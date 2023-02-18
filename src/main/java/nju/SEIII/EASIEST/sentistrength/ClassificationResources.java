@@ -56,7 +56,7 @@ public class ClassificationResources
         evaluativeTerms = new EvaluativeTerms();
         ironyList = new IronyList();
         lemmatiser = new Lemmatiser();
-        sgSentiStrengthFolder = System.getProperty("user.dir")+"/src/main/resources/Data/";
+        sgSentiStrengthFolder = System.getProperty("user.dir")+"/src/main/resources/static/data/";
         sgSentimentWordsFile = "EmotionLookupTable.txt";
         sgSentimentWordsFile2 = "SentimentLookupTable.txt";
         sgEmoticonLookupTable = "EmoticonLookupTable.txt";
