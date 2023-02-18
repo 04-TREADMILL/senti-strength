@@ -34,5 +34,5 @@ test {
 
 apply plugin: 'jacoco'
 jacoco { toolVersion = '0.8.5' }
-jacocoTestReport { reports { html.enabled = true } }
+jacocoTestReport { reports { html.required = true } }
 test.finalizedBy jacocoTestReport
