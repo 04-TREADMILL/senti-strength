@@ -1,21 +1,31 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '2.7.8'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
 group 'nju.SEIII'
 version '1.0-SNAPSHOT'
-
+sourceCompatibility = '11'
+targetCompatibility = '11'
 
 repositories {
     maven { url 'https://repo.nju.edu.cn/repository/maven-public/' }
 }
 
 dependencies {
+    // for test
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    // for machine learning
     implementation 'nz.ac.waikato.cms.weka:weka-stable:3.8.6'
-    implementation files('libs/LibSVM.jar')
-    implementation files('libs/LibLINEAR.jar')
+    implementation files('libs/LibSVM.jar', 'libs/LibLINEAR.jar')
+
+    // for spring boot
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
