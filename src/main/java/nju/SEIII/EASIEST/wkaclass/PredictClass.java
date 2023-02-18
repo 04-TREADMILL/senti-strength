@@ -117,7 +117,7 @@ public class PredictClass {
 
       double clsLabel;
 //      int i;
-      if (sClassifier.indexOf("smoreg") >= 0) {
+      if (sClassifier.contains("smoreg")) {
          try {
             Utilities.printNameAndWarning("SMOreg");
             start = Utilities.getNow();
@@ -136,7 +136,7 @@ public class PredictClass {
          } catch (Exception var30) {
             System.out.println("Fatal error with SMOreg on " + arffTrainFile + " " + var30.getMessage());
          }
-      } else if (sClassifier.indexOf("smo") >= 0) {
+      } else if (sClassifier.contains("smo")) {
          Utilities.printNameAndWarning("SMO   ");
          start = Utilities.getNow();
          System.out.println();
@@ -160,7 +160,7 @@ public class PredictClass {
          } catch (Exception var29) {
             System.out.println("!!Fatal error with loaded SMO train " + arffTrainFile + " applied to unclassified " + sUnclassifiedArff + " trying to label line " + i + ". " + var29.getMessage());
          }
-      } else if (sClassifier.indexOf("slog") >= 0) {
+      } else if (sClassifier.contains("slog")) {
          try {
             Utilities.printNameAndWarning("SLOG  ");
             start = Utilities.getNow();
@@ -178,7 +178,7 @@ public class PredictClass {
          } catch (Exception var28) {
             System.out.println("Fatal error with SLOG train " + arffTrainFile + " applied to unclassified " + sUnclassifiedArff + " " + var28.getMessage());
          }
-      } else if (sClassifier.indexOf("liblin") >= 0) {
+      } else if (sClassifier.contains("liblin")) {
          try {
             Utilities.printNameAndWarning("LibLINEAR");
             start = Utilities.getNow();
@@ -196,7 +196,7 @@ public class PredictClass {
          } catch (Exception var27) {
             System.out.println("Fatal error with LibLINEAR train " + arffTrainFile + " applied to unclassified " + sUnclassifiedArff + " " + var27.getMessage());
          }
-      } else if (sClassifier.indexOf("bayes") >= 0) {
+      } else if (sClassifier.contains("bayes")) {
          try {
             Utilities.printNameAndWarning("BAYES ");
             start = Utilities.getNow();
@@ -212,7 +212,7 @@ public class PredictClass {
          } catch (Exception var26) {
             System.out.println("Fatal error with BAYES train " + arffTrainFile + " applied to unclassified " + sUnclassifiedArff + " " + var26.getMessage());
          }
-      } else if (sClassifier.indexOf("ada") >= 0) {
+      } else if (sClassifier.contains("ada")) {
          try {
             Utilities.printNameAndWarning("ADA   ");
             start = Utilities.getNow();
@@ -230,7 +230,7 @@ public class PredictClass {
          } catch (Exception var25) {
             System.out.println("Fatal error with ADA train " + arffTrainFile + " applied to unclassified " + sUnclassifiedArff + " " + var25.getMessage());
          }
-      } else if (sClassifier.indexOf("jrip") >= 0) {
+      } else if (sClassifier.contains("jrip")) {
          try {
             Utilities.printNameAndWarning("JRIP  ");
             start = Utilities.getNow();
@@ -248,7 +248,7 @@ public class PredictClass {
          } catch (Exception var24) {
             System.out.println("Fatal error with JRIP on " + arffTrainFile + " applied to unclassified " + sUnclassifiedArff + " " + var24.getMessage());
          }
-      } else if (sClassifier.indexOf("dec") >= 0) {
+      } else if (sClassifier.contains("dec")) {
          try {
             Utilities.printlnNameAndWarning("DEC   ");
             start = Utilities.getNow();
@@ -266,7 +266,7 @@ public class PredictClass {
          } catch (Exception var23) {
             System.out.println("Fatal error with DEC on " + arffTrainFile + " applied to unclassified " + sUnclassifiedArff + " " + var23.getMessage());
          }
-      } else if (sClassifier.indexOf("j48") >= 0) {
+      } else if (sClassifier.contains("j48")) {
          try {
             Utilities.printNameAndWarning("J48   ");
             start = Utilities.getNow();
@@ -284,7 +284,7 @@ public class PredictClass {
          } catch (Exception var22) {
             System.out.println("Fatal error with J48 train " + arffTrainFile + " applied to unclassified " + sUnclassifiedArff + " " + var22.getMessage());
          }
-      } else if (sClassifier.indexOf("j48") >= 0) {
+      } else if (sClassifier.contains("j48")) {
          try {
             Utilities.printlnNameAndWarning("MLP   ");
             start = Utilities.getNow();
@@ -302,7 +302,7 @@ public class PredictClass {
          } catch (Exception var21) {
             System.out.println("Fatal error with MLP on " + arffTrainFile + " applied to unclassified " + sUnclassifiedArff + " " + var21.getMessage());
          }
-      } else if (sClassifier.indexOf("libsvm") >= 0) {
+      } else if (sClassifier.contains("libsvm")) {
          try {
             Utilities.printNameAndWarning("LibSVM");
             start = Utilities.getNow();

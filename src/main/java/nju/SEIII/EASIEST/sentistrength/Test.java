@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class Test
 {
@@ -17,23 +18,23 @@ public class Test
     {
     }
 
-    public static void main(String args[])
+    public static void main(String[] args)
     {
-        CharsetEncoder asciiEncoder = Charset.forName("US-ASCII").newEncoder();
+        CharsetEncoder asciiEncoder = StandardCharsets.US_ASCII.newEncoder();
         String test = "R\351al";
-        System.out.println((new StringBuilder(String.valueOf(test))).append(" isPureAscii() : ").append(asciiEncoder.canEncode(test)).toString());
+        System.out.println(test + " isPureAscii() : " + asciiEncoder.canEncode(test));
         for(int i = 0; i < test.length(); i++)
             if(!asciiEncoder.canEncode(test.charAt(i)))
-                System.out.println((new StringBuilder(String.valueOf(test.charAt(i)))).append(" isn't Ascii() : ").toString());
+                System.out.println(test.charAt(i) + " isn't Ascii() : ");
 
         test = "Real";
-        System.out.println((new StringBuilder(String.valueOf(test))).append(" isPureAscii() : ").append(asciiEncoder.canEncode(test)).toString());
+        System.out.println(test + " isPureAscii() : " + asciiEncoder.canEncode(test));
         test = "a\u2665c";
-        System.out.println((new StringBuilder(String.valueOf(test))).append(" isPureAscii() : ").append(asciiEncoder.canEncode(test)).toString());
+        System.out.println(test + " isPureAscii() : " + asciiEncoder.canEncode(test));
         for(int i = 0; i < test.length(); i++)
             if(!asciiEncoder.canEncode(test.charAt(i)))
-                System.out.println((new StringBuilder(String.valueOf(test.charAt(i)))).append(" isn't Ascii() : ").toString());
+                System.out.println(test.charAt(i) + " isn't Ascii() : ");
 
-        System.out.println((new StringBuilder("Encoded Word = ")).append(URLEncoder.encode(test)).toString());
+        System.out.println("Encoded Word = " + URLEncoder.encode(test));
     }
 }

@@ -14,7 +14,7 @@ public class ClassificationStatistics
     {
     }
 
-    public static double correlationAbs(int iCorrect[], int iPredicted[], int iCount)
+    public static double correlationAbs(int[] iCorrect, int[] iPredicted, int iCount)
     {
         double fMeanC = 0.0D;
         double fMeanP = 0.0D;
@@ -39,7 +39,7 @@ public class ClassificationStatistics
         return fProdCP / (Math.sqrt(fSumPSq) * Math.sqrt(fSumCSq));
     }
 
-    public static double correlation(int iCorrect[], int iPredicted[], int iCount)
+    public static double correlation(int[] iCorrect, int[] iPredicted, int iCount)
     {
         double fMeanC = 0.0D;
         double fMeanP = 0.0D;
@@ -64,7 +64,7 @@ public class ClassificationStatistics
         return fProdCP / (Math.sqrt(fSumPSq) * Math.sqrt(fSumCSq));
     }
 
-    public static void TrinaryOrBinaryConfusionTable(int iTrinaryEstimate[], int iTrinaryCorrect[], int iDataCount, int estCorr[][])
+    public static void TrinaryOrBinaryConfusionTable(int[] iTrinaryEstimate, int[] iTrinaryCorrect, int iDataCount, int[][] estCorr)
     {
         for(int i = 0; i <= 2; i++)
         {
@@ -77,11 +77,11 @@ public class ClassificationStatistics
             if(iTrinaryEstimate[i] > -2 && iTrinaryEstimate[i] < 2 && iTrinaryCorrect[i] > -2 && iTrinaryCorrect[i] < 2)
                 estCorr[iTrinaryEstimate[i] + 1][iTrinaryCorrect[i] + 1]++;
             else
-                System.out.println((new StringBuilder("Estimate or correct value ")).append(i).append(" out of range -1 to +1 (data count may be wrong): ").append(iTrinaryEstimate[i]).append(" ").append(iTrinaryCorrect[i]).toString());
+                System.out.println("Estimate or correct value " + i + " out of range -1 to +1 (data count may be wrong): " + iTrinaryEstimate[i] + " " + iTrinaryCorrect[i]);
 
     }
 
-    public static double correlationAbs(int iCorrect[], int iPredicted[], boolean bSelected[], boolean bInvert, int iCount)
+    public static double correlationAbs(int[] iCorrect, int[] iPredicted, boolean[] bSelected, boolean bInvert, int iCount)
     {
         double fMeanC = 0.0D;
         double fMeanP = 0.0D;
@@ -110,7 +110,7 @@ public class ClassificationStatistics
         return fProdCP / (Math.sqrt(fSumPSq) * Math.sqrt(fSumCSq));
     }
 
-    public static int accuracy(int iCorrect[], int iPredicted[], int iCount, boolean bChangeSignOfOneArray)
+    public static int accuracy(int[] iCorrect, int[] iPredicted, int iCount, boolean bChangeSignOfOneArray)
     {
         int iCorrectCount = 0;
         if(bChangeSignOfOneArray)
@@ -129,7 +129,7 @@ public class ClassificationStatistics
         return iCorrectCount;
     }
 
-    public static int accuracy(int iCorrect[], int iPredicted[], boolean bSelected[], boolean bInvert, int iCount)
+    public static int accuracy(int[] iCorrect, int[] iPredicted, boolean[] bSelected, boolean bInvert, int iCount)
     {
         int iCorrectCount = 0;
         for(int iRow = 1; iRow <= iCount; iRow++)
@@ -139,7 +139,7 @@ public class ClassificationStatistics
         return iCorrectCount;
     }
 
-    public static int accuracyWithin1(int iCorrect[], int iPredicted[], boolean bSelected[], boolean bInvert, int iCount)
+    public static int accuracyWithin1(int[] iCorrect, int[] iPredicted, boolean[] bSelected, boolean bInvert, int iCount)
     {
         int iCorrectCount = 0;
         for(int iRow = 1; iRow <= iCount; iRow++)
@@ -149,7 +149,7 @@ public class ClassificationStatistics
         return iCorrectCount;
     }
 
-    public static int accuracyWithin1(int iCorrect[], int iPredicted[], int iCount, boolean bChangeSignOfOneArray)
+    public static int accuracyWithin1(int[] iCorrect, int[] iPredicted, int iCount, boolean bChangeSignOfOneArray)
     {
         int iCorrectCount = 0;
         if(bChangeSignOfOneArray)
@@ -168,7 +168,7 @@ public class ClassificationStatistics
         return iCorrectCount;
     }
 
-    public static double absoluteMeanPercentageErrorNoDivision(int iCorrect[], int iPredicted[], boolean bSelected[], boolean bInvert, int iCount)
+    public static double absoluteMeanPercentageErrorNoDivision(int[] iCorrect, int[] iPredicted, boolean[] bSelected, boolean bInvert, int iCount)
     {
         int iDataCount = 0;
         double fAMeanPE = 0.0D;
@@ -182,7 +182,7 @@ public class ClassificationStatistics
         return fAMeanPE / (double)iDataCount;
     }
 
-    public static double absoluteMeanPercentageError(int iCorrect[], int iPredicted[], boolean bSelected[], boolean bInvert, int iCount)
+    public static double absoluteMeanPercentageError(int[] iCorrect, int[] iPredicted, boolean[] bSelected, boolean bInvert, int iCount)
     {
         int iDataCount = 0;
         double fAMeanPE = 0.0D;
@@ -196,7 +196,7 @@ public class ClassificationStatistics
         return fAMeanPE / (double)iDataCount;
     }
 
-    public static double absoluteMeanPercentageErrorNoDivision(int iCorrect[], int iPredicted[], int iCount, boolean bChangeSignOfOneArray)
+    public static double absoluteMeanPercentageErrorNoDivision(int[] iCorrect, int[] iPredicted, int iCount, boolean bChangeSignOfOneArray)
     {
         double fAMeanPE = 0.0D;
         if(bChangeSignOfOneArray)
@@ -213,11 +213,11 @@ public class ClassificationStatistics
         return fAMeanPE / (double)iCount;
     }
 
-    public static double baselineAccuracyMajorityClassProportion(int iCorrect[], int iCount)
+    public static double baselineAccuracyMajorityClassProportion(int[] iCorrect, int iCount)
     {
         if(iCount == 0)
             return 0.0D;
-        int iClassCount[] = new int[100];
+        int[] iClassCount = new int[100];
         int iMinClass = iCorrect[1];
         int iMaxClass = iCorrect[1];
         for(int i = 2; i <= iCount; i++)
@@ -244,11 +244,11 @@ public class ClassificationStatistics
         return (double)iMaxClassCount / (double)iCount;
     }
 
-    public static void baselineAccuracyMakeLargestClassPrediction(int iCorrect[], int iPredict[], int iCount, boolean bChangeSign)
+    public static void baselineAccuracyMakeLargestClassPrediction(int[] iCorrect, int[] iPredict, int iCount, boolean bChangeSign)
     {
         if(iCount == 0)
             return;
-        int iClassCount[] = new int[100];
+        int[] iClassCount = new int[100];
         int iMinClass = iCorrect[1];
         int iMaxClass = iCorrect[1];
         for(int i = 2; i <= iCount; i++)
@@ -289,7 +289,7 @@ public class ClassificationStatistics
         }
     }
 
-    public static double absoluteMeanPercentageError(int iCorrect[], int iPredicted[], int iCount, boolean bChangeSignOfOneArray)
+    public static double absoluteMeanPercentageError(int[] iCorrect, int[] iPredicted, int iCount, boolean bChangeSignOfOneArray)
     {
         double fAMeanPE = 0.0D;
         if(bChangeSignOfOneArray)

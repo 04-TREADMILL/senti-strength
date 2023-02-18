@@ -24,7 +24,7 @@ public class Utilities
     public static void printClasspath()
     {
         ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
-        URL urls[] = ((URLClassLoader)sysClassLoader).getURLs();
+        URL[] urls = ((URLClassLoader)sysClassLoader).getURLs();
         for(int i = 0; i < urls.length; i++)
             System.out.println(urls[i].getFile());
 
@@ -46,12 +46,12 @@ public class Utilities
 
     public static void printlnNameAndWarning(String methodName)
     {
-        System.out.println((new StringBuilder("Starting ")).append(methodName).append(" ").append(now()).append(" ... ").toString());
+        System.out.println("Starting " + methodName + " " + now() + " ... ");
     }
 
     public static void printNameAndWarning(String methodName)
     {
-        System.out.print((new StringBuilder("Starting ")).append(methodName).append(" ").append(now()).append(" ... ").toString());
+        System.out.print("Starting " + methodName + " " + now() + " ... ");
     }
 
     public static String now()
@@ -75,7 +75,7 @@ public class Utilities
         calSecond.setTime(secondDate);
         long firstMilis = calFirst.getTimeInMillis();
         long secondMilis = calSecond.getTimeInMillis();
-        String timeGapReport = (new StringBuilder(String.valueOf(Long.toString((secondMilis - firstMilis) / 1000L)))).append(" secs").toString();
+        String timeGapReport = (secondMilis - firstMilis) / 1000L + " secs";
         return timeGapReport;
     }
 }

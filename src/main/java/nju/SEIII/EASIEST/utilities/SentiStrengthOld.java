@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 public class SentiStrengthOld {
     private String[] sgSentimentWords;
@@ -127,7 +128,7 @@ public class SentiStrengthOld {
             this.sgErrorLog = this.sgErrorLog + "Can't load negating words from " + this.sgSentiStrengthFolder + this.sgNegatingWordListFile + "\n";
         }
 
-        if (this.sgErrorLog != "") {
+        if (!Objects.equals(this.sgErrorLog, "")) {
             return false;
         } else {
             Sort.quickSortStrings(this.sgEmoticon, 1, this.igEmoticonCount);
@@ -167,7 +168,7 @@ public class SentiStrengthOld {
 
             while(rReader.ready()) {
                 String sLine = rReader.readLine();
-                if (sLine != "") {
+                if (!Objects.equals(sLine, "")) {
                     int iTabPos = sLine.lastIndexOf("\t");
                     if (iTabPos >= 0) {
                         sLine = sLine.substring(iTabPos + 1);
@@ -278,7 +279,7 @@ public class SentiStrengthOld {
 
                     sEmoticon = this.s_ExtractEmoticon(this.sgOriginalText, iPos);
                     sEm = this.sgTempEmoticonEmphasis;
-                    if (sEmoticon != "") {
+                    if (!sEmoticon.equals("")) {
                         this.sgTaggedText = this.sgTaggedText + "<e em=\"" + sEm + "\">" + sEmoticon + "</e>";
                         iPos += sEmoticon.length() - 1;
                         iStartOfElement = 10000;
@@ -430,23 +431,23 @@ public class SentiStrengthOld {
                 }
             }
 
-            if (iSameCount > 0 && "achijkmnpqruvwxyz".indexOf(sWord.substring(iPos - 1, iPos)) >= 0) {
+            if (iSameCount > 0 && "achijkmnpqruvwxyz".contains(sWord.substring(iPos - 1, iPos))) {
                 ++iSameCount;
             }
 
             if (iSameCount > 1) {
-                if (sEm == "") {
+                if (sEm.equals("")) {
                     sWordNew = sWord.substring(0, iPos - iSameCount + 1);
                     sEm = sWord.substring(iPos - iSameCount + 1);
                 } else {
                     sWordNew = sWordNew + sWord.substring(iLastCopiedPos, iPos - iSameCount + 1);
                     sEm = sEm + sWord.substring(iPos - iSameCount + 1);
                 }
-            } else if (sEm != "") {
+            } else if (!sEm.equals("")) {
                 sWordNew = sWordNew + sWord.substring(iLastCopiedPos);
             }
 
-            if (sWordNew == "") {
+            if (sWordNew.equals("")) {
                 sWordNew = sWord;
             }
 
@@ -454,12 +455,12 @@ public class SentiStrengthOld {
             sWordNew = this.s_CorrectSpellingInWord(sWordNew);
             sEm = this.sgTempEmoticonEmphasis;
             if (sWordNew.indexOf(" ") > 0) {
-                if (sEm == "") {
+                if (Objects.equals(sEm, "")) {
                     return sWordNew + "<w equiv=\"" + sWordNew.substring(sWordNew.indexOf(" ")) + "\">" + sWord + "</w>";
                 } else {
                     return sWordNew + "<w equiv=\"" + sWordNew.substring(sWordNew.indexOf(" ")) + "\" em=\"" + sEm + "\">" + sWord + "</w>";
                 }
-            } else if (sEm == "" && sWordNew.compareTo(sWord) == 0) {
+            } else if (Objects.equals(sEm, "") && sWordNew.compareTo(sWord) == 0) {
                 return "<w>" + sWord + "</w>";
             } else {
                 return "<w equiv=\"" + sWordNew + "\" em=\"" + sEm + "\">" + sWord + "</w>";
@@ -486,7 +487,7 @@ public class SentiStrengthOld {
 
                     while(rReader.ready()) {
                         String sLine = rReader.readLine();
-                        if (sLine != "") {
+                        if (!Objects.equals(sLine, "")) {
                             String[] sData = sLine.split("\t");
                             if (sData.length >= 1) {
                                 ++this.igEmoticonCount;
@@ -510,9 +511,9 @@ public class SentiStrengthOld {
     }
 
     private boolean b_LoadSentimentWords() {
-        int iLinesInFile =0;
-        int iWordStrength =0;
-        if (this.sgSentimentWordsFile == "") {
+        int iLinesInFile = 0;
+        int iWordStrength = 0;
+        if (Objects.equals(this.sgSentimentWordsFile, "")) {
             return false;
         } else {
             iLinesInFile = FileOps.i_CountLinesInTextFile(this.sgSentiStrengthFolder + this.sgSentimentWordsFile);
@@ -530,7 +531,7 @@ public class SentiStrengthOld {
 
                     while(rReader.ready()) {
                         String sLine = rReader.readLine();
-                        if (sLine != "") {
+                        if (!Objects.equals(sLine, "")) {
                             int iFirstTabLocation = sLine.indexOf("\t");
                             if (iFirstTabLocation >= 0) {
                                 int iSecondTabLocation = sLine.indexOf("\t", iFirstTabLocation + 1);
@@ -547,11 +548,11 @@ public class SentiStrengthOld {
                                 }
 
                                 sLine = sLine.substring(0, iFirstTabLocation);
-                                if (sLine.indexOf(" ") >= 0) {
+                                if (sLine.contains(" ")) {
                                     sLine = sLine.trim();
                                 }
 
-                                if (sLine != "") {
+                                if (!sLine.equals("")) {
                                     ++this.igSentimentWordsCount;
                                     this.sgSentimentWords[this.igSentimentWordsCount] = sLine;
                                     if (iWordStrength > 0) {
@@ -582,7 +583,7 @@ public class SentiStrengthOld {
     private boolean b_LoadBoosterWords() {
         int iLinesInFile =0;
         int iWordStrength =0;
-        if (this.sgBoosterListFile == "") {
+        if (Objects.equals(this.sgBoosterListFile, "")) {
             return false;
         } else {
             iLinesInFile = FileOps.i_CountLinesInTextFile(this.sgSentiStrengthFolder + this.sgBoosterListFile);
@@ -600,7 +601,7 @@ public class SentiStrengthOld {
 
                     while(rReader.ready()) {
                         String sLine = rReader.readLine();
-                        if (sLine != "") {
+                        if (!Objects.equals(sLine, "")) {
                             int iFirstTabLocation = sLine.indexOf("\t");
                             if (iFirstTabLocation >= 0) {
                                 int iSecondTabLocation = sLine.indexOf("\t", iFirstTabLocation + 1);
@@ -617,11 +618,11 @@ public class SentiStrengthOld {
                                 }
 
                                 sLine = sLine.substring(0, iFirstTabLocation);
-                                if (sLine.indexOf(" ") >= 0) {
+                                if (sLine.contains(" ")) {
                                     sLine = sLine.trim();
                                 }
 
-                                if (sLine != "") {
+                                if (!sLine.equals("")) {
                                     ++this.igBoosterWordCount;
                                     this.sgBoosterWord[this.igBoosterWordCount] = sLine;
                                     this.igBoosterWordStrength[this.igBoosterWordCount] = iWordStrength;
@@ -654,7 +655,7 @@ public class SentiStrengthOld {
                 }
 
                 if (Sort.i_FindStringPositionInSortedArray(sReplaceWord, this.sgCorrectWord, 1, this.igCorrectWordCount) > 0) {
-                    this.sgTempEmoticonEmphasis = this.sgTempEmoticonEmphasis + sWord.substring(iPos, iPos + 1);
+                    this.sgTempEmoticonEmphasis = this.sgTempEmoticonEmphasis + sWord.charAt(iPos);
                     return sReplaceWord;
                 }
             }
@@ -691,7 +692,7 @@ public class SentiStrengthOld {
 
                     while(rReader.ready()) {
                         String sLine = rReader.readLine();
-                        if (sLine != "") {
+                        if (!Objects.equals(sLine, "")) {
                             ++this.igNegatingWordCount;
                             this.sgNegatingWord[this.igNegatingWordCount] = sLine;
                         }
@@ -726,7 +727,7 @@ public class SentiStrengthOld {
 
                     while(rReader.ready()) {
                         String sLine = rReader.readLine();
-                        if (sLine != "") {
+                        if (!Objects.equals(sLine, "")) {
                             ++this.igCorrectWordCount;
                             this.sgCorrectWord[this.igCorrectWordCount] = sLine;
                         }
@@ -759,7 +760,7 @@ public class SentiStrengthOld {
 
     private boolean b_LoadSlang() {
         int iLinesInFile =0;
-        if (this.sgSlangLookupTable == "") {
+        if (Objects.equals(this.sgSlangLookupTable, "")) {
             return false;
         } else {
             iLinesInFile = FileOps.i_CountLinesInTextFile(this.sgSentiStrengthFolder + this.sgSlangLookupTable);
@@ -778,7 +779,7 @@ public class SentiStrengthOld {
 
                     while(rReader.ready()) {
                         String sLine = rReader.readLine();
-                        if (sLine != "") {
+                        if (!Objects.equals(sLine, "")) {
                             int iFirstTabLocation = sLine.indexOf("\t");
                             if (iFirstTabLocation >= 0) {
                                 ++this.igSlangWordCount;
@@ -790,11 +791,11 @@ public class SentiStrengthOld {
                                 }
 
                                 sLine = sLine.substring(0, iFirstTabLocation);
-                                if (sLine.indexOf(" ") >= 0) {
+                                if (sLine.contains(" ")) {
                                     sLine = sLine.trim();
                                 }
 
-                                if (sLine != "") {
+                                if (!sLine.equals("")) {
                                     this.sgSlangWord[this.igSlangWordCount] = sLine;
                                 } else {
                                     --this.igSlangWordCount;
@@ -824,7 +825,7 @@ public class SentiStrengthOld {
         int iPosMax = 0;
         int iNegTotal = 0;
         int iNegMax = 0;
-        if (this.sgOriginalText != "") {
+        if (!Objects.equals(this.sgOriginalText, "")) {
             if (this.b_TagOriginalText()) {
                 this.igTextPos = 1;
                 this.igTextNeg = -1;
@@ -929,15 +930,15 @@ public class SentiStrengthOld {
                 iNegative[iSentence] = -1;
             }
 
-            if (iPositive[iSentence] == 1 && this.bgMissCountsAsPlus2 && this.sgTaggedSentence[iSentence].indexOf(">miss<") >= 0) {
+            if (iPositive[iSentence] == 1 && this.bgMissCountsAsPlus2 && this.sgTaggedSentence[iSentence].contains(">miss<")) {
                 iPositive[iSentence] = 2;
             }
 
-            if (this.bgExclamationCountsAsPlus2 && iPositive[iSentence] == 1 && iNegative[iSentence] == -1 && this.sgTaggedSentence[iSentence].indexOf("!") >= 0) {
+            if (this.bgExclamationCountsAsPlus2 && iPositive[iSentence] == 1 && iNegative[iSentence] == -1 && this.sgTaggedSentence[iSentence].contains("!")) {
                 iPositive[iSentence] = 2;
             }
 
-            if (this.bgYouOrYourIsPlus2UnlessSentenceNegative && iPositive[iSentence] == 1 && iNegative[iSentence] == -1 && this.sgTaggedSentence[iSentence].indexOf(">you") >= 0) {
+            if (this.bgYouOrYourIsPlus2UnlessSentenceNegative && iPositive[iSentence] == 1 && iNegative[iSentence] == -1 && this.sgTaggedSentence[iSentence].contains(">you")) {
                 iPositive[iSentence] = 2;
             }
 
@@ -972,7 +973,7 @@ public class SentiStrengthOld {
                 int var10002;
                 if (sNextChar.compareTo("w") == 0) {
                     iPos = this.i_GetWordFromTaggedText(iSentence, iPos, sWord);
-                    if (sWord[1] != "") {
+                    if (!Objects.equals(sWord[1], "")) {
                         ++iWordTotal;
                         iWordID = Sort.i_FindStringPositionInSortedArrayWithWildcardsInArray(sWord[1].toLowerCase(), this.sgSentimentWords, 1, this.igSentimentWordsCount);
                         if (iWordID >= 0) {
@@ -984,7 +985,7 @@ public class SentiStrengthOld {
                         if (this.bgCountMultipleLettersAsEmotionBoosters && sWord[2].length() >= this.igMinRepeatedLettersForBoost) {
                             if (fWordEmotion[iWordTotal] < 0.0F) {
                                 fWordEmotion[iWordTotal] = (float)((double)fWordEmotion[iWordTotal] - 0.6D);
-                            } else if ((this.bgCountNeutralEmotionsAsPositiveForEmphasis || fWordEmotion[iWordTotal] > 1.0F) && sWord[2].indexOf("xx") < 0 && sWord[2].indexOf("ww") < 0 && (sWord[2].indexOf("h") < 0 || sWord[2].indexOf("a") < 0)) {
+                            } else if ((this.bgCountNeutralEmotionsAsPositiveForEmphasis || fWordEmotion[iWordTotal] > 1.0F) && !sWord[2].contains("xx") && !sWord[2].contains("ww") && (!sWord[2].contains("h") || !sWord[2].contains("a"))) {
                                 fWordEmotion[iWordTotal] = (float)((double)fWordEmotion[iWordTotal] + 0.6D);
                             }
                         }
@@ -1028,7 +1029,7 @@ public class SentiStrengthOld {
                     }
                 } else if (sNextChar.compareTo("p") == 0) {
                     iPos = this.i_GetPunctuationFromTaggedText(iSentence, iPos, sWord);
-                    if (sWord[5] != "" && sWord[5].indexOf("!") >= 0) {
+                    if (!Objects.equals(sWord[5], "") && sWord[5].contains("!")) {
                         if (fWordEmotion[iWordTotal] < 0.0F) {
                             fWordEmotion[iWordTotal] = (float)((double)fWordEmotion[iWordTotal] - 0.6D);
                         } else if (this.bgCountNeutralEmotionsAsPositiveForEmphasis || fWordEmotion[iWordTotal] > 1.0F) {
@@ -1043,8 +1044,8 @@ public class SentiStrengthOld {
                         iWordTotal = 1;
                     }
 
-                    if (sWord[7] != "") {
-                        if (sWord[7].indexOf("-") >= 0) {
+                    if (!Objects.equals(sWord[7], "")) {
+                        if (sWord[7].contains("-")) {
                             var10002 = (int) fWordEmotion[iWordTotal]--;
                         } else {
                             var10002 = (int) fWordEmotion[iWordTotal]++;
@@ -1061,15 +1062,15 @@ public class SentiStrengthOld {
 
     private int i_GetWordFromTaggedText(int iSentence, int iPos, String[] sWordAspects) {
         int iOriginalStart = 0;
-        if (sWordAspects[0] != "") {
+        if (!Objects.equals(sWordAspects[0], "")) {
             sWordAspects[0] = "";
         }
 
-        if (sWordAspects[1] != "") {
+        if (!Objects.equals(sWordAspects[1], "")) {
             sWordAspects[1] = "";
         }
 
-        if (sWordAspects[2] != "") {
+        if (!Objects.equals(sWordAspects[2], "")) {
             sWordAspects[2] = "";
         }
 
@@ -1109,15 +1110,15 @@ public class SentiStrengthOld {
 
     private int i_GetPunctuationFromTaggedText(int iSentence, int iPos, String[] sWordAspects) {
         int iOriginalStart = 0;
-        if (sWordAspects[3] != "") {
+        if (!Objects.equals(sWordAspects[3], "")) {
             sWordAspects[3] = "";
         }
 
-        if (sWordAspects[4] != "") {
+        if (!Objects.equals(sWordAspects[4], "")) {
             sWordAspects[4] = "";
         }
 
-        if (sWordAspects[5] != "") {
+        if (!Objects.equals(sWordAspects[5], "")) {
             sWordAspects[5] = "";
         }
 
@@ -1157,11 +1158,11 @@ public class SentiStrengthOld {
 
     private int i_GetEmoticonFromTaggedText(int iSentence, int iPos, String[] sWordAspects) {
         int iOriginalStart = 0;
-        if (sWordAspects[6] != "") {
+        if (!Objects.equals(sWordAspects[6], "")) {
             sWordAspects[6] = "";
         }
 
-        if (sWordAspects[7] != "") {
+        if (!Objects.equals(sWordAspects[7], "")) {
             sWordAspects[7] = "";
         }
 

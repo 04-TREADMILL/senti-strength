@@ -13,10 +13,10 @@ public class WekaMachineLearning
     {
     }
 
-    public static void main(String args[])
+    public static void main(String[] args)
         throws Exception
     {
-        boolean bArgumentRecognised[] = new boolean[args.length];
+        boolean[] bArgumentRecognised = new boolean[args.length];
         String arffTrainFile = "-";
         String arffEvalFile = "-";
         String classifierName = ",,all,";
@@ -61,7 +61,7 @@ public class WekaMachineLearning
             {
                 if(args[i].equalsIgnoreCase("classifier"))
                 {
-                    classifierName = (new StringBuilder(",,")).append(args[i + 1].toLowerCase()).append(",").toString();
+                    classifierName = ",," + args[i + 1].toLowerCase() + ",";
                     bArgumentRecognised[i] = true;
                     bArgumentRecognised[i + 1] = true;
                 }
@@ -114,7 +114,7 @@ public class WekaMachineLearning
         for(int i = 0; i < args.length; i++)
             if(!bArgumentRecognised[i])
             {
-                System.out.println((new StringBuilder("Unrecognised command - wrong spelling or case?: ")).append(args[i]).toString());
+                System.out.println("Unrecognised command - wrong spelling or case?: " + args[i]);
                 return;
             }
 
@@ -126,7 +126,7 @@ public class WekaMachineLearning
                 System.out.println("Must specify instructions or arffTrain, arffEval, results, and summary. Giving up.");
                 return;
             }
-            System.out.println((new StringBuilder("started training with ")).append(arffTrainFile).toString());
+            System.out.println("started training with " + arffTrainFile);
             WekaDirectTrainClassifyEvaluate.directClassifyAllArff(arffTrainFile, arffEvalFile, classifierName, classifierExclude, resultsFileName, summaryResultsFileName);
         } else
         {
@@ -146,7 +146,7 @@ public class WekaMachineLearning
                         summaryResultsFileName = reader.readLine();
                         if(summaryResultsFileName.length() > 4)
                         {
-                            System.out.println((new StringBuilder("started training with ")).append(arffTrainFile).toString());
+                            System.out.println("started training with " + arffTrainFile);
                             WekaDirectTrainClassifyEvaluate.directClassifyAllArff(arffTrainFile, arffEvalFile, classifierName, classifierExclude, resultsFileName, summaryResultsFileName);
                         }
                     }
@@ -155,24 +155,24 @@ public class WekaMachineLearning
                 reader.close();
             } else
             {
-                System.out.println((new StringBuilder(String.valueOf(instructionFilename))).append(" not found. Must contain train file/eval file/results file/summary file instead").toString());
+                System.out.println(instructionFilename + " not found. Must contain train file/eval file/results file/summary file instead");
             }
         }
         System.out.println("WekaAutoMachineLearning Done");
     }
 
-    public static void reportParameters(String args[], String classifierName, String classifierExclude, String addToClasspath, String instructionFilename, String arffTrainFile, String arffEvalFile, String resultsFileName, 
-            String summaryResultsFileName)
+    public static void reportParameters(String[] args, String classifierName, String classifierExclude, String addToClasspath, String instructionFilename, String arffTrainFile, String arffEvalFile, String resultsFileName,
+                                        String summaryResultsFileName)
     {
         System.out.println("Pre method defaults or set by command line:");
-        System.out.println((new StringBuilder(" ")).append(classifierName).append(" [classifier] ALL/SMO/SLOG/BAYES/ADA/SMOreg/JRIP/DEC/J48 /MLP/LibSVM/LibLin -last 3 not in ALL").toString());
-        System.out.println((new StringBuilder(" ")).append(classifierExclude).append(" [exclude] SMO/SLOG/BAYES/ADA/SMOreg/JRIP/DEC/J48 classifier to exclude").toString());
-        System.out.println((new StringBuilder(" ")).append(instructionFilename).append(" [instructions] file name (train., eval., results file triples list)").toString());
-        System.out.println((new StringBuilder(" ")).append(arffTrainFile).append(" [arffTrain] file").toString());
-        System.out.println((new StringBuilder(" ")).append(arffEvalFile).append(" [arffEval] file").toString());
-        System.out.println((new StringBuilder(" ")).append(resultsFileName).append(" [results] file").toString());
-        System.out.println((new StringBuilder(" ")).append(summaryResultsFileName).append(" [summary] results file (just accuracy)").toString());
-        System.out.println((new StringBuilder(" ")).append(addToClasspath).append(" [addToClasspath] file to add to classpath").toString());
+        System.out.println(" " + classifierName + " [classifier] ALL/SMO/SLOG/BAYES/ADA/SMOreg/JRIP/DEC/J48 /MLP/LibSVM/LibLin -last 3 not in ALL");
+        System.out.println(" " + classifierExclude + " [exclude] SMO/SLOG/BAYES/ADA/SMOreg/JRIP/DEC/J48 classifier to exclude");
+        System.out.println(" " + instructionFilename + " [instructions] file name (train., eval., results file triples list)");
+        System.out.println(" " + arffTrainFile + " [arffTrain] file");
+        System.out.println(" " + arffEvalFile + " [arffEval] file");
+        System.out.println(" " + resultsFileName + " [results] file");
+        System.out.println(" " + summaryResultsFileName + " [summary] results file (just accuracy)");
+        System.out.println(" " + addToClasspath + " [addToClasspath] file to add to classpath");
     }
 
     public static void overallHelp()
@@ -183,6 +183,6 @@ public class WekaMachineLearning
         System.out.println("  [infogain] process raw single ARFF with feature selection, auto folds");
         System.out.println("  [noselection] process raw single ARFF without feature selection, auto folds");
         System.out.println("  [arff] convert plain text to ARFF, with/wo ML prediction");
-        System.out.println("");
+        System.out.println();
     }
 }

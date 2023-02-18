@@ -6,6 +6,7 @@
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 
 import nju.SEIII.EASIEST.utilities.FileOps;
@@ -17,9 +18,9 @@ public class EvaluativeTerms
 {
 
     private int igObjectEvaluationMax;
-    public String sgObject[];
-    public String sgObjectEvaluation[];
-    public int igObjectEvaluationStrength[];
+    public String[] sgObject;
+    public String[] sgObjectEvaluation;
+    public int[] igObjectEvaluationStrength;
     public int igObjectEvaluationCount;
 
     public EvaluativeTerms()
@@ -35,7 +36,7 @@ public class EvaluativeTerms
         File f = new File(sSourceFile);
         if(!f.exists())
         {
-            System.out.println((new StringBuilder("Could not find additional (object/evaluation) file: ")).append(sSourceFile).toString());
+            System.out.println("Could not find additional (object/evaluation) file: " + sSourceFile);
             return false;
         }
         int iStrength = 0;
@@ -50,14 +51,14 @@ public class EvaluativeTerms
             igObjectEvaluationStrength = new int[igObjectEvaluationMax];
             BufferedReader rReader;
             if(options.bgForceUTF8)
-                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sSourceFile), "UTF8"));
+                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sSourceFile), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sSourceFile));
             String sLine;
             while((sLine = rReader.readLine()) != null) 
                 if(sLine != "" && sLine.indexOf("##") != 0 && sLine.indexOf("\t") > 0)
                 {
-                    String sData[] = sLine.split("\t");
+                    String[] sData = sLine.split("\t");
                     if(sData.length > 2 && sData[2].indexOf("##") != 0)
                     {
                         sgObject[++igObjectEvaluationCount] = sData[0];
@@ -74,7 +75,7 @@ public class EvaluativeTerms
                         catch(NumberFormatException e)
                         {
                             System.out.println("Failed to identify integer weight for object/evaluation! Ignoring object/evaluation");
-                            System.out.println((new StringBuilder("Line: ")).append(sLine).toString());
+                            System.out.println("Line: " + sLine);
                             igObjectEvaluationCount--;
                         }
                     } else
@@ -88,7 +89,7 @@ public class EvaluativeTerms
                         catch(NumberFormatException e)
                         {
                             System.out.println("Failed to identify integer weight for idiom in additional file! Ignoring it");
-                            System.out.println((new StringBuilder("Line: ")).append(sLine).toString());
+                            System.out.println("Line: " + sLine);
                         }
                     else
                         try
@@ -100,7 +101,7 @@ public class EvaluativeTerms
                         catch(NumberFormatException e)
                         {
                             System.out.println("Failed to identify integer weight for sentiment term in additional file! Ignoring it");
-                            System.out.println((new StringBuilder("Line: ")).append(sLine).toString());
+                            System.out.println("Line: " + sLine);
                             igObjectEvaluationCount--;
                         }
                 }
@@ -114,13 +115,13 @@ public class EvaluativeTerms
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Could not find additional (object/evaluation) file: ")).append(sSourceFile).toString());
+            System.out.println("Could not find additional (object/evaluation) file: " + sSourceFile);
             e.printStackTrace();
             return false;
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Found additional (object/evaluation) file but could not read from it: ")).append(sSourceFile).toString());
+            System.out.println("Found additional (object/evaluation) file but could not read from it: " + sSourceFile);
             e.printStackTrace();
             return false;
         }

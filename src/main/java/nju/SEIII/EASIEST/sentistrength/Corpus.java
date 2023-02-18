@@ -6,6 +6,8 @@
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 
 import nju.SEIII.EASIEST.utilities.FileOps;
@@ -20,23 +22,23 @@ public class Corpus
 
     public ClassificationOptions options;
     public ClassificationResources resources;
-    private Paragraph paragraph[];
+    private Paragraph[] paragraph;
     private int igParagraphCount;
-    private int igPosCorrect[];
-    private int igNegCorrect[];
-    private int igTrinaryCorrect[];
-    private int igScaleCorrect[];
-    private int igPosClass[];
-    private int igNegClass[];
-    private int igTrinaryClass[];
-    private int igScaleClass[];
+    private int[] igPosCorrect;
+    private int[] igNegCorrect;
+    private int[] igTrinaryCorrect;
+    private int[] igScaleCorrect;
+    private int[] igPosClass;
+    private int[] igNegClass;
+    private int[] igTrinaryClass;
+    private int[] igScaleClass;
     private boolean bgCorpusClassified;
-    private int igSentimentIDList[];
+    private int[] igSentimentIDList;
     private int igSentimentIDListCount;
-    private int igSentimentIDParagraphCount[];
+    private int[] igSentimentIDParagraphCount;
     private boolean bSentimentIDListMade;
     UnusedTermsClassificationIndex unusedTermsClassificationIndex;
-    private boolean bgSupcorpusMember[];
+    private boolean[] bgSupcorpusMember;
     int igSupcorpusMemberCount;
 
     public Corpus()
@@ -98,10 +100,10 @@ public class Corpus
             unusedTermsClassificationIndex.printIndexWithTrinaryValues(saveFile, iMinFreq);
         else
             unusedTermsClassificationIndex.printIndexWithPosNegValues(saveFile, iMinFreq);
-        System.out.println((new StringBuilder("Term weights saved to ")).append(saveFile).toString());
+        System.out.println("Term weights saved to " + saveFile);
     }
 
-    public void setSubcorpus(boolean bSubcorpusMember[])
+    public void setSubcorpus(boolean[] bSubcorpusMember)
     {
         igSupcorpusMemberCount = 0;
         for(int i = 0; i <= igParagraphCount; i++)
@@ -175,7 +177,7 @@ public class Corpus
             if(rReader.ready())
                 sLine = rReader.readLine();
             while((sLine = rReader.readLine()) != null) 
-                if(sLine != "")
+                if(!sLine.equals(""))
                 {
                     paragraph[++igParagraphCount] = new Paragraph();
                     int iLastTabPos = sLine.lastIndexOf("\t");
@@ -191,16 +193,16 @@ public class Corpus
                             }
                             catch(Exception e)
                             {
-                                System.out.println((new StringBuilder("Trinary classification could not be read and will be ignored!: ")).append(sLine).toString());
+                                System.out.println("Trinary classification could not be read and will be ignored!: " + sLine);
                                 igTrinaryCorrect[igParagraphCount] = 999;
                             }
                             if(igTrinaryCorrect[igParagraphCount] > 1 || igTrinaryCorrect[igParagraphCount] < -1)
                             {
-                                System.out.println((new StringBuilder("Trinary classification out of bounds and will be ignored!: ")).append(sLine).toString());
+                                System.out.println("Trinary classification out of bounds and will be ignored!: " + sLine);
                                 igParagraphCount--;
                             } else
                             if(options.bgBinaryVersionOfTrinaryMode && igTrinaryCorrect[igParagraphCount] == 0)
-                                System.out.println((new StringBuilder("Warning, unexpected 0 in binary classification!: ")).append(sLine).toString());
+                                System.out.println("Warning, unexpected 0 in binary classification!: " + sLine);
                         } else
                         if(options.bgScaleMode)
                         {
@@ -210,12 +212,12 @@ public class Corpus
                             }
                             catch(Exception e)
                             {
-                                System.out.println((new StringBuilder("Scale classification could not be read and will be ignored!: ")).append(sLine).toString());
+                                System.out.println("Scale classification could not be read and will be ignored!: " + sLine);
                                 igScaleCorrect[igParagraphCount] = 999;
                             }
                             if(igScaleCorrect[igParagraphCount] > 4 || igTrinaryCorrect[igParagraphCount] < -4)
                             {
-                                System.out.println((new StringBuilder("Scale classification out of bounds (-4 to +4) and will be ignored!: ")).append(sLine).toString());
+                                System.out.println("Scale classification out of bounds (-4 to +4) and will be ignored!: " + sLine);
                                 igParagraphCount--;
                             }
                         } else
@@ -229,17 +231,17 @@ public class Corpus
                             }
                             catch(Exception e)
                             {
-                                System.out.println((new StringBuilder("Positive or negative classification could not be read and will be ignored!: ")).append(sLine).toString());
+                                System.out.println("Positive or negative classification could not be read and will be ignored!: " + sLine);
                                 igPosCorrect[igParagraphCount] = 0;
                             }
                             if(igPosCorrect[igParagraphCount] > 5 || igPosCorrect[igParagraphCount] < 1)
                             {
-                                System.out.println((new StringBuilder("Warning, positive classification out of bounds and line will be ignored!: ")).append(sLine).toString());
+                                System.out.println("Warning, positive classification out of bounds and line will be ignored!: " + sLine);
                                 igParagraphCount--;
                             } else
                             if(igNegCorrect[igParagraphCount] > 5 || igNegCorrect[igParagraphCount] < 1)
                             {
-                                System.out.println((new StringBuilder("Warning, negative classification out of bounds (must be 1,2,3,4, or 5, with or without -) and line will be ignored!: ")).append(sLine).toString());
+                                System.out.println("Warning, negative classification out of bounds (must be 1,2,3,4, or 5, with or without -) and line will be ignored!: " + sLine);
                                 igParagraphCount--;
                             }
                         }
@@ -271,7 +273,7 @@ public class Corpus
             return false;
         }
         useWholeCorpusNotSubcorpus();
-        System.out.println((new StringBuilder("Number of texts in corpus: ")).append(igParagraphCount).toString());
+        System.out.println("Number of texts in corpus: " + igParagraphCount);
         return true;
     }
 
@@ -368,7 +370,7 @@ public class Corpus
             wWriter.write("Correct+\tCorrect-\tPredict+\tPredict-\tText\n");
             for(int i = 1; i <= igParagraphCount; i++)
                 if(bgSupcorpusMember[i])
-                    wWriter.write((new StringBuilder(String.valueOf(igPosCorrect[i]))).append("\t").append(igNegCorrect[i]).append("\t").append(igPosClass[i]).append("\t").append(igNegClass[i]).append("\t").append(paragraph[i].getTaggedParagraph()).append("\n").toString());
+                    wWriter.write(igPosCorrect[i] + "\t" + igNegCorrect[i] + "\t" + igPosClass[i] + "\t" + igNegClass[i] + "\t" + paragraph[i].getTaggedParagraph() + "\n");
 
             wWriter.close();
         }
@@ -619,7 +621,7 @@ public class Corpus
             igSentimentIDListCount = 0;
             for(int i = 1; i <= igParagraphCount; i++)
             {
-                int sentenceIDList[] = paragraph[i].getSentimentIDList();
+                int[] sentenceIDList = paragraph[i].getSentimentIDList();
                 if(sentenceIDList != null)
                 {
                     for(int j = 0; j < sentenceIDList.length; j++)
@@ -632,7 +634,7 @@ public class Corpus
             Sort.quickSortInt(igSentimentIDList, 1, igSentimentIDListCount);
             for(int i = 1; i <= igParagraphCount; i++)
             {
-                int sentenceIDList[] = paragraph[i].getSentimentIDList();
+                int[] sentenceIDList = paragraph[i].getSentimentIDList();
                 if(sentenceIDList != null)
                 {
                     for(int j = 0; j < sentenceIDList.length; j++)
@@ -651,7 +653,7 @@ public class Corpus
         for(int i = 1; i <= iReplications; i++)
             run10FoldCrossValidationOnce(iMinImprovement, bUseTotalDifference, iMultiOptimisations, sWriter, wTermStrengthWriter);
 
-        System.out.println((new StringBuilder("Set of ")).append(iReplications).append(" 10-fold cross validations finished").toString());
+        System.out.println("Set of " + iReplications + " 10-fold cross validations finished");
     }
 
     public void run10FoldCrossValidationMultipleTimes(int iMinImprovement, boolean bUseTotalDifference, int iReplications, int iMultiOptimisations, String sOutFileName)
@@ -659,7 +661,7 @@ public class Corpus
         try
         {
             BufferedWriter wWriter = new BufferedWriter(new FileWriter(sOutFileName));
-            BufferedWriter wTermStrengthWriter = new BufferedWriter(new FileWriter((new StringBuilder(String.valueOf(FileOps.s_ChopFileNameExtension(sOutFileName)))).append("_termStrVars.txt").toString()));
+            BufferedWriter wTermStrengthWriter = new BufferedWriter(new FileWriter(FileOps.s_ChopFileNameExtension(sOutFileName) + "_termStrVars.txt"));
             options.printClassificationOptionsHeadings(wWriter);
             writeClassificationStatsHeadings(wWriter);
             options.printClassificationOptionsHeadings(wTermStrengthWriter);
@@ -671,7 +673,6 @@ public class Corpus
         catch(IOException e)
         {
             e.printStackTrace();
-            return;
         }
     }
 
@@ -691,9 +692,9 @@ public class Corpus
             {
                 sLine = rReader.readLine();
                 iCount1++;
-                if(sLine != "")
+                if(!Objects.equals(sLine, ""))
                 {
-                    String sData[] = sLine.split("\t");
+                    String[] sData = sLine.split("\t");
                     if(sData.length > iTextCol && sData.length > iIDCol)
                     {
                         Paragraph paragraph = new Paragraph();
@@ -701,17 +702,17 @@ public class Corpus
                         if(options.bgTrinaryMode)
                         {
                             iTrinary = paragraph.getParagraphTrinarySentiment();
-                            wWriter.write((new StringBuilder(String.valueOf(sData[iIDCol]))).append("\t").append(iTrinary).append("\n").toString());
+                            wWriter.write(sData[iIDCol] + "\t" + iTrinary + "\n");
                         } else
                         if(options.bgScaleMode)
                         {
                             iScale = paragraph.getParagraphScaleSentiment();
-                            wWriter.write((new StringBuilder(String.valueOf(sData[iIDCol]))).append("\t").append(iScale).append("\n").toString());
+                            wWriter.write(sData[iIDCol] + "\t" + iScale + "\n");
                         } else
                         {
                             iPos = paragraph.getParagraphPositiveSentiment();
                             iNeg = paragraph.getParagraphNegativeSentiment();
-                            wWriter.write((new StringBuilder(String.valueOf(sData[iIDCol]))).append("\t").append(iPos).append("\t").append(iNeg).append("\n").toString());
+                            wWriter.write(sData[iIDCol] + "\t" + iPos + "\t" + iNeg + "\n");
                         }
                     }
                 }
@@ -721,26 +722,26 @@ public class Corpus
                 System.out.println("Reader ready again after pause!");
             int character;
             if((character = rReader.read()) != -1)
-                System.out.println((new StringBuilder("Reader returns char after reader.read() false! ")).append(character).toString());
+                System.out.println("Reader returns char after reader.read() false! " + character);
             rReader.close();
             wWriter.close();
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Could not find input file: ")).append(sInputFile).toString());
+            System.out.println("Could not find input file: " + sInputFile);
             e.printStackTrace();
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Error reading or writing from file: ")).append(sInputFile).toString());
+            System.out.println("Error reading or writing from file: " + sInputFile);
             e.printStackTrace();
         }
         catch(Exception e)
         {
-            System.out.println((new StringBuilder("Error reading from or writing to file: ")).append(sInputFile).toString());
+            System.out.println("Error reading from or writing to file: " + sInputFile);
             e.printStackTrace();
         }
-        System.out.println((new StringBuilder("Processed ")).append(iCount1).append(" lines from file: ").append(sInputFile).append(". Last line was:\n").append(sLine).toString());
+        System.out.println("Processed " + iCount1 + " lines from file: " + sInputFile + ". Last line was:\n" + sLine);
     }
 
     public void annotateAllLinesInInputFile(String sInputFile, int iTextCol)
@@ -749,7 +750,7 @@ public class Corpus
         int iNeg = 0;
         int iTrinary = -3;
         int iScale = -10;
-        String sTempFile = (new StringBuilder(String.valueOf(sInputFile))).append("_temp").toString();
+        String sTempFile = sInputFile + "_temp";
         try
         {
             BufferedReader rReader = new BufferedReader(new FileReader(sInputFile));
@@ -757,9 +758,9 @@ public class Corpus
             while(rReader.ready()) 
             {
                 String sLine = rReader.readLine();
-                if(sLine != "")
+                if(!Objects.equals(sLine, ""))
                 {
-                    String sData[] = sLine.split("\t");
+                    String[] sData = sLine.split("\t");
                     if(sData.length > iTextCol)
                     {
                         Paragraph paragraph = new Paragraph();
@@ -767,21 +768,21 @@ public class Corpus
                         if(options.bgTrinaryMode)
                         {
                             iTrinary = paragraph.getParagraphTrinarySentiment();
-                            wWriter.write((new StringBuilder(String.valueOf(sLine))).append("\t").append(iTrinary).append("\n").toString());
+                            wWriter.write(sLine + "\t" + iTrinary + "\n");
                         } else
                         if(options.bgScaleMode)
                         {
                             iScale = paragraph.getParagraphScaleSentiment();
-                            wWriter.write((new StringBuilder(String.valueOf(sLine))).append("\t").append(iScale).append("\n").toString());
+                            wWriter.write(sLine + "\t" + iScale + "\n");
                         } else
                         {
                             iPos = paragraph.getParagraphPositiveSentiment();
                             iNeg = paragraph.getParagraphNegativeSentiment();
-                            wWriter.write((new StringBuilder(String.valueOf(sLine))).append("\t").append(iPos).append("\t").append(iNeg).append("\n").toString());
+                            wWriter.write(sLine + "\t" + iPos + "\t" + iNeg + "\n");
                         }
                     } else
                     {
-                        wWriter.write((new StringBuilder(String.valueOf(sLine))).append("\n").toString());
+                        wWriter.write(sLine + "\n");
                     }
                 }
             }
@@ -794,17 +795,17 @@ public class Corpus
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Could not find input file: ")).append(sInputFile).toString());
+            System.out.println("Could not find input file: " + sInputFile);
             e.printStackTrace();
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Error reading or writing from file: ")).append(sInputFile).toString());
+            System.out.println("Error reading or writing from file: " + sInputFile);
             e.printStackTrace();
         }
         catch(Exception e)
         {
-            System.out.println((new StringBuilder("Error reading from or writing to file: ")).append(sInputFile).toString());
+            System.out.println("Error reading from or writing to file: " + sInputFile);
             e.printStackTrace();
         }
     }
@@ -824,16 +825,16 @@ public class Corpus
         int iCorrectScaleCount = 0;
         int iPosAbsDiff = 0;
         int iNegAbsDiff = 0;
-        int confusion[][] = {
+        int[][] confusion = {
             new int[3], new int[3], new int[3]
         };
         int maxClassifyForCorrelation = 20000;
-        int iPosClassCorr[] = new int[maxClassifyForCorrelation];
-        int iNegClassCorr[] = new int[maxClassifyForCorrelation];
-        int iPosClassPred[] = new int[maxClassifyForCorrelation];
-        int iNegClassPred[] = new int[maxClassifyForCorrelation];
-        int iScaleClassCorr[] = new int[maxClassifyForCorrelation];
-        int iScaleClassPred[] = new int[maxClassifyForCorrelation];
+        int[] iPosClassCorr = new int[maxClassifyForCorrelation];
+        int[] iNegClassCorr = new int[maxClassifyForCorrelation];
+        int[] iPosClassPred = new int[maxClassifyForCorrelation];
+        int[] iNegClassPred = new int[maxClassifyForCorrelation];
+        int[] iScaleClassCorr = new int[maxClassifyForCorrelation];
+        int[] iScaleClassPred = new int[maxClassifyForCorrelation];
         String sRationale = "";
         String sOutput = "";
         try
@@ -842,8 +843,8 @@ public class Corpus
             BufferedWriter wWriter;
             if(options.bgForceUTF8)
             {
-                wWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sOutputFile), "UTF8"));
-                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sInputFile), "UTF8"));
+                wWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sOutputFile), StandardCharsets.UTF_8));
+                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sInputFile), StandardCharsets.UTF_8));
             } else
             {
                 wWriter = new BufferedWriter(new FileWriter(sOutputFile));
@@ -863,18 +864,18 @@ public class Corpus
             while(rReader.ready()) 
             {
                 String sLine = rReader.readLine();
-                if(sLine != "")
+                if(!Objects.equals(sLine, ""))
                 {
                     int iTabPos = sLine.lastIndexOf("\t");
                     int iFilePos = 0;
                     int iFileNeg = 0;
                     if(iTabPos >= 0)
                     {
-                        String sData[] = sLine.split("\t");
+                        String[] sData = sLine.split("\t");
                         if(sData.length > 1)
                             if(iTextCol > -1)
                             {
-                                wWriter.write((new StringBuilder(String.valueOf(sLine))).append("\t").toString());
+                                wWriter.write(sLine + "\t");
                                 if(iTextCol < sData.length)
                                     sLine = sData[iTextCol];
                             } else
@@ -886,7 +887,7 @@ public class Corpus
                                     iFileTrinary = Integer.parseInt(sData[0].trim());
                                     if(iFileTrinary > 1 || iFileTrinary < -1)
                                     {
-                                        System.out.println((new StringBuilder("Invalid trinary sentiment ")).append(iFileTrinary).append(" (expected -1,0,1) at line: ").append(sLine).toString());
+                                        System.out.println("Invalid trinary sentiment " + iFileTrinary + " (expected -1,0,1) at line: " + sLine);
                                         iFileTrinary = 0;
                                     }
                                 }
@@ -900,7 +901,7 @@ public class Corpus
                                     iFileScale = Integer.parseInt(sData[0].trim());
                                     if(iFileScale > 4 || iFileScale < -4)
                                     {
-                                        System.out.println((new StringBuilder("Invalid overall sentiment ")).append(iFileScale).append(" (expected -4 to +4) at line: ").append(sLine).toString());
+                                        System.out.println("Invalid overall sentiment " + iFileScale + " (expected -4 to +4) at line: " + sLine);
                                         iFileScale = 0;
                                     }
                                 }
@@ -924,22 +925,22 @@ public class Corpus
                     {
                         iTrinary = paragraph.getParagraphTrinarySentiment();
                         if(options.bgExplainClassification)
-                            sRationale = (new StringBuilder("\t")).append(paragraph.getClassificationRationale()).toString();
-                        sOutput = (new StringBuilder(String.valueOf(iTrinary))).append("\t").append(sLine).append(sRationale).append("\n").toString();
+                            sRationale = "\t" + paragraph.getClassificationRationale();
+                        sOutput = iTrinary + "\t" + sLine + sRationale + "\n";
                     } else
                     if(options.bgScaleMode)
                     {
                         iScale = paragraph.getParagraphScaleSentiment();
                         if(options.bgExplainClassification)
-                            sRationale = (new StringBuilder("\t")).append(paragraph.getClassificationRationale()).toString();
-                        sOutput = (new StringBuilder(String.valueOf(iScale))).append("\t").append(sLine).append(sRationale).append("\n").toString();
+                            sRationale = "\t" + paragraph.getClassificationRationale();
+                        sOutput = iScale + "\t" + sLine + sRationale + "\n";
                     } else
                     {
                         iPos = paragraph.getParagraphPositiveSentiment();
                         iNeg = paragraph.getParagraphNegativeSentiment();
                         if(options.bgExplainClassification)
-                            sRationale = (new StringBuilder("\t")).append(paragraph.getClassificationRationale()).toString();
-                        sOutput = (new StringBuilder(String.valueOf(iPos))).append("\t").append(iNeg).append("\t").append(sLine).append(sRationale).append("\n").toString();
+                            sRationale = "\t" + paragraph.getClassificationRationale();
+                        sOutput = iPos + "\t" + iNeg + "\t" + sLine + sRationale + "\n";
                     }
                     wWriter.write(sOutput);
                     if(options.bgTrinaryMode)
@@ -987,44 +988,44 @@ public class Corpus
             if(iClassified > 0)
                 if(options.bgTrinaryMode)
                 {
-                    System.out.println((new StringBuilder("Trinary correct: ")).append(iCorrectTrinaryCount).append(" (").append(((float)iCorrectTrinaryCount / (float)iClassified) * 100F).append("%).").toString());
+                    System.out.println("Trinary correct: " + iCorrectTrinaryCount + " (" + ((float) iCorrectTrinaryCount / (float) iClassified) * 100F + "%).");
                     System.out.println("Correct -> -1   0   1");
-                    System.out.println((new StringBuilder("Est = -1   ")).append(confusion[0][0]).append(" ").append(confusion[0][1]).append(" ").append(confusion[0][2]).toString());
-                    System.out.println((new StringBuilder("Est =  0   ")).append(confusion[1][0]).append(" ").append(confusion[1][1]).append(" ").append(confusion[1][2]).toString());
-                    System.out.println((new StringBuilder("Est =  1   ")).append(confusion[2][0]).append(" ").append(confusion[2][1]).append(" ").append(confusion[2][2]).toString());
+                    System.out.println("Est = -1   " + confusion[0][0] + " " + confusion[0][1] + " " + confusion[0][2]);
+                    System.out.println("Est =  0   " + confusion[1][0] + " " + confusion[1][1] + " " + confusion[1][2]);
+                    System.out.println("Est =  1   " + confusion[2][0] + " " + confusion[2][1] + " " + confusion[2][2]);
                 } else
                 if(options.bgScaleMode)
                 {
-                    System.out.println((new StringBuilder("Scale correct: ")).append(iCorrectScaleCount).append(" (").append(((float)iCorrectScaleCount / (float)iClassified) * 100F).append("%) out of ").append(iClassified).toString());
-                    System.out.println((new StringBuilder("  Correlation: ")).append(ClassificationStatistics.correlation(iScaleClassCorr, iScaleClassPred, iClassified)).toString());
+                    System.out.println("Scale correct: " + iCorrectScaleCount + " (" + ((float) iCorrectScaleCount / (float) iClassified) * 100F + "%) out of " + iClassified);
+                    System.out.println("  Correlation: " + ClassificationStatistics.correlation(iScaleClassCorr, iScaleClassPred, iClassified));
                 } else
                 {
-                    System.out.print((new StringBuilder(String.valueOf(options.sgProgramPos))).append(" correct: ").append(iCorrectPosCount).append(" (").append(((float)iCorrectPosCount / (float)iClassified) * 100F).append("%).").toString());
-                    System.out.println((new StringBuilder(" Mean abs diff: ")).append((float)iPosAbsDiff / (float)iClassified).toString());
+                    System.out.print(options.sgProgramPos + " correct: " + iCorrectPosCount + " (" + ((float) iCorrectPosCount / (float) iClassified) * 100F + "%).");
+                    System.out.println(" Mean abs diff: " + (float) iPosAbsDiff / (float) iClassified);
                     if(iClassified < maxClassifyForCorrelation)
                     {
-                        System.out.println((new StringBuilder(" Correlation: ")).append(ClassificationStatistics.correlationAbs(iPosClassCorr, iPosClassPred, iClassified)).toString());
+                        System.out.println(" Correlation: " + ClassificationStatistics.correlationAbs(iPosClassCorr, iPosClassPred, iClassified));
                         int corrWithin1 = ClassificationStatistics.accuracyWithin1(iPosClassCorr, iPosClassPred, iClassified, false);
-                        System.out.println((new StringBuilder(" Correct +/- 1: ")).append(corrWithin1).append(" (").append((float)(100 * corrWithin1) / (float)iClassified).append("%)").toString());
+                        System.out.println(" Correct +/- 1: " + corrWithin1 + " (" + (float) (100 * corrWithin1) / (float) iClassified + "%)");
                     }
-                    System.out.print((new StringBuilder(String.valueOf(options.sgProgramNeg))).append(" correct: ").append(iCorrectNegCount).append(" (").append(((float)iCorrectNegCount / (float)iClassified) * 100F).append("%).").toString());
-                    System.out.println((new StringBuilder(" Mean abs diff: ")).append((float)iNegAbsDiff / (float)iClassified).toString());
+                    System.out.print(options.sgProgramNeg + " correct: " + iCorrectNegCount + " (" + ((float) iCorrectNegCount / (float) iClassified) * 100F + "%).");
+                    System.out.println(" Mean abs diff: " + (float) iNegAbsDiff / (float) iClassified);
                     if(iClassified < maxClassifyForCorrelation)
                     {
-                        System.out.println((new StringBuilder(" Correlation: ")).append(ClassificationStatistics.correlationAbs(iNegClassCorr, iNegClassPred, iClassified)).toString());
+                        System.out.println(" Correlation: " + ClassificationStatistics.correlationAbs(iNegClassCorr, iNegClassPred, iClassified));
                         int corrWithin1 = ClassificationStatistics.accuracyWithin1(iNegClassCorr, iNegClassPred, iClassified, true);
-                        System.out.println((new StringBuilder(" Correct +/- 1: ")).append(corrWithin1).append(" (").append((float)(100 * corrWithin1) / (float)iClassified).append("%)").toString());
+                        System.out.println(" Correct +/- 1: " + corrWithin1 + " (" + (float) (100 * corrWithin1) / (float) iClassified + "%)");
                     }
                 }
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Could not find input file: ")).append(sInputFile).toString());
+            System.out.println("Could not find input file: " + sInputFile);
             e.printStackTrace();
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Error reading from input file: ")).append(sInputFile).append(" or writing to output file ").append(sOutputFile).toString());
+            System.out.println("Error reading from input file: " + sInputFile + " or writing to output file " + sOutputFile);
             e.printStackTrace();
         }
     }
@@ -1037,7 +1038,7 @@ public class Corpus
             sPosOrScale = "ScaleCorrel";
         else
             sPosOrScale = "PosCorrel";
-        w.write((new StringBuilder("\tPosCorrect\tiPosCorrect/Total\tNegCorrect\tNegCorrect/Total\tPosWithin1\tPosWithin1/Total\tNegWithin1\tNegWithin1/Total\t")).append(sPosOrScale).append("\tNegCorrel").append("\tPosMPE\tNegMPE\tPosMPEnoDiv\tNegMPEnoDiv").append("\tTrinaryOrScaleCorrect\tTrinaryOrScaleCorrect/TotalClassified").append("\tTrinaryOrScaleCorrectWithin1\tTrinaryOrScaleCorrectWithin1/TotalClassified").append("\test-1corr-1\test-1corr0\test-1corr1").append("\test0corr-1\test0corr0\test0corr1").append("\test1corr-1\test1corr0\test1corr1").append("\tTotalClassified\n").toString());
+        w.write("\tPosCorrect\tiPosCorrect/Total\tNegCorrect\tNegCorrect/Total\tPosWithin1\tPosWithin1/Total\tNegWithin1\tNegWithin1/Total\t" + sPosOrScale + "\tNegCorrel" + "\tPosMPE\tNegMPE\tPosMPEnoDiv\tNegMPEnoDiv" + "\tTrinaryOrScaleCorrect\tTrinaryOrScaleCorrect/TotalClassified" + "\tTrinaryOrScaleCorrectWithin1\tTrinaryOrScaleCorrectWithin1/TotalClassified" + "\test-1corr-1\test-1corr0\test-1corr1" + "\test0corr-1\test0corr0\test0corr1" + "\test1corr-1\test1corr0\test1corr1" + "\tTotalClassified\n");
     }
 
     public void run10FoldCrossValidationForAllOptionVariations(int iMinImprovement, boolean bUseTotalDifference, int iReplications, int iMultiOptimisations, String sOutFileName)
@@ -1045,7 +1046,7 @@ public class Corpus
         try
         {
             BufferedWriter wResultsWriter = new BufferedWriter(new FileWriter(sOutFileName));
-            BufferedWriter wTermStrengthWriter = new BufferedWriter(new FileWriter((new StringBuilder(String.valueOf(FileOps.s_ChopFileNameExtension(sOutFileName)))).append("_termStrVars.txt").toString()));
+            BufferedWriter wTermStrengthWriter = new BufferedWriter(new FileWriter(FileOps.s_ChopFileNameExtension(sOutFileName) + "_termStrVars.txt"));
             if(igPosClass == null || igPosClass.length < igPosCorrect.length)
             {
                 igPosClass = new int[igParagraphCount + 1];
@@ -1153,25 +1154,24 @@ public class Corpus
             run10FoldCrossValidationMultipleTimes(iMinImprovement + 1, bUseTotalDifference, iReplications, iMultiOptimisations, wResultsWriter, wTermStrengthWriter);
             wResultsWriter.close();
             wTermStrengthWriter.close();
-            SummariseMultiple10FoldValidations(sOutFileName, (new StringBuilder(String.valueOf(sOutFileName))).append("_sum.txt").toString());
+            SummariseMultiple10FoldValidations(sOutFileName, sOutFileName + "_sum.txt");
         }
         catch(IOException e)
         {
             e.printStackTrace();
-            return;
         }
     }
 
     private void run10FoldCrossValidationOnce(int iMinImprovement, boolean bUseTotalDifference, int iMultiOptimisations, BufferedWriter wWriter, BufferedWriter wTermStrengthWriter)
     {
         int iTotalSentimentWords = resources.sentimentWords.getSentimentWordCount();
-        int iParagraphRand[] = new int[igParagraphCount + 1];
-        int iPosClassAll[] = new int[igParagraphCount + 1];
-        int iNegClassAll[] = new int[igParagraphCount + 1];
-        int iTrinaryOrScaleClassAll[] = new int[igParagraphCount + 1];
+        int[] iParagraphRand = new int[igParagraphCount + 1];
+        int[] iPosClassAll = new int[igParagraphCount + 1];
+        int[] iNegClassAll = new int[igParagraphCount + 1];
+        int[] iTrinaryOrScaleClassAll = new int[igParagraphCount + 1];
         int iTotalClassified = 0;
         Sort.makeRandomOrderList(iParagraphRand);
-        int iOriginalSentimentStrengths[] = new int[iTotalSentimentWords + 1];
+        int[] iOriginalSentimentStrengths = new int[iTotalSentimentWords + 1];
         for(int i = 1; i < iTotalSentimentWords; i++)
             iOriginalSentimentStrengths[i] = resources.sentimentWords.getSentiment(i);
 
@@ -1206,7 +1206,7 @@ public class Corpus
         printClassificationResultsRow(iPosClassAll, iNegClassAll, iTrinaryOrScaleClassAll, wWriter);
     }
 
-    private boolean printClassificationResultsRow(int iPosClassAll[], int iNegClassAll[], int iTrinaryOrScaleClassAll[], BufferedWriter wWriter)
+    private boolean printClassificationResultsRow(int[] iPosClassAll, int[] iNegClassAll, int[] iTrinaryOrScaleClassAll, BufferedWriter wWriter)
     {
         int iPosCorrect = -1;
         int iNegCorrect = -1;
@@ -1226,7 +1226,7 @@ public class Corpus
         double fNegMPE = 9999D;
         double fPosMPEnoDiv = 9999D;
         double fNegMPEnoDiv = 9999D;
-        int estCorr[][] = {
+        int[][] estCorr = {
             new int[3], new int[3], new int[3]
         };
         try
@@ -1263,7 +1263,7 @@ public class Corpus
                 fPosWithin1Poportion = (float)iPosWithin1 / (float)igParagraphCount;
                 fNegWithin1Poportion = (float)iNegWithin1 / (float)igParagraphCount;
             }
-            wWriter.write((new StringBuilder("\t")).append(iPosCorrect).append("\t").append(fPosCorrectPoportion).append("\t").append(iNegCorrect).append("\t").append(fNegCorrectPoportion).append("\t").append(iPosWithin1).append("\t").append(fPosWithin1Poportion).append("\t").append(iNegWithin1).append("\t").append(fNegWithin1Poportion).append("\t").append(fPosOrScaleCorr).append("\t").append(fNegCorr).append("\t").append(fPosMPE).append("\t").append(fNegMPE).append("\t").append(fPosMPEnoDiv).append("\t").append(fNegMPEnoDiv).append("\t").append(iTrinaryCorrect).append("\t").append(fTrinaryCorrectPoportion).append("\t").append(iTrinaryCorrectWithin1).append("\t").append(fTrinaryCorrectWithin1Poportion).append("\t").append(estCorr[0][0]).append("\t").append(estCorr[0][1]).append("\t").append(estCorr[0][2]).append("\t").append(estCorr[1][0]).append("\t").append(estCorr[1][1]).append("\t").append(estCorr[1][2]).append("\t").append(estCorr[2][0]).append("\t").append(estCorr[2][1]).append("\t").append(estCorr[2][2]).append("\t").append(igParagraphCount).append("\n").toString());
+            wWriter.write("\t" + iPosCorrect + "\t" + fPosCorrectPoportion + "\t" + iNegCorrect + "\t" + fNegCorrectPoportion + "\t" + iPosWithin1 + "\t" + fPosWithin1Poportion + "\t" + iNegWithin1 + "\t" + fNegWithin1Poportion + "\t" + fPosOrScaleCorr + "\t" + fNegCorr + "\t" + fPosMPE + "\t" + fNegMPE + "\t" + fPosMPEnoDiv + "\t" + fNegMPEnoDiv + "\t" + iTrinaryCorrect + "\t" + fTrinaryCorrectPoportion + "\t" + iTrinaryCorrectWithin1 + "\t" + fTrinaryCorrectWithin1Poportion + "\t" + estCorr[0][0] + "\t" + estCorr[0][1] + "\t" + estCorr[0][2] + "\t" + estCorr[1][0] + "\t" + estCorr[1][1] + "\t" + estCorr[1][2] + "\t" + estCorr[2][0] + "\t" + estCorr[2][1] + "\t" + estCorr[2][2] + "\t" + igParagraphCount + "\n");
         }
         catch(IOException e)
         {
@@ -1273,7 +1273,7 @@ public class Corpus
         return true;
     }
 
-    private void selectDecileAsSubcorpus(int iParagraphRand[], int iDecile, boolean bInvert)
+    private void selectDecileAsSubcorpus(int[] iParagraphRand, int iDecile, boolean bInvert)
     {
         if(igParagraphCount == 0)
             return;
@@ -1309,11 +1309,11 @@ public class Corpus
             return;
         }
         int iTotalSentimentWords = resources.sentimentWords.getSentimentWordCount();
-        int iOriginalSentimentStrengths[] = new int[iTotalSentimentWords + 1];
+        int[] iOriginalSentimentStrengths = new int[iTotalSentimentWords + 1];
         for(int j = 1; j <= iTotalSentimentWords; j++)
             iOriginalSentimentStrengths[j] = resources.sentimentWords.getSentiment(j);
 
-        int iTotalWeight[] = new int[iTotalSentimentWords + 1];
+        int[] iTotalWeight = new int[iTotalSentimentWords + 1];
         for(int j = 1; j <= iTotalSentimentWords; j++)
             iTotalWeight[j] = 0;
 
@@ -1351,7 +1351,7 @@ public class Corpus
         int iLastScaleNumberCorrect = getClassificationScaleNumberCorrect();
         int iNewScaleNumberCorrect = 0;
         int iTotalSentimentWords = resources.sentimentWords.getSentimentWordCount();
-        int iWordRand[] = new int[iTotalSentimentWords + 1];
+        int[] iWordRand = new int[iTotalSentimentWords + 1];
         while(bFullListChanges) 
         {
             Sort.makeRandomOrderList(iWordRand);
@@ -1405,7 +1405,7 @@ public class Corpus
         int iLastTrinaryCorrect = getClassificationTrinaryNumberCorrect();
         int iNewTrinary = 0;
         int iTotalSentimentWords = resources.sentimentWords.getSentimentWordCount();
-        int iWordRand[] = new int[iTotalSentimentWords + 1];
+        int[] iWordRand = new int[iTotalSentimentWords + 1];
         while(bFullListChanges) 
         {
             Sort.makeRandomOrderList(iWordRand);
@@ -1474,7 +1474,7 @@ public class Corpus
         int iNewPosTotalDiff = 0;
         int iNewNegTotalDiff = 0;
         int iTotalSentimentWords = resources.sentimentWords.getSentimentWordCount();
-        int iWordRand[] = new int[iTotalSentimentWords + 1];
+        int[] iWordRand = new int[iTotalSentimentWords + 1];
         while(bFullListChanges) 
         {
             Sort.makeRandomOrderList(iWordRand);
@@ -1549,9 +1549,9 @@ public class Corpus
         BufferedReader rResults = null;
         BufferedWriter wSummary = null;
         String sLine = null;
-        String sPrevData[] = null;
-        String sData[] = null;
-        float total[] = new float[iDataRows];
+        String[] sPrevData = null;
+        String[] sData = null;
+        float[] total = new float[iDataRows];
         int iRows = 0;
         int i = 0;
         try
@@ -1559,7 +1559,7 @@ public class Corpus
             rResults = new BufferedReader(new FileReader(sInputFile));
             wSummary = new BufferedWriter(new FileWriter(sOutputFile));
             sLine = rResults.readLine();
-            wSummary.write((new StringBuilder(String.valueOf(sLine))).append("\tNumber\n").toString());
+            wSummary.write(sLine + "\tNumber\n");
             while(rResults.ready()) 
             {
                 sLine = rResults.readLine();
@@ -1573,12 +1573,12 @@ public class Corpus
                 if(!bMatching)
                 {
                     for(i = 0; i < iLastOptionCol; i++)
-                        wSummary.write((new StringBuilder(String.valueOf(sPrevData[i]))).append("\t").toString());
+                        wSummary.write(sPrevData[i] + "\t");
 
                     for(i = 0; i < iDataRows; i++)
-                        wSummary.write((new StringBuilder(String.valueOf(total[i] / (float)iRows))).append("\t").toString());
+                        wSummary.write(total[i] / (float) iRows + "\t");
 
-                    wSummary.write((new StringBuilder(String.valueOf(iRows))).append("\n").toString());
+                    wSummary.write(iRows + "\n");
                     for(i = 0; i < iDataRows; i++)
                         total[i] = 0.0F;
 
@@ -1598,24 +1598,24 @@ public class Corpus
                 sPrevData = sLine.split("\t");
             }
             for(i = 0; i < iLastOptionCol; i++)
-                wSummary.write((new StringBuilder(String.valueOf(sPrevData[i]))).append("\t").toString());
+                wSummary.write(sPrevData[i] + "\t");
 
             for(i = 0; i < iDataRows; i++)
-                wSummary.write((new StringBuilder(String.valueOf(total[i] / (float)iRows))).append("\t").toString());
+                wSummary.write(total[i] / (float) iRows + "\t");
 
-            wSummary.write((new StringBuilder(String.valueOf(iRows))).append("\n").toString());
+            wSummary.write(iRows + "\n");
             wSummary.close();
             rResults.close();
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("SummariseMultiple10FoldValidations: File I/O error: ")).append(sInputFile).toString());
+            System.out.println("SummariseMultiple10FoldValidations: File I/O error: " + sInputFile);
             e.printStackTrace();
         }
         catch(Exception e)
         {
-            System.out.println((new StringBuilder("SummariseMultiple10FoldValidations: Error at line: ")).append(sLine).toString());
-            System.out.println((new StringBuilder("Value of i: ")).append(i).toString());
+            System.out.println("SummariseMultiple10FoldValidations: Error at line: " + sLine);
+            System.out.println("Value of i: " + i);
             e.printStackTrace();
         }
     }

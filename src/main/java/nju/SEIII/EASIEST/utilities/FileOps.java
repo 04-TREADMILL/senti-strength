@@ -75,7 +75,7 @@ public class FileOps {
    }
 
    public static String s_ChopFileNameExtension(String sFilename) {
-      if (sFilename != null && sFilename != "") {
+      if (sFilename != null && !sFilename.equals("")) {
          int iLastDotPos = sFilename.lastIndexOf(".");
          if (iLastDotPos > 0) {
             sFilename = sFilename.substring(0, iLastDotPos);

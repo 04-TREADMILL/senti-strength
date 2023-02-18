@@ -10,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ClassificationOptions {
     public boolean bgTensiStrength = false;
@@ -142,75 +143,75 @@ public class ClassificationOptions {
                 int iTabPos = sLine.indexOf("\t");
                 if (iTabPos > 0) {
                     String[] sData = sLine.split("\t");
-                    if (sData[0] == "EmotionParagraphCombineMethod") {
-                        if (sData[1].indexOf("Max") >= 0) {
+                    if (Objects.equals(sData[0], "EmotionParagraphCombineMethod")) {
+                        if (sData[1].contains("Max")) {
                             this.igEmotionParagraphCombineMethod = 0;
                         }
 
-                        if (sData[1].indexOf("Av") >= 0) {
+                        if (sData[1].contains("Av")) {
                             this.igEmotionParagraphCombineMethod = 1;
                         }
 
-                        if (sData[1].indexOf("Tot") >= 0) {
+                        if (sData[1].contains("Tot")) {
                             this.igEmotionParagraphCombineMethod = 2;
                         }
-                    } else if (sData[0] == "EmotionSentenceCombineMethod") {
-                        if (sData[1].indexOf("Max") >= 0) {
+                    } else if (Objects.equals(sData[0], "EmotionSentenceCombineMethod")) {
+                        if (sData[1].contains("Max")) {
                             this.igEmotionSentenceCombineMethod = 0;
                         }
 
-                        if (sData[1].indexOf("Av") >= 0) {
+                        if (sData[1].contains("Av")) {
                             this.igEmotionSentenceCombineMethod = 1;
                         }
 
-                        if (sData[1].indexOf("Tot") >= 0) {
+                        if (sData[1].contains("Tot")) {
                             this.igEmotionSentenceCombineMethod = 2;
                         }
-                    } else if (sData[0] == "IgnoreNegativeEmotionInQuestionSentences") {
+                    } else if (Objects.equals(sData[0], "IgnoreNegativeEmotionInQuestionSentences")) {
                         this.bgReduceNegativeEmotionInQuestionSentences = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "MissCountsAsPlus2") {
+                    } else if (Objects.equals(sData[0], "MissCountsAsPlus2")) {
                         this.bgMissCountsAsPlus2 = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "YouOrYourIsPlus2UnlessSentenceNegative") {
+                    } else if (Objects.equals(sData[0], "YouOrYourIsPlus2UnlessSentenceNegative")) {
                         this.bgYouOrYourIsPlus2UnlessSentenceNegative = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "ExclamationCountsAsPlus2") {
+                    } else if (Objects.equals(sData[0], "ExclamationCountsAsPlus2")) {
                         this.bgExclamationInNeutralSentenceCountsAsPlus2 = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "UseIdiomLookupTable") {
+                    } else if (Objects.equals(sData[0], "UseIdiomLookupTable")) {
                         this.bgUseIdiomLookupTable = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "Mood") {
+                    } else if (Objects.equals(sData[0], "Mood")) {
                         this.igMoodToInterpretNeutralEmphasis = Integer.parseInt(sData[1]);
-                    } else if (sData[0] == "AllowMultiplePositiveWordsToIncreasePositiveEmotion") {
+                    } else if (Objects.equals(sData[0], "AllowMultiplePositiveWordsToIncreasePositiveEmotion")) {
                         this.bgAllowMultiplePositiveWordsToIncreasePositiveEmotion = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "AllowMultipleNegativeWordsToIncreaseNegativeEmotion") {
+                    } else if (Objects.equals(sData[0], "AllowMultipleNegativeWordsToIncreaseNegativeEmotion")) {
                         this.bgAllowMultipleNegativeWordsToIncreaseNegativeEmotion = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "IgnoreBoosterWordsAfterNegatives") {
+                    } else if (Objects.equals(sData[0], "IgnoreBoosterWordsAfterNegatives")) {
                         this.bgIgnoreBoosterWordsAfterNegatives = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "MultipleLettersBoostSentiment") {
+                    } else if (Objects.equals(sData[0], "MultipleLettersBoostSentiment")) {
                         this.bgMultipleLettersBoostSentiment = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "BoosterWordsChangeEmotion") {
+                    } else if (Objects.equals(sData[0], "BoosterWordsChangeEmotion")) {
                         this.bgBoosterWordsChangeEmotion = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "NegatingWordsFlipEmotion") {
+                    } else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
                         this.bgNegatingWordsFlipEmotion = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "NegatingWordsFlipEmotion") {
+                    } else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
                         this.bgNegatingPositiveFlipsEmotion = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "NegatingWordsFlipEmotion") {
+                    } else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
                         this.bgNegatingNegativeNeutralisesEmotion = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "CorrectSpellingsWithRepeatedLetter") {
+                    } else if (Objects.equals(sData[0], "CorrectSpellingsWithRepeatedLetter")) {
                         this.bgCorrectSpellingsWithRepeatedLetter = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "UseEmoticons") {
+                    } else if (Objects.equals(sData[0], "UseEmoticons")) {
                         this.bgUseEmoticons = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "CapitalsAreSentimentBoosters") {
+                    } else if (Objects.equals(sData[0], "CapitalsAreSentimentBoosters")) {
                         this.bgCapitalsBoostTermSentiment = Boolean.parseBoolean(sData[1]);
-                    } else if (sData[0] == "MinRepeatedLettersForBoost") {
+                    } else if (Objects.equals(sData[0], "MinRepeatedLettersForBoost")) {
                         this.igMinRepeatedLettersForBoost = Integer.parseInt(sData[1]);
-                    } else if (sData[0] == "WordsBeforeSentimentToNegate") {
+                    } else if (Objects.equals(sData[0], "WordsBeforeSentimentToNegate")) {
                         this.igMaxWordsBeforeSentimentToNegate = Integer.parseInt(sData[1]);
-                    } else if (sData[0] == "Trinary") {
+                    } else if (Objects.equals(sData[0], "Trinary")) {
                         this.bgTrinaryMode = true;
-                    } else if (sData[0] == "Binary") {
+                    } else if (Objects.equals(sData[0], "Binary")) {
                         this.bgTrinaryMode = true;
                         this.bgBinaryVersionOfTrinaryMode = true;
                     } else {
-                        if (sData[0] != "Scale") {
+                        if (!Objects.equals(sData[0], "Scale")) {
                             rReader.close();
                             return false;
                         }

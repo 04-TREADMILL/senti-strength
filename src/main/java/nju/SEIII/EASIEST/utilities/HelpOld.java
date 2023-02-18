@@ -17,7 +17,7 @@ public class HelpOld
     {
     }
 
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         System.out.println("Methods available in this package:");
         System.out.println("sentiStrength - all SentiStrength classification features except idioms");
@@ -39,20 +39,20 @@ public class HelpOld
         System.out.println("The remaining public variables are optional classification parameters");
         System.out.println("e.g., whether to use negating words");
         System.out.println();
-        String sTextToTranslate = "";
+        StringBuilder sTextToTranslate = new StringBuilder();
         for(int i = 0; i < args.length; i++)
-            sTextToTranslate = (new StringBuilder(String.valueOf(sTextToTranslate))).append(args[i]).append(" ").toString();
+            sTextToTranslate.append(args[i]).append(" ");
 
-        if(sTextToTranslate != "")
+        if(!sTextToTranslate.toString().equals(""))
         {
             SentiStrengthOld ss = new SentiStrengthOld();
             if(ss.initialise())
             {
-                ss.detectEmotionInText(sTextToTranslate.trim());
+                ss.detectEmotionInText(sTextToTranslate.toString().trim());
                 System.out.println(ss.getOriginalText());
                 System.out.println("was tagged as:");
                 System.out.println(ss.getTaggedText());
-                System.out.println((new StringBuilder("Positive sentiment of text: ")).append(ss.getPositiveClassification()).append(", negative: ").append(ss.getNegativeClassification()).toString());
+                System.out.println("Positive sentiment of text: " + ss.getPositiveClassification() + ", negative: " + ss.getNegativeClassification());
             }
         }
     }

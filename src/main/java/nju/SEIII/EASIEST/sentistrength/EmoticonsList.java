@@ -6,6 +6,7 @@
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 
 import nju.SEIII.EASIEST.utilities.FileOps;
@@ -17,8 +18,8 @@ import nju.SEIII.EASIEST.utilities.Sort;
 public class EmoticonsList
 {
 
-    private String sgEmoticon[];
-    private int igEmoticonStrength[];
+    private String[] sgEmoticon;
+    private int[] igEmoticonStrength;
     private int igEmoticonCount;
     private int igEmoticonMax;
 
@@ -44,27 +45,25 @@ public class EmoticonsList
         File f = new File(sSourceFile);
         if(!f.exists())
         {
-            System.out.println((new StringBuilder("Could not find file: ")).append(sSourceFile).toString());
+            System.out.println("Could not find file: " + sSourceFile);
             return false;
         }
         try
         {
             igEmoticonMax = FileOps.i_CountLinesInTextFile(sSourceFile) + 2;
             igEmoticonCount = 0;
-            String sEmoticonTemp[] = new String[igEmoticonMax];
-            sgEmoticon = sEmoticonTemp;
-            int iEmoticonStrengthTemp[] = new int[igEmoticonMax];
-            igEmoticonStrength = iEmoticonStrengthTemp;
+            sgEmoticon = new String[igEmoticonMax];
+            igEmoticonStrength = new int[igEmoticonMax];
             BufferedReader rReader;
             if(options.bgForceUTF8)
-                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sSourceFile), "UTF8"));
+                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sSourceFile), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sSourceFile));
             String sLine;
             while((sLine = rReader.readLine()) != null) 
-                if(sLine != "")
+                if(!sLine.equals(""))
                 {
-                    String sData[] = sLine.split("\t");
+                    String[] sData = sLine.split("\t");
                     if(sData.length > 1)
                     {
                         igEmoticonCount++;
@@ -76,7 +75,7 @@ public class EmoticonsList
                         catch(NumberFormatException e)
                         {
                             System.out.println("Failed to identify integer weight for emoticon! Ignoring emoticon");
-                            System.out.println((new StringBuilder("Line: ")).append(sLine).toString());
+                            System.out.println("Line: " + sLine);
                             igEmoticonCount--;
                         }
                     }
@@ -85,13 +84,13 @@ public class EmoticonsList
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Could not find emoticon file: ")).append(sSourceFile).toString());
+            System.out.println("Could not find emoticon file: " + sSourceFile);
             e.printStackTrace();
             return false;
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Found emoticon file but could not read from it: ")).append(sSourceFile).toString());
+            System.out.println("Found emoticon file but could not read from it: " + sSourceFile);
             e.printStackTrace();
             return false;
         }

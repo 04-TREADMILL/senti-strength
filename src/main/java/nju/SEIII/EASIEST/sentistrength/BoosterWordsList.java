@@ -6,6 +6,8 @@
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import nju.SEIII.EASIEST.utilities.FileOps;
 import nju.SEIII.EASIEST.utilities.Sort;
@@ -16,8 +18,8 @@ import nju.SEIII.EASIEST.utilities.Sort;
 public class BoosterWordsList
 {
 
-    private String sgBoosterWords[];
-    private int igBoosterWordStrength[];
+    private String[] sgBoosterWords;
+    private int[] igBoosterWordStrength;
     private int igBoosterWordsCount;
 
     public BoosterWordsList()
@@ -27,9 +29,9 @@ public class BoosterWordsList
 
     public boolean initialise(String sFilename, ClassificationOptions options, int iExtraBlankArrayEntriesToInclude)
     {
-        int iLinesInFile = 0;
-        int iWordStrength = 0;
-        if(sFilename == "")
+        int iLinesInFile;
+        int iWordStrength;
+        if(Objects.equals(sFilename, ""))
         {
             System.out.println("No booster words file specified");
             return false;
@@ -37,7 +39,7 @@ public class BoosterWordsList
         File f = new File(sFilename);
         if(!f.exists())
         {
-            System.out.println((new StringBuilder("Could not find booster words file: ")).append(sFilename).toString());
+            System.out.println("Could not find booster words file: " + sFilename);
             return false;
         }
         iLinesInFile = FileOps.i_CountLinesInTextFile(sFilename);
@@ -53,12 +55,12 @@ public class BoosterWordsList
         {
             BufferedReader rReader;
             if(options.bgForceUTF8)
-                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), "UTF8"));
+                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sFilename));
             String sLine;
             while((sLine = rReader.readLine()) != null) 
-                if(sLine != "")
+                if(!sLine.equals(""))
                 {
                     int iFirstTabLocation = sLine.indexOf("\t");
                     if(iFirstTabLocation >= 0)
@@ -74,13 +76,13 @@ public class BoosterWordsList
                         catch(NumberFormatException e)
                         {
                             System.out.println("Failed to identify integer weight for booster word! Assuming it is zero");
-                            System.out.println((new StringBuilder("Line: ")).append(sLine).toString());
+                            System.out.println("Line: " + sLine);
                             iWordStrength = 0;
                         }
                         sLine = sLine.substring(0, iFirstTabLocation);
-                        if(sLine.indexOf(" ") >= 0)
+                        if(sLine.contains(" "))
                             sLine = sLine.trim();
-                        if(sLine != "")
+                        if(!sLine.equals(""))
                         {
                             igBoosterWordsCount++;
                             sgBoosterWords[igBoosterWordsCount] = sLine;
@@ -93,13 +95,13 @@ public class BoosterWordsList
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Could not find booster words file: ")).append(sFilename).toString());
+            System.out.println("Could not find booster words file: " + sFilename);
             e.printStackTrace();
             return false;
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Found booster words file but could not read from it: ")).append(sFilename).toString());
+            System.out.println("Found booster words file but could not read from it: " + sFilename);
             e.printStackTrace();
             return false;
         }
@@ -118,7 +120,7 @@ public class BoosterWordsList
         }
         catch(Exception e)
         {
-            System.out.println((new StringBuilder("Could not add extra booster word: ")).append(sText).toString());
+            System.out.println("Could not add extra booster word: " + sText);
             e.printStackTrace();
             return false;
         }

@@ -45,7 +45,7 @@ public class Sentence {
 
     public int addToStringIndex(StringIndex stringIndex, TextParsingOptions textParsingOptions, boolean bRecordCount, boolean bArffIndex) {
         String sEncoded = "";
-        int iStringPos =1;
+        int iStringPos = 1;
         int iTermsChecked = 0;
         if (textParsingOptions.bgIncludePunctuation && textParsingOptions.igNgramSize == 1 && !textParsingOptions.bgUseTranslations && !textParsingOptions.bgAddEmphasisCode) {
             for(int i = 1; i <= this.igTermCount; ++i) {
@@ -54,7 +54,7 @@ public class Sentence {
 
             iTermsChecked = this.igTermCount;
         } else {
-            String sText = "";
+            StringBuilder sText = new StringBuilder();
             int iCurrentTerm = 0;
             int iTermCount = 0;
 
@@ -63,32 +63,32 @@ public class Sentence {
                 if (textParsingOptions.bgIncludePunctuation || !this.term[iCurrentTerm].isPunctuation()) {
                     ++iTermCount;
                     if (iTermCount > 1) {
-                        sText = sText + " ";
+                        sText.append(" ");
                     } else {
-                        sText = "";
+                        sText = new StringBuilder();
                     }
 
                     if (textParsingOptions.bgUseTranslations) {
-                        sText = sText + this.term[iCurrentTerm].getTranslation();
+                        sText.append(this.term[iCurrentTerm].getTranslation());
                     } else {
-                        sText = sText + this.term[iCurrentTerm].getOriginalText();
+                        sText.append(this.term[iCurrentTerm].getOriginalText());
                     }
 
                     if (textParsingOptions.bgAddEmphasisCode && this.term[iCurrentTerm].containsEmphasis()) {
-                        sText = sText + "+";
+                        sText.append("+");
                     }
                 }
 
                 if (iTermCount == textParsingOptions.igNgramSize) {
                     if (bArffIndex) {
-                        sEncoded = Arff.arffSafeWordEncode(sText.toLowerCase(), false);
+                        sEncoded = Arff.arffSafeWordEncode(sText.toString().toLowerCase(), false);
                         iStringPos = stringIndex.findString(sEncoded);
                         iTermCount = 0;
                         if (iStringPos > -1) {
                             stringIndex.add1ToCount(iStringPos);
                         }
                     } else {
-                        stringIndex.addString(sText.toLowerCase(), bRecordCount);
+                        stringIndex.addString(sText.toString().toLowerCase(), bRecordCount);
                         iTermCount = 0;
                     }
 
@@ -104,7 +104,7 @@ public class Sentence {
     public void setSentence(String sSentence, ClassificationResources classResources, ClassificationOptions newClassificationOptions) {
         this.resources = classResources;
         this.options = newClassificationOptions;
-        if (this.options.bgAlwaysSplitWordsAtApostrophes && sSentence.indexOf("'") >= 0) {
+        if (this.options.bgAlwaysSplitWordsAtApostrophes && sSentence.contains("'")) {
             sSentence = sSentence.replace("'", " ");
         }
 
@@ -179,13 +179,13 @@ public class Sentence {
     }
 
     public String getTaggedSentence() {
-        String sTagged = "";
+        StringBuilder sTagged = new StringBuilder();
 
         for(int i = 1; i <= this.igTermCount; ++i) {
             if (this.bgSpaceAfterTerm[i]) {
-                sTagged = sTagged + this.term[i].getTag() + " ";
+                sTagged.append(this.term[i].getTag()).append(" ");
             } else {
-                sTagged = sTagged + this.term[i].getTag();
+                sTagged.append(this.term[i].getTag());
             }
         }
 
@@ -197,19 +197,19 @@ public class Sentence {
     }
 
     public String getTranslatedSentence() {
-        String sTranslated = "";
+        StringBuilder sTranslated = new StringBuilder();
 
         for(int i = 1; i <= this.igTermCount; ++i) {
             if (this.term[i].isWord()) {
-                sTranslated = sTranslated + this.term[i].getTranslatedWord();
+                sTranslated.append(this.term[i].getTranslatedWord());
             } else if (this.term[i].isPunctuation()) {
-                sTranslated = sTranslated + this.term[i].getTranslatedPunctuation();
+                sTranslated.append(this.term[i].getTranslatedPunctuation());
             } else if (this.term[i].isEmoticon()) {
-                sTranslated = sTranslated + this.term[i].getEmoticon();
+                sTranslated.append(this.term[i].getEmoticon());
             }
 
             if (this.bgSpaceAfterTerm[i]) {
-                sTranslated = sTranslated + " ";
+                sTranslated.append(" ");
             }
         }
 
@@ -372,7 +372,7 @@ public class Sentence {
                             }
                         } else {
                             ++iWordTotal;
-                            if (iTerm == 1 || !this.term[iTerm].isProperNoun() || this.term[iTerm - 1].getOriginalText().equals(":") || this.term[iTerm - 1].getOriginalText().length() > 3 && this.term[iTerm - 1].getOriginalText().substring(0, 1).equals("@")) {
+                            if (iTerm == 1 || !this.term[iTerm].isProperNoun() || this.term[iTerm - 1].getOriginalText().equals(":") || this.term[iTerm - 1].getOriginalText().length() > 3 && this.term[iTerm - 1].getOriginalText().charAt(0) == '@') {
                                 fSentiment[iWordTotal] = (float)this.term[iTerm].getSentimentValue();
                                 
                                 if (this.options.bgExplainClassification) {
@@ -395,7 +395,7 @@ public class Sentence {
 
                             if (this.options.bgMultipleLettersBoostSentiment && this.term[iTerm].getWordEmphasisLength() >= this.options.igMinRepeatedLettersForBoost && (iTerm == 1 || !this.term[iTerm - 1].isPunctuation() || !this.term[iTerm - 1].getOriginalText().equals("@"))) {
                                 String sEmphasis = this.term[iTerm].getWordEmphasis().toLowerCase();
-                                if (sEmphasis.indexOf("xx") < 0 && sEmphasis.indexOf("ww") < 0 && sEmphasis.indexOf("ha") < 0) {
+                                if (!sEmphasis.contains("xx") && !sEmphasis.contains("ww") && !sEmphasis.contains("ha")) {
                                     if (fSentiment[iWordTotal] < 0.0F) {
                                         fSentiment[iWordTotal] = (float)((double)fSentiment[iWordTotal] - 0.6D);
                                         if (this.options.bgExplainClassification) {

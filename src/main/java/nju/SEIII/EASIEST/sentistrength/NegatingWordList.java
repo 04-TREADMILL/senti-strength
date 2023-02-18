@@ -6,6 +6,7 @@
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 
 import nju.SEIII.EASIEST.utilities.FileOps;
@@ -17,7 +18,7 @@ import nju.SEIII.EASIEST.utilities.Sort;
 public class NegatingWordList
 {
 
-    private String sgNegatingWord[];
+    private String[] sgNegatingWord;
     private int igNegatingWordCount;
     private int igNegatingWordMax;
 
@@ -34,7 +35,7 @@ public class NegatingWordList
         File f = new File(sFilename);
         if(!f.exists())
         {
-            System.out.println((new StringBuilder("Could not find the negating words file: ")).append(sFilename).toString());
+            System.out.println("Could not find the negating words file: " + sFilename);
             return false;
         }
         igNegatingWordMax = FileOps.i_CountLinesInTextFile(sFilename) + 2;
@@ -44,12 +45,12 @@ public class NegatingWordList
         {
             BufferedReader rReader;
             if(options.bgForceUTF8)
-                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), "UTF8"));
+                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sFilename));
             String sLine;
             while((sLine = rReader.readLine()) != null) 
-                if(sLine != "")
+                if(!sLine.equals(""))
                 {
                     igNegatingWordCount++;
                     sgNegatingWord[igNegatingWordCount] = sLine;
@@ -59,13 +60,13 @@ public class NegatingWordList
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Could not find negating words file: ")).append(sFilename).toString());
+            System.out.println("Could not find negating words file: " + sFilename);
             e.printStackTrace();
             return false;
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Found negating words file but could not read from it: ")).append(sFilename).toString());
+            System.out.println("Found negating words file but could not read from it: " + sFilename);
             e.printStackTrace();
             return false;
         }

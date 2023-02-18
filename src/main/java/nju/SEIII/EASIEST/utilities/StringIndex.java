@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 public class StringIndex {
    private int igTextMax = 10000000;
@@ -55,7 +56,7 @@ public class StringIndex {
          return false;
       } else {
          try {
-            BufferedReader rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sVocabTermPtrsCountFileName), "UTF8"));
+            BufferedReader rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sVocabTermPtrsCountFileName), StandardCharsets.UTF_8));
             String sLine = rReader.readLine();
             String[] sData = sLine.split("\t");
             this.igTextLast = -1;
@@ -97,7 +98,7 @@ public class StringIndex {
       }
 
       try {
-         BufferedWriter wWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sVocabTermPtrsCountFileName), "UTF8"));
+         BufferedWriter wWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sVocabTermPtrsCountFileName), StandardCharsets.UTF_8));
          wWriter.write("Word\tLessPtr\tMorePtr\tAllTopics");
 
          for(int i = 0; i <= this.igTextLast; ++i) {

@@ -31,10 +31,10 @@ public class WekaCrossValidateNoSelection
     {
     }
 
-    public static void main(String args[])
+    public static void main(String[] args)
         throws Exception
     {
-        boolean bArgumentRecognised[] = new boolean[args.length];
+        boolean[] bArgumentRecognised = new boolean[args.length];
         String classifierName = ",,all,";
         String addToClasspath = "";
         String classifierExclude = "";
@@ -61,7 +61,7 @@ public class WekaCrossValidateNoSelection
                 }
                 if(args[i].equals("classifier"))
                 {
-                    classifierName = (new StringBuilder(",,")).append(args[i + 1].toLowerCase()).append(",").toString();
+                    classifierName = ",," + args[i + 1].toLowerCase() + ",";
                     bArgumentRecognised[i] = true;
                     bArgumentRecognised[i + 1] = true;
                 }
@@ -107,7 +107,7 @@ public class WekaCrossValidateNoSelection
 
         for(int i = 0; i < args.length; i++)
             if(!bArgumentRecognised[i])
-                System.out.println((new StringBuilder("Unrecognised command - wrong spelling or case?: ")).append(args[i]).toString());
+                System.out.println("Unrecognised command - wrong spelling or case?: " + args[i]);
 
         ReportParameters(args, iterations, classifierName, classifierExclude, addToClasspath, instructionFilename, inputArffFilename, resultsFileName, summaryResultsFileName);
         File f;
@@ -130,7 +130,7 @@ public class WekaCrossValidateNoSelection
                 reader.close();
             } else
             {
-                System.out.println((new StringBuilder("Instructions file ")).append(instructionFilename).append(" not found - giving up.").toString());
+                System.out.println("Instructions file " + instructionFilename + " not found - giving up.");
                 return;
             }
         }
@@ -142,15 +142,15 @@ public class WekaCrossValidateNoSelection
         f = new File(inputArffFilename);
         if(!f.exists())
         {
-            System.out.println((new StringBuilder("Input ARFF file ")).append(inputArffFilename).append(" not found - giving up without running analysis.").toString());
+            System.out.println("Input ARFF file " + inputArffFilename + " not found - giving up without running analysis.");
             return;
         }
-        System.out.println((new StringBuilder("Started processing ")).append(inputArffFilename).toString());
+        System.out.println("Started processing " + inputArffFilename);
         for(int i = 1; i <= iterations; i++)
         {
             int randomSeed = random.nextInt();
             classifyAllArff(inputArffFilename, classifierName, classifierExclude, randomSeed, resultsFileName, summaryResultsFileName);
-            System.out.println((new StringBuilder(String.valueOf(i))).append("/").append(iterations).append(" iterations done").toString());
+            System.out.println(String.valueOf(i) + "/" + iterations + " iterations done");
         }
 
         System.out.println("For correlations, use Windows SentiStrength, Data Mining|Summarise Average... menu item");
@@ -167,11 +167,11 @@ public class WekaCrossValidateNoSelection
         data.setClassIndex(data.numAttributes() - 1);
         String options = null;
         Evaluation eval = new Evaluation(data);
-        System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+        System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
         if(classifierName.indexOf(",liblin,") > 0)
             try
             {
-                Utilities.addToClassPath((new StringBuilder(String.valueOf(sgJarFolder))).append("liblinear-1.51.jar").toString());
+                Utilities.addToClassPath(sgJarFolder + "liblinear-1.51.jar");
                 start = Utilities.getNow();
                 Utilities.printNameAndWarning("LibLINEAR");
                 start = Utilities.getNow();
@@ -180,18 +180,18 @@ public class WekaCrossValidateNoSelection
                 schemeLibLINEAR.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeLibLINEAR, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "LibLin", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with LibLINEAR on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
-                System.out.println((new StringBuilder("Must have jar file in Jar folder ")).append(sgJarFolder).append(" or classpath. Here is the current Java classpath").toString());
+                System.out.println("Error with LibLINEAR on " + arffFileName + " " + e.getMessage());
+                System.out.println("Must have jar file in Jar folder " + sgJarFolder + " or classpath. Here is the current Java classpath");
                 Utilities.printClasspath();
             }
         if(classifierName.indexOf(",libsvm,") > 0)
             try
             {
-                Utilities.addToClassPath((new StringBuilder(String.valueOf(sgJarFolder))).append("libsvm.jar").toString());
+                Utilities.addToClassPath(sgJarFolder + "libsvm.jar");
                 start = Utilities.getNow();
                 Utilities.printNameAndWarning("LibSVM");
                 eval = new Evaluation(data);
@@ -200,12 +200,12 @@ public class WekaCrossValidateNoSelection
                 schemeLibSVM.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeLibSVM, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "LibSVM", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with LibSVM on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
-                System.out.println((new StringBuilder("Must have jar file in Jar folder ")).append(sgJarFolder).append(" or classpath. Here is the current Java classpath").toString());
+                System.out.println("Error with LibSVM on " + arffFileName + " " + e.getMessage());
+                System.out.println("Must have jar file in Jar folder " + sgJarFolder + " or classpath. Here is the current Java classpath");
                 Utilities.printClasspath();
             }
         if((classifierName.indexOf(",smo,") > 0 || classifierName.indexOf(",all,") > 0) && !classifierExclude.equals("SMO"))
@@ -218,11 +218,11 @@ public class WekaCrossValidateNoSelection
                 schemeSMO.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeSMO, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "SMO", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with SMO on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
+                System.out.println("Error with SMO on " + arffFileName + " " + e.getMessage());
             }
         if((classifierName.indexOf(",slog,") > 0 || classifierName.indexOf(",all,") > 0) && !classifierExclude.equals("SLOG"))
             try
@@ -235,11 +235,11 @@ public class WekaCrossValidateNoSelection
                 schemeSLOG.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeSLOG, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "SLOG", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with SLOG on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
+                System.out.println("Error with SLOG on " + arffFileName + " " + e.getMessage());
             }
         if((classifierName.indexOf(",bayes,") > 0 || classifierName.indexOf(",all,") > 0) && !classifierExclude.equals("BAYES"))
             try
@@ -250,11 +250,11 @@ public class WekaCrossValidateNoSelection
                 NaiveBayes schemeBayes = new NaiveBayes();
                 eval.crossValidateModel(schemeBayes, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "BAYES", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with BAYES on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
+                System.out.println("Error with BAYES on " + arffFileName + " " + e.getMessage());
             }
         if((classifierName.indexOf(",ada,") > 0 || classifierName.indexOf(",all,") > 0) && !classifierExclude.equals("ADA"))
             try
@@ -267,11 +267,11 @@ public class WekaCrossValidateNoSelection
                 schemeAda.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeAda, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "ADA", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with ADA on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
+                System.out.println("Error with ADA on " + arffFileName + " " + e.getMessage());
             }
         if((classifierName.indexOf(",smoreg,") > 0 || classifierName.indexOf(",all,") > 0) && !classifierExclude.equals("SMOreg"))
             try
@@ -284,11 +284,11 @@ public class WekaCrossValidateNoSelection
                 schemeSMOreg.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeSMOreg, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "SMOreg", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with SMOreg on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
+                System.out.println("Error with SMOreg on " + arffFileName + " " + e.getMessage());
             }
         if((classifierName.indexOf(",jrip,") > 0 || classifierName.indexOf(",all,") > 0) && !classifierExclude.equals("JRIP"))
             try
@@ -301,11 +301,11 @@ public class WekaCrossValidateNoSelection
                 schemeJrip.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeJrip, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "JRIP", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with JRIP on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
+                System.out.println("Error with JRIP on " + arffFileName + " " + e.getMessage());
             }
         if((classifierName.indexOf(",dec,") > 0 || classifierName.indexOf(",all,") > 0) && !classifierExclude.equals("DEC"))
             try
@@ -318,11 +318,11 @@ public class WekaCrossValidateNoSelection
                 schemeDec.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeDec, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "DEC", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with DEC on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
+                System.out.println("Error with DEC on " + arffFileName + " " + e.getMessage());
             }
         if((classifierName.indexOf(",j48,") > 0 || classifierName.indexOf(",all,") > 0) && !classifierExclude.equals("J48"))
             try
@@ -335,26 +335,26 @@ public class WekaCrossValidateNoSelection
                 schemeJ48.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeJ48, data, 10, new Random(randomSeed), new Object[0]);
                 PrintClassificationResultsAllData(eval, arffFileName, "J48", randomSeed, options, allResultsFilename, summaryResultsFilename);
-                System.out.println((new StringBuilder(String.valueOf(Utilities.timeGap(start, Utilities.getNow())))).append(" taken").toString());
+                System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Error with J48 on ")).append(arffFileName).append(" ").append(e.getMessage()).toString());
+                System.out.println("Error with J48 on " + arffFileName + " " + e.getMessage());
             }
     }
 
-    public static void ReportParameters(String args[], int iterations, String classifierName, String classifierExclude, String addToClasspath, String instructionFilename, String inputFilename, String resultsFileName, 
-            String summaryResultsFileName)
+    public static void ReportParameters(String[] args, int iterations, String classifierName, String classifierExclude, String addToClasspath, String instructionFilename, String inputFilename, String resultsFileName,
+                                        String summaryResultsFileName)
     {
         System.out.println("No feature selection method: defaults or set by command line:");
-        System.out.println((new StringBuilder(" ")).append(iterations).append(" [iterations]").toString());
-        System.out.println((new StringBuilder(" ")).append(classifierName).append(" [classifier] LibSVM/LibLin/ALL=SMO/SLOG/BAYES/ADA/SMOreg/JRIP/DEC/J48").toString());
-        System.out.println((new StringBuilder(" ")).append(classifierExclude).append(" [classifierExclude] SMO/SLOG/BAYES/ADA/SMOreg/JRIP/DEC/J48").toString());
-        System.out.println((new StringBuilder(" ")).append(instructionFilename).append(" [instructions] file (train., eval., results file triples list)").toString());
-        System.out.println((new StringBuilder(" ")).append(inputFilename).append(" [input] ARFF file").toString());
-        System.out.println((new StringBuilder(" ")).append(resultsFileName).append(" [results] file").toString());
-        System.out.println((new StringBuilder(" ")).append(summaryResultsFileName).append(" [summary] results file (just accuracy)").toString());
-        System.out.println((new StringBuilder(" ")).append(addToClasspath).append(" [addToClasspath] file to add to classpath").toString());
+        System.out.println(" " + iterations + " [iterations]");
+        System.out.println(" " + classifierName + " [classifier] LibSVM/LibLin/ALL=SMO/SLOG/BAYES/ADA/SMOreg/JRIP/DEC/J48");
+        System.out.println(" " + classifierExclude + " [classifierExclude] SMO/SLOG/BAYES/ADA/SMOreg/JRIP/DEC/J48");
+        System.out.println(" " + instructionFilename + " [instructions] file (train., eval., results file triples list)");
+        System.out.println(" " + inputFilename + " [input] ARFF file");
+        System.out.println(" " + resultsFileName + " [results] file");
+        System.out.println(" " + summaryResultsFileName + " [summary] results file (just accuracy)");
+        System.out.println(" " + addToClasspath + " [addToClasspath] file to add to classpath");
         System.out.println("");
     }
 
@@ -366,16 +366,16 @@ public class WekaCrossValidateNoSelection
         allResultsPrintStream.println();
         allResultsPrintStream.println(arffFilename);
         allResultsPrintStream.println("=== Evaluation result ===");
-        allResultsPrintStream.println((new StringBuilder("Scheme: ")).append(classifierName).toString());
-        allResultsPrintStream.println((new StringBuilder("Options: ")).append(options).toString());
-        allResultsPrintStream.println((new StringBuilder("Relation: .Randomize-S")).append(randomSeed).toString());
+        allResultsPrintStream.println("Scheme: " + classifierName);
+        allResultsPrintStream.println("Options: " + options);
+        allResultsPrintStream.println("Relation: .Randomize-S" + randomSeed);
         allResultsPrintStream.println(eval.toSummaryString());
         allResultsPrintStream.println(eval.toClassDetailsString());
         allResultsPrintStream.println(eval.toMatrixString());
         fout.close();
         fout = new FileOutputStream(summaryResultsFilename, true);
         PrintStream summaryResultsPrintStream = new PrintStream(fout);
-        summaryResultsPrintStream.println((new StringBuilder(String.valueOf(classifierName))).append("\t").append(randomSeed).append("\t").append(eval.pctCorrect()).append("%\t").append(options).append("\t").append(arffFilename).toString());
+        summaryResultsPrintStream.println(classifierName + "\t" + randomSeed + "\t" + eval.pctCorrect() + "%\t" + options + "\t" + arffFilename);
         fout.close();
     }
 

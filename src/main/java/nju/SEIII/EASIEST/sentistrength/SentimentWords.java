@@ -6,6 +6,8 @@
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 
 import nju.SEIII.EASIEST.utilities.FileOps;
@@ -17,13 +19,13 @@ import nju.SEIII.EASIEST.utilities.Sort;
 public class SentimentWords
 {
 
-    private String sgSentimentWords[];
-    private int igSentimentWordsStrengthTake1[];
+    private String[] sgSentimentWords;
+    private int[] igSentimentWordsStrengthTake1;
     private int igSentimentWordsCount;
-    private String sgSentimentWordsWithStarAtStart[];
-    private int igSentimentWordsWithStarAtStartStrengthTake1[];
+    private String[] sgSentimentWordsWithStarAtStart;
+    private int[] igSentimentWordsWithStarAtStartStrengthTake1;
     private int igSentimentWordsWithStarAtStartCount;
-    private boolean bgSentimentWordsWithStarAtStartHasStarAtEnd[];
+    private boolean[] bgSentimentWordsWithStarAtStartHasStarAtEnd;
 
     public SentimentWords()
     {
@@ -75,7 +77,7 @@ public class SentimentWords
         if(igSentimentWordsWithStarAtStartCount > 0)
         {
             for(int i = 1; i <= igSentimentWordsWithStarAtStartCount; i++)
-                if(sWord == sgSentimentWordsWithStarAtStart[i])
+                if(sWord.equals(sgSentimentWordsWithStarAtStart[i]))
                 {
                     if(iNewSentiment > 0)
                         setSentiment(igSentimentWordsCount + i, iNewSentiment - 1);
@@ -100,17 +102,10 @@ public class SentimentWords
                     iSentimentStrength--;
                 else
                     iSentimentStrength++;
-                String sOutput = (new StringBuilder(String.valueOf(sgSentimentWords[i]))).append("\t").append(iSentimentStrength).append("\n").toString();
-                if(c.options.bgForceUTF8)
-                    try
-                    {
-                        sOutput = new String(sOutput.getBytes("UTF-8"), "UTF-8");
-                    }
-                    catch(UnsupportedEncodingException e)
-                    {
-                        System.out.println("UTF-8 not found on your system!");
-                        e.printStackTrace();
-                    }
+                String sOutput = sgSentimentWords[i] + "\t" + iSentimentStrength + "\n";
+                if(c.options.bgForceUTF8) {
+                    sOutput = new String(sOutput.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+                }
                 wWriter.write(sOutput);
             }
 
@@ -121,20 +116,13 @@ public class SentimentWords
                     iSentimentStrength--;
                 else
                     iSentimentStrength++;
-                String sOutput = (new StringBuilder("*")).append(sgSentimentWordsWithStarAtStart[i]).toString();
+                String sOutput = "*" + sgSentimentWordsWithStarAtStart[i];
                 if(bgSentimentWordsWithStarAtStartHasStarAtEnd[i])
-                    sOutput = (new StringBuilder(String.valueOf(sOutput))).append("*").toString();
-                sOutput = (new StringBuilder(String.valueOf(sOutput))).append("\t").append(iSentimentStrength).append("\n").toString();
-                if(c.options.bgForceUTF8)
-                    try
-                    {
-                        sOutput = new String(sOutput.getBytes("UTF-8"), "UTF-8");
-                    }
-                    catch(UnsupportedEncodingException e)
-                    {
-                        System.out.println("UTF-8 not found on your system!");
-                        e.printStackTrace();
-                    }
+                    sOutput = sOutput + "*";
+                sOutput = sOutput + "\t" + iSentimentStrength + "\n";
+                if(c.options.bgForceUTF8) {
+                    sOutput = new String(sOutput.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+                }
                 wWriter.write(sOutput);
             }
 
@@ -155,13 +143,13 @@ public class SentimentWords
             for(int i = 1; i <= igSentimentWordsCount; i++)
             {
                 int iSentimentStrength = igSentimentWordsStrengthTake1[i];
-                wWriter.write((new StringBuilder("\t")).append(iSentimentStrength).toString());
+                wWriter.write("\t" + iSentimentStrength);
             }
 
             for(int i = 1; i <= igSentimentWordsWithStarAtStartCount; i++)
             {
                 int iSentimentStrength = igSentimentWordsWithStarAtStartStrengthTake1[i];
-                wWriter.write((new StringBuilder("\t")).append(iSentimentStrength).toString());
+                wWriter.write("\t" + iSentimentStrength);
             }
 
             wWriter.write("\n");
@@ -179,11 +167,11 @@ public class SentimentWords
         try
         {
             for(int i = 1; i <= igSentimentWordsCount; i++)
-                wWriter.write((new StringBuilder("\t")).append(sgSentimentWords[i]).toString());
+                wWriter.write("\t" + sgSentimentWords[i]);
 
             for(int i = 1; i <= igSentimentWordsWithStarAtStartCount; i++)
             {
-                wWriter.write((new StringBuilder("\t*")).append(sgSentimentWordsWithStarAtStart[i]).toString());
+                wWriter.write("\t*" + sgSentimentWordsWithStarAtStart[i]);
                 if(bgSentimentWordsWithStarAtStartHasStarAtEnd[i])
                     wWriter.write("*");
             }
@@ -257,7 +245,7 @@ public class SentimentWords
     {
         int iWordStrength = 0;
         int iWordsWithStarAtStart = 0;
-        if(sFilename == "")
+        if(Objects.equals(sFilename, ""))
         {
             System.out.println("No sentiment file specified");
             return false;
@@ -265,13 +253,13 @@ public class SentimentWords
         File f = new File(sFilename);
         if(!f.exists())
         {
-            System.out.println((new StringBuilder("Could not find sentiment file: ")).append(sFilename).toString());
+            System.out.println("Could not find sentiment file: " + sFilename);
             return false;
         }
         int iLinesInFile = FileOps.i_CountLinesInTextFile(sFilename);
         if(iLinesInFile < 2)
         {
-            System.out.println((new StringBuilder("Less than 2 lines in sentiment file: ")).append(sFilename).toString());
+            System.out.println("Less than 2 lines in sentiment file: " + sFilename);
             return false;
         }
         igSentimentWordsStrengthTake1 = new int[iLinesInFile + 1 + iExtraBlankArrayEntriesToInclude];
@@ -281,12 +269,12 @@ public class SentimentWords
         {
             BufferedReader rReader;
             if(options.bgForceUTF8)
-                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), "UTF8"));
+                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sFilename));
             String sLine;
             while((sLine = rReader.readLine()) != null) 
-                if(sLine != "")
+                if(!sLine.equals(""))
                     if(sLine.indexOf("*") == 0)
                     {
                         iWordsWithStarAtStart++;
@@ -305,13 +293,13 @@ public class SentimentWords
                             }
                             catch(NumberFormatException e)
                             {
-                                System.out.println((new StringBuilder("Failed to identify integer weight for sentiment word! Ignoring word\nLine: ")).append(sLine).toString());
+                                System.out.println("Failed to identify integer weight for sentiment word! Ignoring word\nLine: " + sLine);
                                 iWordStrength = 0;
                             }
                             sLine = sLine.substring(0, iFirstTabLocation);
-                            if(sLine.indexOf(" ") >= 0)
+                            if(sLine.contains(" "))
                                 sLine = sLine.trim();
-                            if(sLine != "")
+                            if(!sLine.equals(""))
                             {
                                 sgSentimentWords[++igSentimentWordsCount] = sLine;
                                 if(iWordStrength > 0)
@@ -328,13 +316,13 @@ public class SentimentWords
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Couldn't find sentiment file: ")).append(sFilename).toString());
+            System.out.println("Couldn't find sentiment file: " + sFilename);
             e.printStackTrace();
             return false;
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Found sentiment file but couldn't read from it: ")).append(sFilename).toString());
+            System.out.println("Found sentiment file but couldn't read from it: " + sFilename);
             e.printStackTrace();
             return false;
         }
@@ -350,7 +338,7 @@ public class SentimentWords
         File f = new File(sFilename);
         if(!f.exists())
         {
-            System.out.println((new StringBuilder("Could not find sentiment file: ")).append(sFilename).toString());
+            System.out.println("Could not find sentiment file: " + sFilename);
             return false;
         }
         igSentimentWordsWithStarAtStartStrengthTake1 = new int[iWordsWithStarAtStart + 1 + iExtraBlankArrayEntriesToInclude];
@@ -361,13 +349,13 @@ public class SentimentWords
         {
             BufferedReader rReader;
             if(options.bgForceUTF8)
-                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), "UTF8"));
+                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sFilename));
             while(rReader.ready()) 
             {
                 String sLine = rReader.readLine();
-                if(sLine != "" && sLine.indexOf("*") == 0)
+                if(!Objects.equals(sLine, "") && sLine.indexOf("*") == 0)
                 {
                     int iFirstTabLocation = sLine.indexOf("\t");
                     if(iFirstTabLocation >= 0)
@@ -382,7 +370,7 @@ public class SentimentWords
                         }
                         catch(NumberFormatException e)
                         {
-                            System.out.println((new StringBuilder("Failed to identify integer weight for *sentiment* word! Ignoring word\nLine: ")).append(sLine).toString());
+                            System.out.println("Failed to identify integer weight for *sentiment* word! Ignoring word\nLine: " + sLine);
                             iWordStrength = 0;
                         }
                         sLine = sLine.substring(1, iFirstTabLocation);
@@ -394,9 +382,9 @@ public class SentimentWords
                         {
                             bgSentimentWordsWithStarAtStartHasStarAtEnd[++igSentimentWordsWithStarAtStartCount] = false;
                         }
-                        if(sLine.indexOf(" ") >= 0)
+                        if(sLine.contains(" "))
                             sLine = sLine.trim();
-                        if(sLine != "")
+                        if(!sLine.equals(""))
                         {
                             sgSentimentWordsWithStarAtStart[igSentimentWordsWithStarAtStartCount] = sLine;
                             if(iWordStrength > 0)
@@ -416,13 +404,13 @@ public class SentimentWords
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Couldn't find *sentiment file*: ")).append(sFilename).toString());
+            System.out.println("Couldn't find *sentiment file*: " + sFilename);
             e.printStackTrace();
             return false;
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Found *sentiment file* but couldn't read from it: ")).append(sFilename).toString());
+            System.out.println("Found *sentiment file* but couldn't read from it: " + sFilename);
             e.printStackTrace();
             return false;
         }
@@ -456,7 +444,7 @@ public class SentimentWords
             }
             catch(Exception e)
             {
-                System.out.println((new StringBuilder("Could not add extra sentiment term: ")).append(sTerm).toString());
+                System.out.println("Could not add extra sentiment term: " + sTerm);
                 e.printStackTrace();
                 return false;
             }

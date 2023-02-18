@@ -65,7 +65,7 @@ public class Paragraph {
    public void setParagraph(String sParagraph, ClassificationResources classResources, ClassificationOptions newClassificationOptions) {
       this.resources = classResources;
       this.options = newClassificationOptions;
-      if (sParagraph.indexOf("\"") >= 0) {
+      if (sParagraph.contains("\"")) {
          sParagraph = sParagraph.replace("\"", "'");
       }
 
@@ -137,7 +137,7 @@ public class Paragraph {
             iLastSentenceEnd = iPos - 1;
          }
 
-         if (sNextSentence != "") {
+         if (!sNextSentence.equals("")) {
             ++this.igSentenceCount;
             this.sentence[this.igSentenceCount] = new Sentence();
             this.sentence[this.igSentenceCount].setSentence(sNextSentence, this.resources, this.options);
@@ -204,23 +204,23 @@ public class Paragraph {
    }
 
    public String getTaggedParagraph() {
-      String sTagged = "";
+      StringBuilder sTagged = new StringBuilder();
 
       for(int i = 1; i <= this.igSentenceCount; ++i) {
-         sTagged = sTagged + this.sentence[i].getTaggedSentence();
+         sTagged.append(this.sentence[i].getTaggedSentence());
       }
 
-      return sTagged;
+      return sTagged.toString();
    }
 
    public String getTranslatedParagraph() {
-      String sTranslated = "";
+      StringBuilder sTranslated = new StringBuilder();
 
       for(int i = 1; i <= this.igSentenceCount; ++i) {
-         sTranslated = sTranslated + this.sentence[i].getTranslatedSentence();
+         sTranslated.append(this.sentence[i].getTranslatedSentence());
       }
 
-      return sTranslated;
+      return sTranslated.toString();
    }
 
    public void recalculateParagraphSentimentScores() {

@@ -6,6 +6,8 @@
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 
 import nju.SEIII.EASIEST.utilities.FileOps;
@@ -16,11 +18,11 @@ import nju.SEIII.EASIEST.utilities.FileOps;
 public class IdiomList
 {
 
-    public String sgIdioms[];
-    public int igIdiomStrength[];
+    public String[] sgIdioms;
+    public int[] igIdiomStrength;
     public int igIdiomCount;
-    public String sgIdiomWords[][];
-    int igIdiomWordCount[];
+    public String[][] sgIdiomWords;
+    int[] igIdiomWordCount;
 
     public IdiomList()
     {
@@ -31,12 +33,12 @@ public class IdiomList
     {
         int iLinesInFile = 0;
         int iIdiomStrength = 0;
-        if(sFilename == "")
+        if(Objects.equals(sFilename, ""))
             return false;
         File f = new File(sFilename);
         if(!f.exists())
         {
-            System.out.println((new StringBuilder("Could not find idiom list file: ")).append(sFilename).toString());
+            System.out.println("Could not find idiom list file: " + sFilename);
             return false;
         }
         iLinesInFile = FileOps.i_CountLinesInTextFile(sFilename);
@@ -47,12 +49,12 @@ public class IdiomList
         {
             BufferedReader rReader;
             if(options.bgForceUTF8)
-                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), "UTF8"));
+                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFilename), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sFilename));
             String sLine;
             while((sLine = rReader.readLine()) != null) 
-                if(sLine != "")
+                if(!sLine.equals(""))
                 {
                     int iFirstTabLocation = sLine.indexOf("\t");
                     if(iFirstTabLocation >= 0)
@@ -73,17 +75,17 @@ public class IdiomList
                         catch(NumberFormatException e)
                         {
                             System.out.println("Failed to identify integer weight for idiom! Ignoring idiom");
-                            System.out.println((new StringBuilder("Line: ")).append(sLine).toString());
+                            System.out.println("Line: " + sLine);
                             iIdiomStrength = 0;
                         }
                         sLine = sLine.substring(0, iFirstTabLocation);
-                        if(sLine.indexOf(" ") >= 0)
+                        if(sLine.contains(" "))
                             sLine = sLine.trim();
                         if(sLine.indexOf("  ") > 0)
                             sLine = sLine.replace("  ", " ");
                         if(sLine.indexOf("  ") > 0)
                             sLine = sLine.replace("  ", " ");
-                        if(sLine != "")
+                        if(!sLine.equals(""))
                         {
                             igIdiomCount++;
                             sgIdioms[igIdiomCount] = sLine;
@@ -95,13 +97,13 @@ public class IdiomList
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Could not find idiom list file: ")).append(sFilename).toString());
+            System.out.println("Could not find idiom list file: " + sFilename);
             e.printStackTrace();
             return false;
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Found idiom list file but could not read from it: ")).append(sFilename).toString());
+            System.out.println("Found idiom list file but could not read from it: " + sFilename);
             e.printStackTrace();
             return false;
         }
@@ -126,7 +128,7 @@ public class IdiomList
         }
         catch(Exception e)
         {
-            System.out.println((new StringBuilder("Could not add extra idiom: ")).append(sIdiom).toString());
+            System.out.println("Could not add extra idiom: " + sIdiom);
             e.printStackTrace();
             return false;
         }
@@ -139,15 +141,14 @@ public class IdiomList
         igIdiomWordCount = new int[igIdiomCount + 1];
         for(int iIdiom = 1; iIdiom <= igIdiomCount; iIdiom++)
         {
-            String sWordList[] = sgIdioms[iIdiom].split(" ");
+            String[] sWordList = sgIdioms[iIdiom].split(" ");
             if(sWordList.length >= 9)
             {
-                System.out.println((new StringBuilder("Ignoring idiom! Too many words in it! (>9): ")).append(sgIdioms[iIdiom]).toString());
+                System.out.println("Ignoring idiom! Too many words in it! (>9): " + sgIdioms[iIdiom]);
             } else
             {
                 igIdiomWordCount[iIdiom] = sWordList.length;
-                for(int iTerm = 0; iTerm < sWordList.length; iTerm++)
-                    sgIdiomWords[iIdiom][iTerm] = sWordList[iTerm];
+                System.arraycopy(sWordList, 0, sgIdiomWords[iIdiom], 0, sWordList.length);
 
             }
         }
@@ -158,7 +159,7 @@ public class IdiomList
     {
         sPhrase = sPhrase.toLowerCase();
         for(int i = 1; i <= igIdiomCount; i++)
-            if(sPhrase.indexOf(sgIdioms[i]) >= 0)
+            if(sPhrase.contains(sgIdioms[i]))
                 return igIdiomStrength[i];
 
         return 999;

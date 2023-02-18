@@ -10,7 +10,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import java.util.Objects;
+
 import nju.SEIII.EASIEST.utilities.FileOps;
 
 public class SentiStrength {
@@ -244,13 +247,9 @@ public class SentiStrength {
       }
 
       if (c.initialise()) {
-         if (sTextToParse != "") {
+         if (!Objects.equals(sTextToParse, "")) {
             if (bURLEncoded) {
-               try {
-                  sTextToParse = URLDecoder.decode(sTextToParse, "UTF-8");
-               } catch (UnsupportedEncodingException var31) {
-                  var31.printStackTrace();
-               }
+               sTextToParse = URLDecoder.decode(sTextToParse, StandardCharsets.UTF_8);
             } else {
                sTextToParse = sTextToParse.replace("+", " ");
             }
@@ -263,8 +262,8 @@ public class SentiStrength {
          } else if (bStdIn) {
             this.listenToStdIn(c, iTextCol);
          } else if (!bWait) {
-            if (sOptimalTermStrengths != "") {
-               if (sInputFile == "") {
+            if (!Objects.equals(sOptimalTermStrengths, "")) {
+               if (Objects.equals(sInputFile, "")) {
                   System.out.println("Input file must be specified to optimise term weights");
                   return;
                }
@@ -287,11 +286,11 @@ public class SentiStrength {
             } else if (iTextColForAnnotation > 0) {
                this.annotationTextCol(c, sInputFile, sInputFolder, sFileSubString, iTextColForAnnotation, bOkToOverwrite);
             } else {
-               if (sInputFolder != "") {
+               if (!Objects.equals(sInputFolder, "")) {
                   System.out.println("Input folder specified but textCol and IDcol or annotateCol needed");
                }
 
-               if (sInputFile == "") {
+               if (Objects.equals(sInputFile, "")) {
                   System.out.println("No action taken because no input file nor text specified");
                   this.showBriefHelp();
                   return;
@@ -820,7 +819,7 @@ public class SentiStrength {
       try {
          while((sTextToParse = stdin.readLine()) != null) {
             boolean bSuccess;
-            if (sTextToParse.indexOf("#Change_TermWeight") >= 0) {
+            if (sTextToParse.contains("#Change_TermWeight")) {
                String[] sData = sTextToParse.split("\t");
                bSuccess = c.resources.sentimentWords.setSentiment(sData[1], Integer.parseInt(sData[2]));
                if (bSuccess) {
@@ -868,12 +867,7 @@ public class SentiStrength {
                }
 
                if (c.options.bgForceUTF8) {
-                  try {
-                     System.out.println(new String(sOutput.getBytes("UTF-8"), "UTF-8"));
-                  } catch (UnsupportedEncodingException var13) {
-                     System.out.println("UTF-8Not found on your system!");
-                     var13.printStackTrace();
-                  }
+                  System.out.println(new String(sOutput.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
                } else {
                   System.out.println(sOutput);
                }
@@ -894,7 +888,7 @@ public class SentiStrength {
             try {
                while(true) {
                   String sTextToParse = stdin.readLine();
-                  if (sTextToParse.toLowerCase().equals("@end")) {
+                  if (sTextToParse.equalsIgnoreCase("@end")) {
                      return;
                   }
 
@@ -929,12 +923,7 @@ public class SentiStrength {
                   if (!c.options.bgForceUTF8) {
                      System.out.println(sOutput);
                   } else {
-                     try {
-                        System.out.println(new String(sOutput.getBytes("UTF-8"), "UTF-8"));
-                     } catch (UnsupportedEncodingException var12) {
-                        System.out.println("UTF-8Not found on your system!");
-                        var12.printStackTrace();
-                     }
+                     System.out.println(new String(sOutput.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
                   }
                }
             } catch (IOException var13) {
@@ -995,7 +984,7 @@ public class SentiStrength {
                      lastSpacePos = inputLine.length();
                   }
 
-                  decodedText = URLDecoder.decode(inputLine.substring(5, lastSpacePos), "UTF-8");
+                  decodedText = URLDecoder.decode(inputLine.substring(5, lastSpacePos), StandardCharsets.UTF_8);
                   System.out.println("Analysis of text: " + decodedText);
                   break;
                }
@@ -1042,12 +1031,7 @@ public class SentiStrength {
          }
 
          if (c.options.bgForceUTF8) {
-            try {
-               out.print(new String(sOutput.getBytes("UTF-8"), "UTF-8"));
-            } catch (UnsupportedEncodingException var22) {
-               out.print("UTF-8 Not found on your system!");
-               var22.printStackTrace();
-            }
+            out.print(new String(sOutput.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
          } else {
             out.print(sOutput);
          }

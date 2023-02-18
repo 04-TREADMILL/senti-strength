@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -356,7 +357,7 @@ public class Arff {
             if (iSentimentType == 4) {
                iClassOffset = 2;
                if (sData.length > 2) {
-                  if (sData[1].length() > 1 && sData[1].substring(0, 1).equals("-")) {
+                  if (sData[1].length() > 1 && sData[1].charAt(0) == '-') {
                      sData[1] = sData[1].substring(1);
                   }
 
@@ -394,7 +395,7 @@ public class Arff {
                   ++iAttUsed;
                   if (bgSaveArffAsCondensed) {
                      if (stringIndex.getCount(w) != 0) {
-                        wWriter.write(Integer.toString(iAttUsed + iClassOffset) + " " + stringIndex.getCount(w) + ",");
+                        wWriter.write(iAttUsed + iClassOffset + " " + stringIndex.getCount(w) + ",");
                      }
                   } else {
                      wWriter.write(stringIndex.getCount(w) + ",");
@@ -422,8 +423,8 @@ public class Arff {
 
    private static void mergeLabelledAndUnlabelledTextFiles(String sLabelledTextFileIn, String sUnlabelledTextFileIn, String sTextFileOut) {
       try {
-         BufferedReader rLabelled = new BufferedReader(new InputStreamReader(new FileInputStream(sLabelledTextFileIn), "UTF8"));
-         BufferedReader rUnlabelled = new BufferedReader(new InputStreamReader(new FileInputStream(sUnlabelledTextFileIn), "UTF8"));
+         BufferedReader rLabelled = new BufferedReader(new InputStreamReader(new FileInputStream(sLabelledTextFileIn), StandardCharsets.UTF_8));
+         BufferedReader rUnlabelled = new BufferedReader(new InputStreamReader(new FileInputStream(sUnlabelledTextFileIn), StandardCharsets.UTF_8));
          BufferedWriter wWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sTextFileOut)));
 
          while(rLabelled.ready() && rUnlabelled.ready()) {
@@ -521,21 +522,16 @@ public class Arff {
    public static String arffSafeWordEncode(String sWord, boolean bCodeNumbersForQuestionMarksNotUsed) {
       String sEncodedWord = "";
 
-      try {
-         sEncodedWord = URLEncoder.encode(sWord, "UTF-8");
-      } catch (UnsupportedEncodingException var4) {
-         System.out.print("Fatal UnsupportedEncodingException UTF-8");
-         var4.printStackTrace();
-      }
+      sEncodedWord = URLEncoder.encode(sWord, StandardCharsets.UTF_8);
 
       if (sEncodedWord.equals(sWord)) {
          return "U_" + sWord;
       } else {
-         if (sEncodedWord.indexOf("%") >= 0) {
+         if (sEncodedWord.contains("%")) {
             sEncodedWord = sEncodedWord.replace("%", "_pc");
          }
 
-         if (sEncodedWord.indexOf("}") >= 0) {
+         if (sEncodedWord.contains("}")) {
             sEncodedWord = sEncodedWord.replace("}", "_brak");
          }
 
@@ -550,7 +546,7 @@ public class Arff {
          return false;
       } else {
          try {
-            BufferedReader rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sSentiTextFileIn), "UTF8"));
+            BufferedReader rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sSentiTextFileIn), StandardCharsets.UTF_8));
             String sLine;
             if (bHeaderLine && rReader.ready()) {
                sLine = rReader.readLine();
@@ -614,13 +610,13 @@ public class Arff {
 
             while(rReader.ready()) {
                String sLine = rReader.readLine();
-               if (sLine.indexOf("@data") >= 0) {
+               if (sLine.contains("@data")) {
                   break;
                }
 
                if (sLine.length() > 0) {
                   String[] sData = sLine.split(" ");
-                  if (sData.length == 3 && sData[0].equals("@attribute") && sData[2].equals("numeric") && sData[1].length() > 2 && sData[1].indexOf("Ngram") < 0) {
+                  if (sData.length == 3 && sData[0].equals("@attribute") && sData[2].equals("numeric") && sData[1].length() > 2 && !sData[1].contains("Ngram")) {
                      int iStringLastOld1 = stringIndex.getLastWordID();
                      if (sData[1].substring(1).equals("Q")) {
                         iPos = sData[1].indexOf("_");
@@ -896,7 +892,7 @@ public class Arff {
 
    private static boolean printSelectedAttributes(String[] sAttributes, int iAttributesCount, boolean[] bDelete, BufferedWriter swNew, boolean bVerbose) {
       int iDelCount = 0;
-      String sDelList = "";
+      StringBuilder sDelList = new StringBuilder();
 
       try {
          if (sAttributes[0] != null) {
@@ -909,7 +905,7 @@ public class Arff {
             } else {
                ++iDelCount;
                if (bVerbose) {
-                  sDelList = sDelList + sAttributes[i];
+                  sDelList.append(sAttributes[i]);
                }
             }
          }
@@ -989,14 +985,14 @@ public class Arff {
 
                   printCondensedData(swOutput, iAttID, iData, iPairs);
                } else {
-                  String sDeletedCols = "";
+                  StringBuilder sDeletedCols = new StringBuilder();
                   sData = sLine.split(",");
 
                   for(iCol = 1; iCol < iLastPrintedAttribute; ++iCol) {
                      if (!bDeleteCol[iCol]) {
                         swOutput.write(sData[iCol - 1] + ",");
                      } else {
-                        sDeletedCols = sDeletedCols + sData[iCol - 1] + ",";
+                        sDeletedCols.append(sData[iCol - 1]).append(",");
                      }
                   }
 
@@ -1005,7 +1001,7 @@ public class Arff {
                   } else {
                      for(iCol = iLastPrintedAttribute; iCol <= iAttributeCount; ++iCol) {
                         if (bDeleteCol[iCol]) {
-                           sDeletedCols = sDeletedCols + sData[iCol - 1] + ",";
+                           sDeletedCols.append(sData[iCol - 1]).append(",");
                         }
                      }
 
@@ -1120,7 +1116,7 @@ public class Arff {
 
    private static boolean[] printNonDuplicateAttributes(String[] sAttributes1, int iAttributes1Count, String[] sAttributes2, int iAttributes2Count, boolean bVerbose, BufferedWriter wMerged) {
       int iDupCount = 0;
-      String sDuplicateList = "";
+      StringBuilder sDuplicateList = new StringBuilder();
       boolean[] bDuplicate2 = new boolean[iAttributes2Count + 1];
 
       try {
@@ -1133,7 +1129,7 @@ public class Arff {
             for(i = 1; i <= iAttributes1Count; ++i) {
                if (sAttributes2[j].equals(sAttributes1[i])) {
                   if (bVerbose) {
-                     sDuplicateList = sDuplicateList + sAttributes1[i] + " | ";
+                     sDuplicateList.append(sAttributes1[i]).append(" | ");
                   }
 
                   bDuplicate2[j] = true;
@@ -1195,7 +1191,7 @@ public class Arff {
          }
 
          for(; rArffIn.ready() && sLine.indexOf("@data") != 0; sLine = rArffIn.readLine()) {
-            if (!sLine.equals("") && !sLine.substring(0, 1).equals("%")) {
+            if (!sLine.equals("") && sLine.charAt(0) != '%') {
                if (sLine.indexOf("@relation ") == 0) {
                   sAttributes[0] = sLine;
                } else {
@@ -1413,7 +1409,7 @@ public class Arff {
       int iDataCount = iAttData[1];
 
       try {
-         System.out.println("AttributeSelection: Attributes " + iAttributeCount + " data " + iDataCount + " attribute x data " + Long.toString((long)(iAttributeCount + 1) * (long)(iAttributeCount + 1)));
+         System.out.println("AttributeSelection: Attributes " + iAttributeCount + " data " + iDataCount + " attribute x data " + (long) (iAttributeCount + 1) * (long) (iAttributeCount + 1));
          int[][] iData = new int[iAttributeCount + 1][iDataCount + 1];
          double[] fColIG = new double[iAttributeCount + 1];
          boolean[] bUseCol = new boolean[iAttributeCount + 1];
@@ -1469,7 +1465,7 @@ public class Arff {
    }
 
    private static String readArffAttributesAndData(String sArffIn, int iAttributeCount, int iDataCount, String[] sAttributes, int[][] iData) {
-      String sHeader = "";
+      StringBuilder sHeader = new StringBuilder();
       String sLine = "";
       int iAtt = 0;
       boolean var10 = false;
@@ -1489,7 +1485,7 @@ public class Arff {
                   sAttributes[iAtt] = sLine;
                }
             } else {
-               sHeader = sHeader + sLine + "\n";
+               sHeader.append(sLine).append("\n");
             }
          }
 
@@ -1502,14 +1498,14 @@ public class Arff {
                   do {
                      if (!rArff.ready()) {
                         rArff.close();
-                        return sHeader;
+                        return sHeader.toString();
                      }
 
                      sLine = rArff.readLine();
                   } while(sLine.length() <= 1);
 
                   ++iDataCount;
-                  if (sLine.indexOf("{") >= 0) {
+                  if (sLine.contains("{")) {
                      for(iAtt = 1; iAtt <= iAttributeCount; ++iAtt) {
                         iData[iAtt][iDataCount] = 0;
                      }
@@ -1534,7 +1530,7 @@ public class Arff {
       } catch (Exception var12) {
          System.out.println("[readArffAttributesAndData]Error reading file " + sArffIn);
          var12.printStackTrace();
-         return sHeader;
+         return sHeader.toString();
       }
    }
 

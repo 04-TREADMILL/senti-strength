@@ -1,5 +1,7 @@
 package nju.SEIII.EASIEST.sentistrength;
 
+import java.util.Objects;
+
 public class Term {
    private final int igContentTypeWord = 1;
    private final int igContentTypePunctuation = 2;
@@ -73,13 +75,13 @@ public class Term {
    public String getTag() {
       switch(this.igContentType) {
       case 1:
-         if (this.sgWordEmphasis != "") {
+         if (!Objects.equals(this.sgWordEmphasis, "")) {
             return "<w equiv=\"" + this.sgTranslatedWord + "\" em=\"" + this.sgWordEmphasis + "\">" + this.sgOriginalWord + "</w>";
          }
 
          return "<w>" + this.sgOriginalWord + "</w>";
       case 2:
-         if (this.sgPunctuationEmphasis != "") {
+         if (!Objects.equals(this.sgPunctuationEmphasis, "")) {
             return "<p equiv=\"" + this.sgPunctuation + "\" em=\"" + this.sgPunctuationEmphasis + "\">" + this.sgPunctuation + this.sgPunctuationEmphasis + "</p>";
          }
 
@@ -163,7 +165,7 @@ public class Term {
 
    public boolean isAllCapitals() {
       if (!this.bgAllCaptialsCalculated) {
-         if (this.sgOriginalWord == this.sgOriginalWord.toUpperCase()) {
+         if (Objects.equals(this.sgOriginalWord, this.sgOriginalWord.toUpperCase())) {
             this.bgAllCapitals = true;
          } else {
             this.bgAllCapitals = false;
@@ -182,10 +184,10 @@ public class Term {
    public boolean punctuationContains(String sPunctuation) {
       if (this.igContentType != 2) {
          return false;
-      } else if (this.sgPunctuation.indexOf(sPunctuation) > -1) {
+      } else if (this.sgPunctuation.contains(sPunctuation)) {
          return true;
       } else {
-         return this.sgPunctuationEmphasis != "" && this.sgPunctuationEmphasis.indexOf(sPunctuation) > -1;
+         return !Objects.equals(this.sgPunctuationEmphasis, "") && this.sgPunctuationEmphasis.contains(sPunctuation);
       }
    }
 
@@ -220,7 +222,7 @@ public class Term {
          if (!this.bgProperNounCalculated) {
             if (this.sgOriginalWord.length() > 1) {
                String sFirstLetter = this.sgOriginalWord.substring(0, 1);
-               if (!sFirstLetter.toLowerCase().equals(sFirstLetter.toUpperCase()) && !this.sgOriginalWord.substring(0, 2).toUpperCase().equals("I'")) {
+               if (!sFirstLetter.toLowerCase().equals(sFirstLetter.toUpperCase()) && !this.sgOriginalWord.substring(0, 2).equalsIgnoreCase("I'")) {
                   String sWordRemainder = this.sgOriginalWord.substring(1);
                   if (sFirstLetter.equals(sFirstLetter.toUpperCase()) && sWordRemainder.equals(sWordRemainder.toLowerCase())) {
                      this.bgProperNoun = true;
@@ -333,8 +335,8 @@ public class Term {
    }
 
    private void codeWord(String sWord) {
-      String sWordNew = "";
-      String sEm = "";
+      StringBuilder sWordNew = new StringBuilder();
+      StringBuilder sEm = new StringBuilder();
       if (this.options.bgCorrectExtraLetterSpellingErrors) {
          int iSameCount = 0;
          int iLastCopiedPos = 0;
@@ -345,18 +347,18 @@ public class Term {
             if (sWord.substring(iPos, iPos + 1).compareToIgnoreCase(sWord.substring(iPos - 1, iPos)) == 0) {
                ++iSameCount;
             } else {
-               if (iSameCount > 0 && this.options.sgIllegalDoubleLettersInWordMiddle.indexOf(sWord.substring(iPos - 1, iPos)) >= 0) {
+               if (iSameCount > 0 && this.options.sgIllegalDoubleLettersInWordMiddle.contains(sWord.substring(iPos - 1, iPos))) {
                   ++iSameCount;
                }
 
                if (iSameCount > 1) {
-                  if (sEm == "") {
-                     sWordNew = sWord.substring(0, iPos - iSameCount + 1);
-                     sEm = sWord.substring(iPos - iSameCount, iPos - 1);
+                  if (sEm.toString().equals("")) {
+                     sWordNew = new StringBuilder(sWord.substring(0, iPos - iSameCount + 1));
+                     sEm = new StringBuilder(sWord.substring(iPos - iSameCount, iPos - 1));
                      iLastCopiedPos = iPos;
                   } else {
-                     sWordNew = sWordNew + sWord.substring(iLastCopiedPos, iPos - iSameCount + 1);
-                     sEm = sEm + sWord.substring(iPos - iSameCount, iPos - 1);
+                     sWordNew.append(sWord, iLastCopiedPos, iPos - iSameCount + 1);
+                     sEm.append(sWord, iPos - iSameCount, iPos - 1);
                      iLastCopiedPos = iPos;
                   }
                }
@@ -365,41 +367,41 @@ public class Term {
             }
          }
 
-         if (iSameCount > 0 && this.options.sgIllegalDoubleLettersAtWordEnd.indexOf(sWord.substring(iPos - 1, iPos)) >= 0) {
+         if (iSameCount > 0 && this.options.sgIllegalDoubleLettersAtWordEnd.contains(sWord.substring(iPos - 1, iPos))) {
             ++iSameCount;
          }
 
          if (iSameCount > 1) {
-            if (sEm == "") {
-               sWordNew = sWord.substring(0, iPos - iSameCount + 1);
-               sEm = sWord.substring(iPos - iSameCount + 1);
+            if (sEm.toString().equals("")) {
+               sWordNew = new StringBuilder(sWord.substring(0, iPos - iSameCount + 1));
+               sEm = new StringBuilder(sWord.substring(iPos - iSameCount + 1));
             } else {
-               sWordNew = sWordNew + sWord.substring(iLastCopiedPos, iPos - iSameCount + 1);
-               sEm = sEm + sWord.substring(iPos - iSameCount + 1);
+               sWordNew.append(sWord, iLastCopiedPos, iPos - iSameCount + 1);
+               sEm.append(sWord.substring(iPos - iSameCount + 1));
             }
-         } else if (sEm != "") {
-            sWordNew = sWordNew + sWord.substring(iLastCopiedPos);
+         } else if (!sEm.toString().equals("")) {
+            sWordNew.append(sWord.substring(iLastCopiedPos));
          }
       }
 
-      if (sWordNew == "") {
-         sWordNew = sWord;
+      if (sWordNew.toString().equals("")) {
+         sWordNew = new StringBuilder(sWord);
       }
 
       this.igContentType = 1;
       this.sgOriginalWord = sWord;
-      this.sgWordEmphasis = sEm;
-      this.sgTranslatedWord = sWordNew;
-      if (this.sgTranslatedWord.indexOf("@") < 0) {
+      this.sgWordEmphasis = sEm.toString();
+      this.sgTranslatedWord = sWordNew.toString();
+      if (!this.sgTranslatedWord.contains("@")) {
          if (this.options.bgCorrectSpellingsUsingDictionary) {
             this.correctSpellingInTranslatedWord();
          }
 
          if (this.options.bgUseLemmatisation) {
             if (this.sgTranslatedWord.equals("")) {
-               sWordNew = this.resources.lemmatiser.lemmatise(this.sgOriginalWord);
-               if (!sWordNew.equals(this.sgOriginalWord)) {
-                  this.sgTranslatedWord = sWordNew;
+               sWordNew = new StringBuilder(this.resources.lemmatiser.lemmatise(this.sgOriginalWord));
+               if (!sWordNew.toString().equals(this.sgOriginalWord)) {
+                  this.sgTranslatedWord = sWordNew.toString();
                }
             } else {
                this.sgTranslatedWord = this.resources.lemmatiser.lemmatise(this.sgTranslatedWord);
@@ -417,7 +419,7 @@ public class Term {
             if (this.sgTranslatedWord.substring(iPos, iPos + 1).compareTo(this.sgTranslatedWord.substring(iPos - 1, iPos)) == 0) {
                String sReplaceWord = this.sgTranslatedWord.substring(0, iPos) + this.sgTranslatedWord.substring(iPos + 1);
                if (this.resources.correctSpellings.correctSpelling(sReplaceWord.toLowerCase())) {
-                  this.sgWordEmphasis = this.sgWordEmphasis + this.sgTranslatedWord.substring(iPos, iPos + 1);
+                  this.sgWordEmphasis = this.sgWordEmphasis + this.sgTranslatedWord.charAt(iPos);
                   this.sgTranslatedWord = sReplaceWord;
                   return;
                }

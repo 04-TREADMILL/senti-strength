@@ -6,6 +6,7 @@
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 
 import nju.SEIII.EASIEST.utilities.FileOps;
@@ -14,8 +15,8 @@ import nju.SEIII.EASIEST.utilities.Sort;
 public class Lemmatiser
 {
 
-    private String sgWord[];
-    private String sgLemma[];
+    private String[] sgWord;
+    private String[] sgLemma;
     private int igWordLast;
 
     public Lemmatiser()
@@ -34,13 +35,13 @@ public class Lemmatiser
         File f = new File(sFileName);
         if(!f.exists())
         {
-            System.out.println((new StringBuilder("Could not find lemma file: ")).append(sFileName).toString());
+            System.out.println("Could not find lemma file: " + sFileName);
             return false;
         }
         iLinesInFile = FileOps.i_CountLinesInTextFile(sFileName);
         if(iLinesInFile < 2)
         {
-            System.out.println((new StringBuilder("Less than 2 lines in sentiment file: ")).append(sFileName).toString());
+            System.out.println("Less than 2 lines in sentiment file: " + sFileName);
             return false;
         }
         sgWord = new String[iLinesInFile + 1];
@@ -50,12 +51,12 @@ public class Lemmatiser
         {
             BufferedReader rReader;
             if(bForceUTF8)
-                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFileName), "UTF8"));
+                rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sFileName), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sFileName));
             String sLine;
             while((sLine = rReader.readLine()) != null) 
-                if(sLine != "")
+                if(!sLine.equals(""))
                 {
                     int iFirstTabLocation = sLine.indexOf("\t");
                     if(iFirstTabLocation >= 0)
@@ -66,9 +67,9 @@ public class Lemmatiser
                             sgLemma[igWordLast] = sLine.substring(iFirstTabLocation + 1, iSecondTabLocation);
                         else
                             sgLemma[igWordLast] = sLine.substring(iFirstTabLocation + 1);
-                        if(sgWord[igWordLast].indexOf(" ") >= 0)
+                        if(sgWord[igWordLast].contains(" "))
                             sgWord[igWordLast] = sgWord[igWordLast].trim();
-                        if(sgLemma[igWordLast].indexOf(" ") >= 0)
+                        if(sgLemma[igWordLast].contains(" "))
                             sgLemma[igWordLast] = sgLemma[igWordLast].trim();
                     }
                 }
@@ -77,13 +78,13 @@ public class Lemmatiser
         }
         catch(FileNotFoundException e)
         {
-            System.out.println((new StringBuilder("Couldn't find lemma file: ")).append(sFileName).toString());
+            System.out.println("Couldn't find lemma file: " + sFileName);
             e.printStackTrace();
             return false;
         }
         catch(IOException e)
         {
-            System.out.println((new StringBuilder("Found lemma file but couldn't read from it: ")).append(sFileName).toString());
+            System.out.println("Found lemma file but couldn't read from it: " + sFileName);
             e.printStackTrace();
             return false;
         }
