@@ -25,7 +25,7 @@ import weka.core.Utils;
 public class WekaCrossValidateNoSelection
 {
 
-    private static String sgJarFolder = "C:/jars/";
+    private static final String sgJarFolder = System.getProperty("user.dir") + "libs/";
 
     public WekaCrossValidateNoSelection()
     {
@@ -171,7 +171,7 @@ public class WekaCrossValidateNoSelection
         if(classifierName.indexOf(",liblin,") > 0)
             try
             {
-                Utilities.addToClassPath(sgJarFolder + "liblinear-1.51.jar");
+                Utilities.addToClassPath(sgJarFolder + "LibLINEAR.jar");
                 start = Utilities.getNow();
                 Utilities.printNameAndWarning("LibLINEAR");
                 start = Utilities.getNow();
@@ -191,7 +191,7 @@ public class WekaCrossValidateNoSelection
         if(classifierName.indexOf(",libsvm,") > 0)
             try
             {
-                Utilities.addToClassPath(sgJarFolder + "libsvm.jar");
+                Utilities.addToClassPath(sgJarFolder + "LibSVM.jar");
                 start = Utilities.getNow();
                 Utilities.printNameAndWarning("LibSVM");
                 eval = new Evaluation(data);

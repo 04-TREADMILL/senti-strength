@@ -16,7 +16,7 @@ import weka.core.Utils;
 public class WekaDirectTrainClassifyEvaluate
 {
 
-    private static String sgJarFolder = "C:/jars/";
+    private static final String sgJarFolder = System.getProperty("user.dir") + "libs/";
 
     public WekaDirectTrainClassifyEvaluate()
     {
@@ -43,7 +43,7 @@ public class WekaDirectTrainClassifyEvaluate
             {
                 Utilities.printNameAndWarning("LibLINEAR");
                 start = Utilities.getNow();
-                Utilities.addToClassPath(sgJarFolder + "liblinear-1.51.jar");
+                Utilities.addToClassPath(sgJarFolder + "LibLINEAR.jar");
                 LibLINEAR schemeLibLINEAR = new LibLINEAR();
                 options = " -i -o \u2013t";
                 schemeLibLINEAR.setOptions(Utils.splitOptions(options));
@@ -63,7 +63,7 @@ public class WekaDirectTrainClassifyEvaluate
             {
                 Utilities.printNameAndWarning("LibSVM");
                 start = Utilities.getNow();
-                Utilities.addToClassPath(sgJarFolder + "libsvm.jar");
+                Utilities.addToClassPath(sgJarFolder + "LibSVM.jar");
                 LibSVM schemeLibSVM = new LibSVM();
                 options = "-s 0";
                 schemeLibSVM.setOptions(Utils.splitOptions(options));

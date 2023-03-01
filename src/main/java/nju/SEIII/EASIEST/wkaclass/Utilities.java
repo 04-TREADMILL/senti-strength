@@ -36,12 +36,10 @@ public class Utilities
         File f = new File(s);
         URL u = f.toURL();
         URLClassLoader urlClassLoader = (URLClassLoader)ClassLoader.getSystemClassLoader();
-        Class urlClass =URLClassLoader.class;
+        Class urlClass = URLClassLoader.class;
         Method method = urlClass.getDeclaredMethod("addURL", new Class[] {URL.class});
         method.setAccessible(true);
-        method.invoke(urlClassLoader, new Object[] {
-            u
-        });
+        method.invoke(urlClassLoader, new Object[] {u});
     }
 
     public static void printlnNameAndWarning(String methodName)

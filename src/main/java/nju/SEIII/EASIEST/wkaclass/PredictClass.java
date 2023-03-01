@@ -23,7 +23,7 @@ import weka.core.Instances;
 import weka.core.Utils;
 
 public class PredictClass {
-   private static String sgJarFolder = "C:/jars/";
+   private static final String sgJarFolder = System.getProperty("user.dir") + "libs/";
 
    public static void main(String[] args) {
       boolean[] bArgumentRecognised = new boolean[args.length];
@@ -307,7 +307,7 @@ public class PredictClass {
             Utilities.printNameAndWarning("LibSVM");
             start = Utilities.getNow();
             System.out.println();
-            Utilities.addToClassPath(sgJarFolder + "libsvm.jar");
+            Utilities.addToClassPath(sgJarFolder + "LibSVM.jar");
             LibSVM schemeLibSVM = new LibSVM();
             options = "-s 0";
             schemeLibSVM.setOptions(Utils.splitOptions(options));

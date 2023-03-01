@@ -30,7 +30,7 @@ import weka.filters.unsupervised.instance.Randomize;
 public class WekaCrossValidateInfoGain
 {
 
-    private static String sgJarFolder = "C:/jars/";
+    private static final String sgJarFolder = System.getProperty("user.dir") + "libs/";
 
     public WekaCrossValidateInfoGain()
     {
@@ -260,7 +260,7 @@ public class WekaCrossValidateInfoGain
             {
                 Utilities.printNameAndWarning("LibLINEAR");
                 start = Utilities.getNow();
-                Utilities.addToClassPath(sgJarFolder + "liblinear-1.51.jar");
+                Utilities.addToClassPath(sgJarFolder + "LibLINEAR.jar");
                 Evaluation eval = new Evaluation(data);
                 LibLINEAR schemeLibLINEAR = new LibLINEAR();
                 options = " -i -o \u2013t";
@@ -280,7 +280,7 @@ public class WekaCrossValidateInfoGain
             {
                 Utilities.printNameAndWarning("LibSVM");
                 start = Utilities.getNow();
-                Utilities.addToClassPath(sgJarFolder + "libsvm.jar");
+                Utilities.addToClassPath(sgJarFolder + "LibSVM.jar");
                 Evaluation eval = new Evaluation(data);
                 LibSVM schemeLibSVM = new LibSVM();
                 options = "-s 0";
