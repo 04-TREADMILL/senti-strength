@@ -5,6 +5,11 @@ import java.util.Random;
 import nju.SEIII.EASIEST.utilities.Sort;
 import nju.SEIII.EASIEST.utilities.StringIndex;
 
+
+/**
+ *  This class represents a paragraph and contains information about
+ *  its sentences, sentiment, and classification options.
+ */
 public class Paragraph {
    private Sentence[] sentence;
    private int igSentenceCount = 0;
@@ -20,6 +25,16 @@ public class Paragraph {
    private Random generator = new Random();
    private String sgClassificationRationale = "";
 
+   /**
+    * This method adds all the sentences to the given UnusedTermsClassificationIndex
+    * and then adds a new index to the main index with positive and negative values.
+    *
+    * @param unusedTermsClassificationIndex The UnusedTermsClassificationIndex to which the sentences are added.
+    * @param iCorrectPosClass The number of correct positive classes.
+    * @param iEstPosClass The estimated number of positive classes.
+    * @param iCorrectNegClass The number of correct negative classes.
+    * @param iEstNegClass The estimated number of negative classes.
+    */
    public void addParagraphToIndexWithPosNegValues(UnusedTermsClassificationIndex unusedTermsClassificationIndex, int iCorrectPosClass, int iEstPosClass, int iCorrectNegClass, int iEstNegClass) {
       for(int i = 1; i <= this.igSentenceCount; ++i) {
          this.sentence[i].addSentenceToIndex(unusedTermsClassificationIndex);
@@ -28,6 +43,14 @@ public class Paragraph {
       unusedTermsClassificationIndex.addNewIndexToMainIndexWithPosNegValues(iCorrectPosClass, iEstPosClass, iCorrectNegClass, iEstNegClass);
    }
 
+   /**
+    * Adds all sentences in this object to the specified UnusedTermsClassificationIndex object
+    * and then adds that index to the main index with the specified scale values.
+    *
+    * @param unusedTermsClassificationIndex the UnusedTermsClassificationIndex object to add the sentences to and then add to the main index
+    * @param iCorrectScaleClass the correct scale class value for the index
+    * @param iEstScaleClass the estimated scale class value for the index
+    */
    public void addParagraphToIndexWithScaleValues(UnusedTermsClassificationIndex unusedTermsClassificationIndex, int iCorrectScaleClass, int iEstScaleClass) {
       for(int i = 1; i <= this.igSentenceCount; ++i) {
          this.sentence[i].addSentenceToIndex(unusedTermsClassificationIndex);
@@ -36,6 +59,14 @@ public class Paragraph {
       unusedTermsClassificationIndex.addNewIndexToMainIndexWithScaleValues(iCorrectScaleClass, iEstScaleClass);
    }
 
+   /**
+    * Adds all sentences in this object to the specified UnusedTermsClassificationIndex object
+    * and then adds that index to the main index with the specified binary values.
+    *
+    * @param unusedTermsClassificationIndex the UnusedTermsClassificationIndex object to add the sentences to and then add to the main index
+    * @param iCorrectBinaryClass the correct binary class value for the index
+    * @param iEstBinaryClass the estimated binary class value for the index
+    */
    public void addParagraphToIndexWithBinaryValues(UnusedTermsClassificationIndex unusedTermsClassificationIndex, int iCorrectBinaryClass, int iEstBinaryClass) {
       for(int i = 1; i <= this.igSentenceCount; ++i) {
          this.sentence[i].addSentenceToIndex(unusedTermsClassificationIndex);
@@ -44,6 +75,16 @@ public class Paragraph {
       unusedTermsClassificationIndex.addNewIndexToMainIndexWithBinaryValues(iCorrectBinaryClass, iEstBinaryClass);
    }
 
+   /**
+    * Adds all sentences in this object to the specified StringIndex object with the specified text parsing options,
+    * recording the count and/or adding to the ARFF index if specified, and returns the number of terms checked.
+    *
+    * @param stringIndex the StringIndex object to add the sentences to
+    * @param textParsingOptions the TextParsingOptions object to use for parsing the text
+    * @param bRecordCount a boolean indicating whether to record the count or not
+    * @param bArffIndex a boolean indicating whether to add to the ARFF index or not
+    * @return the number of terms checked
+    */
    public int addToStringIndex(StringIndex stringIndex, TextParsingOptions textParsingOptions, boolean bRecordCount, boolean bArffIndex) {
       int iTermsChecked = 0;
 
@@ -54,6 +95,14 @@ public class Paragraph {
       return iTermsChecked;
    }
 
+   /**
+    * Adds all sentences in this object to the specified UnusedTermsClassificationIndex object
+    * and then adds that index to the main index with the specified trinary values.
+    *
+    * @param unusedTermsClassificationIndex the UnusedTermsClassificationIndex object to add the sentences to and then add to the main index
+    * @param iCorrectTrinaryClass the correct trinary class value for the index
+    * @param iEstTrinaryClass the estimated trinary class value for the index
+    */
    public void addParagraphToIndexWithTrinaryValues(UnusedTermsClassificationIndex unusedTermsClassificationIndex, int iCorrectTrinaryClass, int iEstTrinaryClass) {
       for(int i = 1; i <= this.igSentenceCount; ++i) {
          this.sentence[i].addSentenceToIndex(unusedTermsClassificationIndex);
@@ -62,6 +111,13 @@ public class Paragraph {
       unusedTermsClassificationIndex.addNewIndexToMainIndexWithTrinaryValues(iCorrectTrinaryClass, iEstTrinaryClass);
    }
 
+   /**
+    * Sets the paragraph text and parses it into sentences.
+    *
+    * @param sParagraph the paragraph text to set
+    * @param classResources the classification resources to use for sentence parsing
+    * @param newClassificationOptions the classification options to use for sentence parsing
+    */
    public void setParagraph(String sParagraph, ClassificationResources classResources, ClassificationOptions newClassificationOptions) {
       this.resources = classResources;
       this.options = newClassificationOptions;
@@ -148,6 +204,12 @@ public class Paragraph {
 
    }
 
+   /**
+    * Returns the sentiment ID list.
+    * If the sentiment ID list has not been made yet, it will be made before returning it.
+    *
+    * @return an array of integers representing the sentiment IDs.
+    */
    public int[] getSentimentIDList() {
       if (!this.bSentimentIDListMade) {
          this.makeSentimentIDList();
@@ -156,10 +218,20 @@ public class Paragraph {
       return this.igSentimentIDList;
    }
 
+   /**
+    * Returns the classification rationale.
+    *
+    * @return a string representing the classification rationale.
+    */
    public String getClassificationRationale() {
       return this.sgClassificationRationale;
    }
 
+   /**
+    * Helper method that makes the sentiment ID list.
+    * This method iterates through each sentence in the object's sentence array and collects the sentiment ID
+    * lists from each sentence. It then removes duplicates and sorts the list in ascending order.
+    */
    public void makeSentimentIDList() {
       boolean bIsDuplicate = false;
       this.igSentimentIDListCount = 0;
@@ -203,6 +275,12 @@ public class Paragraph {
       this.bSentimentIDListMade = true;
    }
 
+   /**
+    * Returns the tagged paragraph.
+    * This method concatenates the tagged sentences of each sentence in the object's sentence array.
+    *
+    * @return a string representing the tagged paragraph.
+    */
    public String getTaggedParagraph() {
       StringBuilder sTagged = new StringBuilder();
 
@@ -213,6 +291,12 @@ public class Paragraph {
       return sTagged.toString();
    }
 
+   /**
+    * Returns the translated paragraph.
+    * This method concatenates the translated sentences of each sentence in the object's sentence array.
+    *
+    * @return a string representing the translated paragraph.
+    */
    public String getTranslatedParagraph() {
       StringBuilder sTranslated = new StringBuilder();
 
@@ -223,6 +307,11 @@ public class Paragraph {
       return sTranslated.toString();
    }
 
+   /**
+    * Recalculates the sentiment scores for each sentence in the paragraph.
+    * This method calls the recalculateSentenceSentimentScore() method of each sentence in the object's sentence array
+    * and then calls calculateParagraphSentimentScores() to update the sentiment scores for the entire paragraph.
+    */
    public void recalculateParagraphSentimentScores() {
       for(int iSentence = 1; iSentence <= this.igSentenceCount; ++iSentence) {
          this.sentence[iSentence].recalculateSentenceSentimentScore();
@@ -231,6 +320,16 @@ public class Paragraph {
       this.calculateParagraphSentimentScores();
    }
 
+   /**
+    * Re-classifies a classified paragraph for sentiment change based on the given sentiment word ID.
+    * This method first checks if the paragraph's negative sentiment score has already been calculated, and if not,
+    * calls calculateParagraphSentimentScores() to calculate it. If the paragraph has a non-zero sentiment ID list,
+    * and the given sentiment word ID is in the list, then the method calls the
+    * reClassifyClassifiedSentenceForSentimentChange() method of each sentence in the object's sentence array with the
+    * given sentiment word ID, and then calls calculateParagraphSentimentScores() to update the paragraph's sentiment scores.
+    *
+    * @param iSentimentWordID the ID of the sentiment word to use for re-classification
+    */
    public void reClassifyClassifiedParagraphForSentimentChange(int iSentimentWordID) {
       if (this.igNegativeSentiment == 0) {
          this.calculateParagraphSentimentScores();
@@ -252,6 +351,12 @@ public class Paragraph {
       }
    }
 
+   /**
+    * Returns the number of positive sentiment words in this paragraph.
+    * If the positive sentiment score has not been calculated yet, it will be calculated first.
+    *
+    * @return the number of positive sentiment words in this paragraph.
+    */
    public int getParagraphPositiveSentiment() {
       if (this.igPositiveSentiment == 0) {
          this.calculateParagraphSentimentScores();
@@ -260,6 +365,12 @@ public class Paragraph {
       return this.igPositiveSentiment;
    }
 
+   /**
+    * Returns the number of negative sentiment words in this paragraph.
+    * If the negative sentiment score has not been calculated yet, it will be calculated first.
+    *
+    * @return the number of negative sentiment words in this paragraph.
+    */
    public int getParagraphNegativeSentiment() {
       if (this.igNegativeSentiment == 0) {
          this.calculateParagraphSentimentScores();
@@ -268,6 +379,12 @@ public class Paragraph {
       return this.igNegativeSentiment;
    }
 
+   /**
+    * Returns the trinary sentiment score of this paragraph: positive, neutral, or negative.
+    * If the sentiment score has not been calculated yet, it will be calculated first.
+    *
+    * @return the trinary sentiment score of this paragraph.
+    */
    public int getParagraphTrinarySentiment() {
       if (this.igNegativeSentiment == 0) {
          this.calculateParagraphSentimentScores();
@@ -276,6 +393,13 @@ public class Paragraph {
       return this.igTrinarySentiment;
    }
 
+   /**
+    * Returns the scale sentiment of the paragraph.
+    * If the negative sentiment score has not been calculated yet,
+    * the method calls calculateParagraphSentimentScores() to calculate it.
+    *
+    * @return the scale sentiment of the paragraph
+    */
    public int getParagraphScaleSentiment() {
       if (this.igNegativeSentiment == 0) {
          this.calculateParagraphSentimentScores();
@@ -284,14 +408,34 @@ public class Paragraph {
       return this.igScaleSentiment;
    }
 
+   /**
+    * Determines if the given string is a sentence-ending punctuation.
+    *
+    * @param sChar the string to be checked
+    * @return true if the string is "." or "!" or "?", false otherwise
+    */
    private boolean b_IsSentenceEndPunctuation(String sChar) {
       return sChar.compareTo(".") == 0 || sChar.compareTo("!") == 0 || sChar.compareTo("?") == 0;
    }
 
+   /**
+    * This method determines whether a given string character is alphanumeric or not.
+    *
+    * @param sChar the string character to be checked
+    * @return true if the character is alphanumeric, false otherwise
+    */
    private boolean b_IsAlphanumeric(String sChar) {
       return sChar.compareToIgnoreCase("a") >= 0 && sChar.compareToIgnoreCase("z") <= 0 || sChar.compareTo("0") >= 0 && sChar.compareTo("9") <= 0 || sChar.compareTo("$") == 0 || sChar.compareTo("£") == 0 || sChar.compareTo("'") == 0;
    }
 
+   /**
+    * This method calculates the sentiment scores of each paragraph.
+    * It sets igPositiveSentiment, igNegativeSentiment, igTrinarySentiment.
+    * If bgScaleMode is true, igScaleSentiment is also set.
+    * If bgExplainClassification is true, sgClassificationRationale is set
+    * based on the classification method used.
+    * This method is called by the constructor of the Paragraph class.
+    */
    private void calculateParagraphSentimentScores() {
       this.igPositiveSentiment = 1;
       this.igNegativeSentiment = -1;
@@ -502,6 +646,13 @@ public class Paragraph {
       }
    }
 
+   /**
+    * This method serves as a tie-breaker for binary selection. It returns a random number between -1 and 1 if the
+    * default binary classification is not provided. If the default binary classification is provided, it returns the
+    * default binary classification value.
+    *
+    * @return An integer value of either 1 or -1 that represents the binary selection result.
+    */
    private int binarySelectionTieBreaker() {
       if (this.options.igDefaultBinaryClassification != 1 && this.options.igDefaultBinaryClassification != -1) {
          return this.generator.nextDouble() > 0.5D ? 1 : -1;
