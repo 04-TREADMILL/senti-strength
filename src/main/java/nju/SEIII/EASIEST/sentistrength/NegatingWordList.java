@@ -15,19 +15,44 @@ import nju.SEIII.EASIEST.utilities.Sort;
 // Referenced classes of package nju.SEIII.EASIEST.sentistrength:
 //            ClassificationOptions
 
+/**
+ * This class represents a list of negating words used in sentiment analysis.
+ * It provides methods for initializing the list from a file and checking if a given word is a negating word.
+ */
 public class NegatingWordList
 {
 
+    /**
+     * The array of negating words.
+     */
     private String[] sgNegatingWord;
+
+    /**
+     * The number of negating words currently in the array.
+     */
     private int igNegatingWordCount;
+
+    /**
+     * The maximum number of negating words that can be stored in the array.
+     */
     private int igNegatingWordMax;
 
+    /**
+     * Creates a new NegatingWordList object with no negating words.
+     */
     public NegatingWordList()
     {
         igNegatingWordCount = 0;
         igNegatingWordMax = 0;
     }
 
+    /**
+     * Initializes the negating word list from the given file.
+     *
+     * @param sFilename the name of the file containing the negating words
+     * @param options the classification options to use when reading the file
+     * @return true if the list was successfully initialized, false otherwise
+     */
     public boolean initialise(String sFilename, ClassificationOptions options)
     {
         if(igNegatingWordMax > 0)
@@ -73,6 +98,12 @@ public class NegatingWordList
         return true;
     }
 
+    /**
+     * Checks if the given word is a negating word.
+     *
+     * @param sWord the word to check
+     * @return true if the word is a negating word, false otherwise
+     */
     public boolean negatingWord(String sWord)
     {
         return Sort.i_FindStringPositionInSortedArray(sWord, sgNegatingWord, 1, igNegatingWordCount) >= 0;

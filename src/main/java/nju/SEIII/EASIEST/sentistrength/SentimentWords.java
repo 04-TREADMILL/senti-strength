@@ -16,23 +16,65 @@ import nju.SEIII.EASIEST.utilities.Sort;
 // Referenced classes of package nju.SEIII.EASIEST.sentistrength:
 //            Corpus, ClassificationOptions
 
+/**
+ * This class represents a list of sentiment words used in sentiment analysis.
+ * It provides methods for accessing individual sentiment words from the list.
+ */
 public class SentimentWords
 {
 
+    /**
+     * An array of sentiment words without the '*' character at the start.
+     */
     private String[] sgSentimentWords;
+
+    /**
+     * An array of the strength scores associated with each sentiment word in {@link #sgSentimentWords}.
+     */
     private int[] igSentimentWordsStrengthTake1;
+
+    /**
+     * The number of sentiment words in {@link #sgSentimentWords}.
+     */
     private int igSentimentWordsCount;
+
+    /**
+     * An array of sentiment words with the '*' character at the start.
+     *
+     * @see #bgSentimentWordsWithStarAtStartHasStarAtEnd
+     */
     private String[] sgSentimentWordsWithStarAtStart;
+
+    /**
+     * An array of the strength scores associated with each sentiment word in {@link #sgSentimentWordsWithStarAtStart}.
+     */
     private int[] igSentimentWordsWithStarAtStartStrengthTake1;
+
+    /**
+     * The number of sentiment words in {@link #sgSentimentWordsWithStarAtStart}.
+     */
     private int igSentimentWordsWithStarAtStartCount;
+
+    /**
+     * An array indicating whether each sentiment word in {@link #sgSentimentWordsWithStarAtStart} has a '*' character at the end.
+     */
     private boolean[] bgSentimentWordsWithStarAtStartHasStarAtEnd;
 
+    /**
+     Constructs a new SentimentWords object.
+     */
     public SentimentWords()
     {
         igSentimentWordsCount = 0;
         igSentimentWordsWithStarAtStartCount = 0;
     }
 
+    /**
+     * Returns the sentiment word with the given ID.
+     *
+     * @param iWordID the ID of the sentiment word to retrieve
+     * @return the sentiment word with the given ID, or an empty string if the ID is invalid
+     */
     public String getSentimentWord(int iWordID)
     {
         if(iWordID > 0)
@@ -45,6 +87,14 @@ public class SentimentWords
         return "";
     }
 
+    /**
+     * Returns the sentiment strength of a given word. The method first checks if the word is present in the sgSentimentWords array.
+     * If it is, the corresponding sentiment strength is returned from the igSentimentWordsStrengthTake1 array.
+     * If the word is not present in sgSentimentWords array, the method checks if it matches any of the words with a star at the beginning, and returns the corresponding sentiment strength from the igSentimentWordsWithStarAtStartStrengthTake1 array.
+     * If the word is not found in either array, it returns 999.
+     * @param sWord the word to find the sentiment strength of
+     * @return the sentiment strength of the given word
+     */
     public int getSentiment(String sWord)
     {
         int iWordID = Sort.i_FindStringPositionInSortedArrayWithWildcardsInArray(sWord.toLowerCase(), sgSentimentWords, 1, igSentimentWordsCount);
@@ -57,6 +107,13 @@ public class SentimentWords
             return 999;
     }
 
+    /**
+     * Sets the sentiment value of a given word.
+     *
+     * @param sWord The word to set the sentiment value for.
+     * @param iNewSentiment The new sentiment value for the word.
+     * @return True if the sentiment value was successfully set, false otherwise.
+     */
     public boolean setSentiment(String sWord, int iNewSentiment)
     {
         int iWordID = Sort.i_FindStringPositionInSortedArrayWithWildcardsInArray(sWord.toLowerCase(), sgSentimentWords, 1, igSentimentWordsCount);
@@ -90,6 +147,13 @@ public class SentimentWords
         return false;
     }
 
+    /**
+
+     Saves a sentiment list to a file.
+     @param sFilename the name of the file to save to
+     @param c the corpus containing the sentiment list
+     @return true if the operation is successful, false otherwise
+     */
     public boolean saveSentimentList(String sFilename, Corpus c)
     {
         try
@@ -136,6 +200,12 @@ public class SentimentWords
         return true;
     }
 
+    /**
+
+     Prints the sentiment values in a single row to a BufferedWriter.
+     @param wWriter the BufferedWriter to print to
+     @return true if the operation is successful, false otherwise
+     */
     public boolean printSentimentValuesInSingleRow(BufferedWriter wWriter)
     {
         try
@@ -162,6 +232,12 @@ public class SentimentWords
         return true;
     }
 
+    /**
+
+     Prints the sentiment terms in a single header row to a BufferedWriter.
+     @param wWriter the BufferedWriter to print to
+     @return true if the operation is successful, false otherwise
+     */
     public boolean printSentimentTermsInSingleHeaderRow(BufferedWriter wWriter)
     {
         try
@@ -186,6 +262,12 @@ public class SentimentWords
         return true;
     }
 
+    /**
+
+     Retrieves the sentiment score for a given word ID.
+     @param iWordID the ID of the word whose sentiment score is to be retrieved.
+     @return the sentiment score of the specified word, or 999 if the word ID is negative.
+     */
     public int getSentiment(int iWordID)
     {
         if(iWordID > 0)
@@ -200,6 +282,12 @@ public class SentimentWords
         }
     }
 
+    /**
+
+     Sets the sentiment score for a given word ID.
+     @param iWordID the ID of the word whose sentiment score is to be set.
+     @param iNewSentiment the new sentiment score to set for the specified word.
+     */
     public void setSentiment(int iWordID, int iNewSentiment)
     {
         if(iWordID <= igSentimentWordsCount)
@@ -208,6 +296,12 @@ public class SentimentWords
             igSentimentWordsWithStarAtStartStrengthTake1[iWordID - igSentimentWordsCount] = iNewSentiment;
     }
 
+    /**
+
+     Retrieves the ID of the word with the given string in the sentiment words list.
+     @param sWord the string of the word whose ID is to be retrieved.
+     @return the ID of the word with the specified string, or -1 if the word is not found in the sentiment words list.
+     */
     public int getSentimentID(String sWord)
     {
         int iWordID = Sort.i_FindStringPositionInSortedArrayWithWildcardsInArray(sWord.toLowerCase(), sgSentimentWords, 1, igSentimentWordsCount);
@@ -220,6 +314,12 @@ public class SentimentWords
             return -1;
     }
 
+    /**
+
+     Retrieves the ID of the word in the "sentiment words with star at start" list that matches the given string.
+     @param sWord the string of the word to match.
+     @return the ID of the word that matches the specified string, or -1 if no match is found.
+     */
     private int getMatchingStarAtStartRawWordID(String sWord)
     {
         int iSubStringPos = 0;
@@ -236,11 +336,23 @@ public class SentimentWords
         return -1;
     }
 
+    /**
+
+     Get the count of sentiment words.
+     @return the count of sentiment words.
+     */
     public int getSentimentWordCount()
     {
         return igSentimentWordsCount;
     }
 
+    /**
+     * Initialize the sentiment analyzer with a sentiment file.
+     * @param sFilename the path of the sentiment file.
+     * @param options the classification options.
+     * @param iExtraBlankArrayEntriesToInclude the number of extra blank array entries to include.
+     * @return true if initialization is successful; false otherwise.
+     */
     public boolean initialise(String sFilename, ClassificationOptions options, int iExtraBlankArrayEntriesToInclude)
     {
         int iWordStrength = 0;
@@ -332,6 +444,15 @@ public class SentimentWords
             return true;
     }
 
+    /**
+
+     * Initializes sentiment words with a star at the beginning from a file and stores them in arrays.
+     * @param sFilename the filename of the sentiment words file
+     * @param options an instance of ClassificationOptions
+     * @param iWordsWithStarAtStart the number of words with a star at the beginning to initialize
+     * @param iExtraBlankArrayEntriesToInclude the number of extra blank array entries to include
+     * @return true if initialization is successful, false otherwise
+     */
     public boolean initialiseWordsWithStarAtStart(String sFilename, ClassificationOptions options, int iWordsWithStarAtStart, int iExtraBlankArrayEntriesToInclude)
     {
         int iWordStrength = 0;
@@ -417,6 +538,15 @@ public class SentimentWords
         return true;
     }
 
+    /**
+
+     Adds or modifies a sentiment term in the sentiment words array.
+     If the term already exists, it modifies its strength, otherwise it adds it to the array.
+     @param sTerm the sentiment term to add or modify
+     @param iTermStrength the strength of the sentiment term
+     @param bSortSentimentListAfterAddingTerm whether to sort the sentiment list after adding the term
+     @return true if the term was added or modified successfully, false otherwise
+     */
     public boolean addOrModifySentimentTerm(String sTerm, int iTermStrength, boolean bSortSentimentListAfterAddingTerm)
     {
         int iTermPosition = getSentimentID(sTerm);
@@ -452,6 +582,10 @@ public class SentimentWords
         return true;
     }
 
+    /**
+
+     Sorts the sentiment words array.
+     */
     public void sortSentimentList()
     {
         Sort.quickSortStringsWithInt(sgSentimentWords, igSentimentWordsStrengthTake1, 1, igSentimentWordsCount);
