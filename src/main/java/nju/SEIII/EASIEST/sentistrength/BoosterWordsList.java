@@ -15,18 +15,43 @@ import nju.SEIII.EASIEST.utilities.Sort;
 // Referenced classes of package nju.SEIII.EASIEST.sentistrength:
 //            ClassificationOptions
 
-public class BoosterWordsList
-{
+Sure! Here are detailed comments for the BoosterWordsList class in Javadoc style:
 
+/**
+ * This class stores data about booster words and their strengths into two arrays.
+ */
+public class BoosterWordsList {
+    /**
+     * An array of Strings representing booster words.
+     */
     private String[] sgBoosterWords;
+    /**
+     * An array of integers representing booster word strengths.
+     */
     private int[] igBoosterWordStrength;
+    /**
+     * The number of booster words stored in the arrays.
+     */
     private int igBoosterWordsCount;
 
+    /**
+     * Constructor that initializes the value of igBoosterWordsCount to 0.
+     */
     public BoosterWordsList()
     {
         igBoosterWordsCount = 0;
     }
-
+    /**
+     * This method reads data from a file specified by its filename parameter (sFilename) and stores that data into two arrays (sgBoosterWords and igBoosterWordStrength).
+     * Each line in that file represents one entry in those two arrays.
+     * The first part of each line (before its first tab character) represents one element in the String array (sgBoosterWords) 
+     * The second part (between its first and second tab characters) represents one element in the int array (igBoosterWordStrength).
+     * 
+     * @param sFilename The name of the file to read data from
+     * @param options   A ClassificationOptions object
+     * @param iExtraBlankArrayEntriesToInclude The number of extra blank entries to include in the arrays
+     * @return true if initialization is successful; false otherwise
+     */
     public boolean initialise(String sFilename, ClassificationOptions options, int iExtraBlankArrayEntriesToInclude)
     {
         int iLinesInFile;
@@ -48,6 +73,7 @@ public class BoosterWordsList
             System.out.println("No booster words specified");
             return false;
         }
+        // Initialize sgBoosterWords and igBoosterWordStrength arrays with given size
         sgBoosterWords = new String[iLinesInFile + 1 + iExtraBlankArrayEntriesToInclude];
         igBoosterWordStrength = new int[iLinesInFile + 1 + iExtraBlankArrayEntriesToInclude];
         igBoosterWordsCount = 0;
@@ -62,12 +88,15 @@ public class BoosterWordsList
             while((sLine = rReader.readLine()) != null) 
                 if(!sLine.equals(""))
                 {
+                    // Find the first tab character in sLine
                     int iFirstTabLocation = sLine.indexOf("\t");
                     if(iFirstTabLocation >= 0)
                     {
+                        // Find the second tab character in sLine after its first tab character
                         int iSecondTabLocation = sLine.indexOf("\t", iFirstTabLocation + 1);
                         try
                         {
+                            // Try to parse an integer value from substring between first and second tab characters or after first tab character (if no second tab character found)
                             if(iSecondTabLocation > 0)
                                 iWordStrength = Integer.parseInt(sLine.substring(iFirstTabLocation + 1, iSecondTabLocation));
                             else
@@ -79,11 +108,13 @@ public class BoosterWordsList
                             System.out.println("Line: " + sLine);
                             iWordStrength = 0;
                         }
+                        // Update sLine to be substring before first tab character and trim leading/trailing spaces (if any)
                         sLine = sLine.substring(0, iFirstTabLocation);
                         if(sLine.contains(" "))
                             sLine = sLine.trim();
                         if(!sLine.equals(""))
                         {
+                            // Update
                             igBoosterWordsCount++;
                             sgBoosterWords[igBoosterWordsCount] = sLine;
                             igBoosterWordStrength[igBoosterWordsCount] = iWordStrength;
@@ -108,6 +139,14 @@ public class BoosterWordsList
         return true;
     }
 
+    /**
+     * Adds an extra term into the two arrays (sgBoosterWords and igBoosterWordStrength).
+     *
+     * @param sText The text of the extra term to add
+     * @param iWordStrength The strength value of the extra term to add
+     * @param bSortBoosterListAfterAddingTerm Whether or not to sort both arrays after adding the extra term
+     * @return true if adding the extra term is successful; false otherwise
+     */
     public boolean addExtraTerm(String sText, int iWordStrength, boolean bSortBoosterListAfterAddingTerm)
     {
         try
@@ -127,11 +166,20 @@ public class BoosterWordsList
         return true;
     }
 
+    /**
+     * Sorts both arrays (sgBoosterWords and igBoosterWordStrength) using a quick sort algorithm.
+     */
     public void sortBoosterWordList()
     {
         Sort.quickSortStringsWithInt(sgBoosterWords, igBoosterWordStrength, 1, igBoosterWordsCount);
     }
 
+    /**
+     * Returns the strength value of a given word.
+     *
+     * @param sWord The word to get its strength value
+     * @return The strength value of the given word; 0 if that word is not found in sgBoosterWords array
+     */
     public int getBoosterStrength(String sWord)
     {
         int iWordID = Sort.i_FindStringPositionInSortedArray(sWord.toLowerCase(), sgBoosterWords, 1, igBoosterWordsCount);
