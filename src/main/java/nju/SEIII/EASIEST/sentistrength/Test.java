@@ -20,6 +20,7 @@ public class Test
 
     public static void main(String[] args)
     {
+        
         CharsetEncoder asciiEncoder = StandardCharsets.US_ASCII.newEncoder();
         String test = "R\351al";
         System.out.println(test + " isPureAscii() : " + asciiEncoder.canEncode(test));

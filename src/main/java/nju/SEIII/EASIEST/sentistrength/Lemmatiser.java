@@ -12,6 +12,9 @@ import java.nio.charset.StandardCharsets;
 import nju.SEIII.EASIEST.utilities.FileOps;
 import nju.SEIII.EASIEST.utilities.Sort;
 
+/**
+ * The class is used for lemmatization
+ */
 public class Lemmatiser
 {
 
@@ -24,6 +27,12 @@ public class Lemmatiser
         igWordLast = -1;
     }
 
+    /**
+     *
+     * @param sFileName file name
+     * @param bForceUTF8 file encoding format
+     * @return
+     */
     public boolean initialise(String sFileName, boolean bForceUTF8)
     {
         int iLinesInFile = 0;
@@ -91,6 +100,11 @@ public class Lemmatiser
         return true;
     }
 
+    /**
+     *
+     * @param sWord word need to be lemmatised
+     * @return result of lemmatization
+     */
     public String lemmatise(String sWord)
     {
         int iLemmaID = Sort.i_FindStringPositionInSortedArray(sWord, sgWord, 0, igWordLast);

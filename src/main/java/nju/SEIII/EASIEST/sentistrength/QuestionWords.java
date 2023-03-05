@@ -14,9 +14,11 @@ import nju.SEIII.EASIEST.utilities.Sort;
 // Referenced classes of package nju.SEIII.EASIEST.sentistrength:
 //            ClassificationOptions
 
+/**
+ * The QuestionWords class is used to label question words.
+ */
 public class QuestionWords
 {
-
     private String[] sgQuestionWord;
     private int igQuestionWordCount;
     private int igQuestionWordMax;
@@ -27,6 +29,12 @@ public class QuestionWords
         igQuestionWordMax = 0;
     }
 
+    /**
+     *
+     * @param sFilename question words file
+     * @param options file encoding format
+     * @return if the questionwordsFile has been successfully imported
+     */
     public boolean initialise(String sFilename, ClassificationOptions options)
     {
         if(igQuestionWordMax > 0)
@@ -72,6 +80,11 @@ public class QuestionWords
         return true;
     }
 
+    /**
+     *
+     * @param sWord
+     * @return if sWord is question word
+     */
     public boolean questionWord(String sWord)
     {
         return Sort.i_FindStringPositionInSortedArray(sWord, sgQuestionWord, 1, igQuestionWordCount) >= 0;

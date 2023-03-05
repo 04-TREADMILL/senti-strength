@@ -10,9 +10,11 @@ import java.util.Objects;
 
 import nju.SEIII.EASIEST.utilities.Trie;
 
+/**
+ * This class is used to store unused terms
+ */
 public class UnusedTermsClassificationIndex
 {
-
     private String[] sgTermList;
     private int igTermListCount;
     private int igTermListMax;
@@ -44,6 +46,10 @@ public class UnusedTermsClassificationIndex
     {
     }
 
+    /**
+     *
+     * @param sTerm term added
+     */
     public void addTermToNewTermIndex(String sTerm)
     {
         if(sgTermList == null)
@@ -63,6 +69,13 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     *
+     * @param iCorrectPosClass Num of correctly classified positive terms
+     * @param iEstPosClass Num of positive terms
+     * @param iCorrectNegClass Num of correctly classified negative terms
+     * @param iEstNegClass Num of negative terms
+     */
     public void addNewIndexToMainIndexWithPosNegValues(int iCorrectPosClass, int iEstPosClass, int iCorrectNegClass, int iEstNegClass)
     {
         if(iCorrectNegClass > 0 && iCorrectPosClass > 0)
@@ -90,6 +103,11 @@ public class UnusedTermsClassificationIndex
         iTermsAddedIDTempCount = 0;
     }
 
+    /**
+     *
+     * @param iCorrectScaleClass Num of correctly classified scale terms
+     * @param iEstScaleClass Num of scale terms
+     */
     public void addNewIndexToMainIndexWithScaleValues(int iCorrectScaleClass, int iEstScaleClass)
     {
         for(int iTerm = 1; iTerm <= iTermsAddedIDTempCount; iTerm++)
@@ -112,6 +130,11 @@ public class UnusedTermsClassificationIndex
         iTermsAddedIDTempCount = 0;
     }
 
+    /**
+     *
+     * @param iCorrectTrinaryClass Num of correctly classified trinary terms
+     * @param iEstTrinaryClass Num of trinary terms
+     */
     public void addNewIndexToMainIndexWithTrinaryValues(int iCorrectTrinaryClass, int iEstTrinaryClass)
     {
         for(int iTerm = 1; iTerm <= iTermsAddedIDTempCount; iTerm++)
@@ -134,6 +157,11 @@ public class UnusedTermsClassificationIndex
         iTermsAddedIDTempCount = 0;
     }
 
+    /**
+     *
+     * @param iCorrectBinaryClass Num of correctly classified binary terms
+     * @param iEstBinaryClass Num of binary terms
+     */
     public void addNewIndexToMainIndexWithBinaryValues(int iCorrectBinaryClass, int iEstBinaryClass)
     {
         for(int iTerm = 1; iTerm <= iTermsAddedIDTempCount; iTerm++)
@@ -158,6 +186,13 @@ public class UnusedTermsClassificationIndex
         iTermsAddedIDTempCount = 0;
     }
 
+    /**
+     *
+     * @param bInitialiseScale is scale initialise
+     * @param bInitialisePosNeg is pos/neg initialise
+     * @param bInitialiseBinary is binary initialise
+     * @param bInitialiseTrinary is trinary initialise
+     */
     public void initialise(boolean bInitialiseScale, boolean bInitialisePosNeg, boolean bInitialiseBinary, boolean bInitialiseTrinary)
     {
         igTermListCount = 0;
@@ -193,6 +228,11 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     * Print index with Post/Neg values
+     * @param sOutputFile file will be output
+     * @param iMinFreq minimum frequency
+     */
     public void printIndexWithPosNegValues(String sOutputFile, int iMinFreq)
     {
         try
@@ -234,6 +274,11 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     * Print index with Scale values
+     * @param sOutputFile file will be output
+     * @param iMinFreq minimum frequency
+     */
     public void printIndexWithScaleValues(String sOutputFile, int iMinFreq)
     {
         try
@@ -263,6 +308,11 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     * Print index with Trinary values
+     * @param sOutputFile file will be output
+     * @param iMinFreq minimum frequency
+     */
     public void printIndexWithTrinaryValues(String sOutputFile, int iMinFreq)
     {
         try
@@ -292,6 +342,11 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     * Print index with Binary values
+     * @param sOutputFile file will be output
+     * @param iMinFreq minimum frequency
+     */
     public void printIndexWithBinaryValues(String sOutputFile, int iMinFreq)
     {
         try
