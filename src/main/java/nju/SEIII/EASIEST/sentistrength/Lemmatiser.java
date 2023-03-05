@@ -13,7 +13,9 @@ import nju.SEIII.EASIEST.utilities.FileOps;
 import nju.SEIII.EASIEST.utilities.Sort;
 
 /**
- * The class is used for lemmatization
+ * This class implements a lemmatizer, which is used to reduce words to their base or dictionary form,
+ * in order to improve the accuracy of text analysis.
+ * It reads a file containing a list of word-lemma pairs, and uses them to lemmatize input words.
  */
 public class Lemmatiser
 {
@@ -28,10 +30,11 @@ public class Lemmatiser
     }
 
     /**
+     * Initializes the lemmatizer with a lemma file.
      *
-     * @param sFileName file name
-     * @param bForceUTF8 file encoding format
-     * @return
+     * @param sFileName   the name of the lemma file to be used
+     * @param bForceUTF8  specifies whether the file should be read as UTF-8 or not
+     * @return true if the initialization was successful, false otherwise
      */
     public boolean initialise(String sFileName, boolean bForceUTF8)
     {
@@ -101,9 +104,9 @@ public class Lemmatiser
     }
 
     /**
-     *
-     * @param sWord word need to be lemmatised
-     * @return result of lemmatization
+     * Maps a word to its lemma form.
+     * @param sWord the word to be lemmatised
+     * @return the lemma form of the word if it is found in the lemma file, otherwise returns the original word
      */
     public String lemmatise(String sWord)
     {

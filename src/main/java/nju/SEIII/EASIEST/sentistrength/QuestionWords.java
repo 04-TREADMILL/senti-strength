@@ -15,14 +15,20 @@ import nju.SEIII.EASIEST.utilities.Sort;
 //            ClassificationOptions
 
 /**
- * The QuestionWords class is used to label question words.
+ *  The QuestionWords class is used to load and manage a list of question words from a file.
+ *  It provides a method to check whether a given word is a question word or not.
  */
+
 public class QuestionWords
 {
     private String[] sgQuestionWord;
     private int igQuestionWordCount;
     private int igQuestionWordMax;
 
+    /**
+     * Initializes a new instance of the QuestionWords class with default values.
+     * The count of loaded question words is set to zero, and the maximum count is set to zero as well.
+     */
     public QuestionWords()
     {
         igQuestionWordCount = 0;
@@ -30,11 +36,13 @@ public class QuestionWords
     }
 
     /**
+     * Loads the list of question words from a file and sorts it in alphabetical order.
      *
-     * @param sFilename question words file
-     * @param options file encoding format
-     * @return if the questionwordsFile has been successfully imported
+     * @param sFilename the name of the file containing the list of question words.
+     * @param options the classification options to use when loading the file.
+     * @return true if the file was successfully loaded and sorted, false otherwise.
      */
+
     public boolean initialise(String sFilename, ClassificationOptions options)
     {
         if(igQuestionWordMax > 0)
@@ -81,9 +89,10 @@ public class QuestionWords
     }
 
     /**
+     * Determines whether a given word is a question word or not.
      *
-     * @param sWord
-     * @return if sWord is question word
+     * @param sWord the word to check.
+     * @return true if the word is a question word, false otherwise.
      */
     public boolean questionWord(String sWord)
     {
