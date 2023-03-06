@@ -9,6 +9,13 @@ import nju.SEIII.EASIEST.utilities.Sort;
 import nju.SEIII.EASIEST.utilities.StringIndex;
 import nju.SEIII.EASIEST.wkaclass.Arff;
 
+/**
+ * The Sentence class represents a sentence that has been parsed and classified for sentiment analysis.
+ * It contains an array of Term objects representing the individual words in the sentence, along with
+ * other information such as the sentiment score of the sentence, whether any idioms or object evaluations
+ * have been applied to the term strengths, and the classification resources and options used to parse and
+ * classify the sentence.
+ */
 public class Sentence {
     private Term[] term;
     private boolean[] bgSpaceAfterTerm;
@@ -36,6 +43,12 @@ public class Sentence {
     public Sentence() {
     }
 
+    /**
+     * Adds each term's text in this object's term array to a new term index in the provided
+     * UnusedTermsClassificationIndex object.
+     *
+     * @param unusedTermClassificationIndex The UnusedTermsClassificationIndex object to add the terms to
+     */
     public void addSentenceToIndex(UnusedTermsClassificationIndex unusedTermClassificationIndex) {
         for(int i = 1; i <= this.igTermCount; ++i) {
             unusedTermClassificationIndex.addTermToNewTermIndex(this.term[i].getText());
@@ -43,6 +56,15 @@ public class Sentence {
 
     }
 
+    /**
+     * Adds strings to a StringIndex object based on a text parsing options object and other options.
+     *
+     * @param stringIndex The StringIndex object to add strings to
+     * @param textParsingOptions The TextParsingOptions object to use for parsing the text
+     * @param bRecordCount A boolean indicating whether to record the count of each string added
+     * @param bArffIndex A boolean indicating whether to use ARFF safe encoding for the strings
+     * @return The number of terms checked
+     */
     public int addToStringIndex(StringIndex stringIndex, TextParsingOptions textParsingOptions, boolean bRecordCount, boolean bArffIndex) {
         String sEncoded = "";
         int iStringPos = 1;
@@ -101,6 +123,13 @@ public class Sentence {
         return iTermsChecked;
     }
 
+    /**
+     * Sets the sentence to be processed by the classifier and extracts the individual terms and punctuation marks from it.
+     *
+     * @param sSentence The input sentence to be processed.
+     * @param classResources The resources required for classification.
+     * @param newClassificationOptions The new classification options to be used for classification.
+     */
     public void setSentence(String sSentence, ClassificationResources classResources, ClassificationOptions newClassificationOptions) {
         this.resources = classResources;
         this.options = newClassificationOptions;
@@ -133,6 +162,12 @@ public class Sentence {
         this.bgSpaceAfterTerm[this.igTermCount] = false;
     }
 
+    /**
+     * Returns an array of integers representing the sentiment ID list of this object.
+     * If the sentiment ID list has not been generated yet, it will be generated before being returned.
+     *
+     * @return An array of integers representing the sentiment ID list of this object.
+     */
     public int[] getSentimentIDList() {
         if (!this.bSentimentIDListMade) {
             this.makeSentimentIDList();
@@ -141,6 +176,10 @@ public class Sentence {
         return this.igSentimentIDList;
     }
 
+    /**
+     * Generates a list of sentiment IDs based on the terms in the sentence.
+     * If the sentiment ID list has not been made, it generates it and stores it.
+     */
     public void makeSentimentIDList() {
         int iSentimentIDTemp = 0;
         this.igSentimentIDListCount = 0;
@@ -178,6 +217,11 @@ public class Sentence {
         this.bSentimentIDListMade = true;
     }
 
+    /**
+     * Returns a string containing tagged sentences.
+     *
+     * @return String tagged sentences.
+     */
     public String getTaggedSentence() {
         StringBuilder sTagged = new StringBuilder();
 
@@ -192,10 +236,20 @@ public class Sentence {
         return sTagged + "<br>";
     }
 
+    /**
+     * Returns the classification rationale.
+     *
+     * @return String classification rationale.
+     */
     public String getClassificationRationale() {
         return this.sgClassificationRationale;
     }
 
+    /**
+     * Returns a translated sentence.
+     *
+     * @return String translated sentence.
+     */
     public String getTranslatedSentence() {
         StringBuilder sTranslated = new StringBuilder();
 
@@ -216,10 +270,25 @@ public class Sentence {
         return sTranslated + "<br>";
     }
 
+    /**
+     * Recalculates the sentence sentiment score.
+     * This method calls the "calculateSentenceSentimentScore" method to recalculate
+     * the sentence sentiment score.
+     */
     public void recalculateSentenceSentimentScore() {
         this.calculateSentenceSentimentScore();
     }
 
+    /**
+     * Re-classifies a classified sentence for sentiment change.
+     * This method checks if the specified sentiment word ID is in the sentence's
+     * sentiment ID list. If it is, the method calls the "calculateSentenceSentimentScore"
+     * method to re-calculate the sentence sentiment score. If the sentence's negative
+     * sentiment count is zero, the method also calls the "calculateSentenceSentimentScore"
+     * method to calculate the sentence sentiment score.
+     *
+     * @param iSentimentWordID the sentiment word ID to check
+     */
     public void reClassifyClassifiedSentenceForSentimentChange(int iSentimentWordID) {
         if (this.igNegativeSentiment == 0) {
             this.calculateSentenceSentimentScore();
@@ -237,6 +306,15 @@ public class Sentence {
         }
     }
 
+    /**
+     * Returns the positive sentiment count of the sentence.
+     * This method checks if the positive sentiment count of the sentence is zero.
+     * If it is, the method calls the "calculateSentenceSentimentScore" method to calculate
+     * the sentence sentiment score. The method then returns the positive sentiment count
+     * of the sentence.
+     *
+     * @return the positive sentiment count of the sentence
+     */
     public int getSentencePositiveSentiment() {
         if (this.igPositiveSentiment == 0) {
             this.calculateSentenceSentimentScore();
@@ -245,6 +323,15 @@ public class Sentence {
         return this.igPositiveSentiment;
     }
 
+    /**
+     * Returns the negative sentiment count of the sentence.
+     * This method checks if the negative sentiment count of the sentence is zero.
+     * If it is, the method calls the "calculateSentenceSentimentScore" method to calculate
+     * the sentence sentiment score. The method then returns the negative sentiment count
+     * of the sentence.
+     *
+     * @return the negative sentiment count of the sentence
+     */
     public int getSentenceNegativeSentiment() {
         if (this.igNegativeSentiment == 0) {
             this.calculateSentenceSentimentScore();
@@ -253,6 +340,15 @@ public class Sentence {
         return this.igNegativeSentiment;
     }
 
+    /**
+     * Marks the terms in the sentence that are valid for sentiment classification.
+     * If the option to ignore sentences without keywords is set, it checks whether
+     * the sentence contains any sentiment keywords, and marks the terms that are
+     * within a certain distance of those keywords as valid for classification.
+     * If no keywords are found, it sets the bgNothingToClassify flag to true.
+     * Otherwise, it sets the bgNothingToClassify flag to false and marks the terms
+     * that are within a certain distance of the keywords as valid for classification.
+     */
     private void markTermsValidToClassify() {
         this.bgIncludeTerm = new boolean[this.igTermCount + 1];
         int iTermsSinceValid;
@@ -309,6 +405,9 @@ public class Sentence {
 
     }
 
+    /**
+     * Private method to calculate the sentiment score of a sentence.
+     */
     private void calculateSentenceSentimentScore() {
         if (this.options.bgExplainClassification && this.sgClassificationRationale.length() > 0) {
             this.sgClassificationRationale = "";
@@ -692,6 +791,16 @@ public class Sentence {
         }
     }
 
+    /**
+     * Private method to adjust the sentiment score of a sentence based on the presence of irony.
+     * If the positive sentiment score of the sentence is above a certain threshold, this method checks
+     * for the presence of irony in the sentence by looking at various factors, such as the use of quotes,
+     * exclamation points, and certain terms known to be associated with irony.
+     * If irony is detected, this method adjusts the sentiment score of the sentence accordingly.
+     * Note: This method assumes that the sentence object has already been initialized with the necessary
+     * data, including the text of the sentence, the positive and negative sentiment scores, and the options
+     * for detecting irony.
+     */
     private void adjustSentimentForIrony() {
         int iTerm;
         if (this.igPositiveSentiment >= this.options.igMinSentencePosForQuotesIrony) {
@@ -738,6 +847,11 @@ public class Sentence {
 
     }
 
+    /**
+     * Overrides the strength of terms with the strength of corresponding object evaluations.
+     *
+     * @param recalculateIfAlreadyDone If set to true, reapply the object evaluations even if they were already applied.
+     */
     public void overrideTermStrengthsWithObjectEvaluationStrengths(boolean recalculateIfAlreadyDone) {
         boolean bMatchingObject = false;
         boolean bMatchingEvaluation = false;
@@ -777,6 +891,11 @@ public class Sentence {
 
     }
 
+    /**
+     * Overrides the sentiment strength of terms with the strength of matching idioms.
+     *
+     * @param recalculateIfAlreadyDone true if the sentiment strength should be recalculated even if it has already been applied, false otherwise.
+     */
     public void overrideTermStrengthsWithIdiomStrengths(boolean recalculateIfAlreadyDone) {
         if (!this.bgIdiomsApplied || recalculateIfAlreadyDone) {
             for(int iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
