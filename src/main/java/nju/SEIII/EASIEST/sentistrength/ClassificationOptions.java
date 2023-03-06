@@ -12,6 +12,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * The ClassificationOptions class represents the options used for sentiment analysis in the SentiStrength program.
+ * These options can be set or modified to customize the sentiment analysis process.
+ */
 public class ClassificationOptions {
     public boolean bgTensiStrength = false;
     public String sgProgramName = "SentiStrength";

@@ -16,6 +16,9 @@ import java.util.Objects;
 
 import nju.SEIII.EASIEST.utilities.FileOps;
 
+/**
+ * The SentiStrength entry class, which provides a number of command-line arguments to drive SentiStrength.
+ */
 public class SentiStrength {
    Corpus c = new Corpus();
 

@@ -6,6 +6,9 @@
 package nju.SEIII.EASIEST.sentistrength;
 
 
+/**
+ * TextParsingOptions class provides settings for text parsing options.
+ */
 public class TextParsingOptions
 {
 
