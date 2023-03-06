@@ -15,7 +15,6 @@ import nju.SEIII.EASIEST.utilities.Sort;
 // Referenced classes of package nju.SEIII.EASIEST.sentistrength:
 //            ClassificationOptions
 
-Sure! Here are detailed comments for the BoosterWordsList class in Javadoc style:
 
 /**
  * This class stores data about booster words and their strengths into two arrays.
