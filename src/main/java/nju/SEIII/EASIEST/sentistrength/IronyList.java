@@ -1,8 +1,3 @@
-// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) fieldsfirst 
-// Source File Name:   IronyList.java
-
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
@@ -12,63 +7,80 @@ import java.nio.charset.StandardCharsets;
 import nju.SEIII.EASIEST.utilities.FileOps;
 import nju.SEIII.EASIEST.utilities.Sort;
 
-// Referenced classes of package nju.SEIII.EASIEST.sentistrength:
-//            ClassificationOptions
+/**
+ * IronyList is a class that stores a list of ironic terms and provides a method to check whether a term is ironic or not.
+ */
+public class IronyList {
 
-public class IronyList
-{
-
+    /**
+     * Array of irony terms.
+     */
     private String[] sgIronyTerm;
+
+    /**
+     * Number of irony terms.
+     */
     private int igIronyTermCount;
+
+    /**
+     * Capacity of irony terms.
+     */
     private int igIronyTermMax;
 
-    public IronyList()
-    {
+    /**
+     * Constructs an IronyList object with zero count of ironic terms and maximum capacity of zero.
+     */
+    public IronyList() {
         igIronyTermCount = 0;
         igIronyTermMax = 0;
     }
 
-    public boolean termIsIronic(String term)
-    {
+    /**
+     * Checks if a given term is ironic by searching for it in the list of ironic terms.
+     *
+     * @param term The term to check.
+     * @return true if the term is found in the list of ironic terms, false otherwise.
+     */
+    public boolean termIsIronic(String term) {
         int iIronyTermCount = Sort.i_FindStringPositionInSortedArray(term, sgIronyTerm, 1, igIronyTermCount);
         return iIronyTermCount >= 0;
     }
 
-    public boolean initialise(String sSourceFile, ClassificationOptions options)
-    {
-        if(igIronyTermCount > 0)
+    /**
+     * Initializes the list of ironic terms by reading from a file.
+     *
+     * @param sSourceFile The path to the file containing the list of ironic terms.
+     * @param options     The options to use when initializing the list of ironic terms.
+     * @return true if the initialization was successful, false otherwise.
+     */
+    public boolean initialise(String sSourceFile, ClassificationOptions options) {
+        if (igIronyTermCount > 0)
             return true;
         File f = new File(sSourceFile);
-        if(!f.exists())
+        if (!f.exists())
             return true;
-        try
-        {
+        try {
             igIronyTermMax = FileOps.i_CountLinesInTextFile(sSourceFile) + 2;
             igIronyTermCount = 0;
             sgIronyTerm = new String[igIronyTermMax];
             BufferedReader rReader;
-            if(options.bgForceUTF8)
+            if (options.bgForceUTF8)
                 rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sSourceFile), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sSourceFile));
             String sLine;
-            while((sLine = rReader.readLine()) != null) 
-                if(!sLine.equals(""))
-                {
+            while ((sLine = rReader.readLine()) != null)
+                if (!sLine.equals("")) {
                     String[] sData = sLine.split("\t");
-                    if(sData.length > 0)
+                    if (sData.length > 0)
                         sgIronyTerm[++igIronyTermCount] = sData[0];
                 }
             rReader.close();
-        }
-        catch(FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             System.out.println("Could not find IronyTerm file: " + sSourceFile);
             e.printStackTrace();
             return false;
-        }
-        catch(IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Found IronyTerm file but could not read from it: " + sSourceFile);
             e.printStackTrace();
             return false;
