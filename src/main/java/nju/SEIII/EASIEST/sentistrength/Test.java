@@ -11,6 +11,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * This is a test class that demonstrates detecting ASCII strings and doing URL encoding.
+ */
 public class Test
 {
 
