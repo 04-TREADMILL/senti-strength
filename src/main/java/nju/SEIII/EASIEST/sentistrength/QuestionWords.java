@@ -14,18 +14,34 @@ import nju.SEIII.EASIEST.utilities.Sort;
 // Referenced classes of package nju.SEIII.EASIEST.sentistrength:
 //            ClassificationOptions
 
+/**
+ *  The QuestionWords class is used to load and manage a list of question words from a file.
+ *  It provides a method to check whether a given word is a question word or not.
+ */
+
 public class QuestionWords
 {
-
     private String[] sgQuestionWord;
     private int igQuestionWordCount;
     private int igQuestionWordMax;
 
+    /**
+     * Initializes a new instance of the QuestionWords class with default values.
+     * The count of loaded question words is set to zero, and the maximum count is set to zero as well.
+     */
     public QuestionWords()
     {
         igQuestionWordCount = 0;
         igQuestionWordMax = 0;
     }
+
+    /**
+     * Loads the list of question words from a file and sorts it in alphabetical order.
+     *
+     * @param sFilename the name of the file containing the list of question words.
+     * @param options the classification options to use when loading the file.
+     * @return true if the file was successfully loaded and sorted, false otherwise.
+     */
 
     public boolean initialise(String sFilename, ClassificationOptions options)
     {
@@ -72,6 +88,12 @@ public class QuestionWords
         return true;
     }
 
+    /**
+     * Determines whether a given word is a question word or not.
+     *
+     * @param sWord the word to check.
+     * @return true if the word is a question word, false otherwise.
+     */
     public boolean questionWord(String sWord)
     {
         return Sort.i_FindStringPositionInSortedArray(sWord, sgQuestionWord, 1, igQuestionWordCount) >= 0;

@@ -10,9 +10,11 @@ import java.util.Objects;
 
 import nju.SEIII.EASIEST.utilities.Trie;
 
+/**
+ * UnusedTermsClassificationIndex class represents an index for unused terms in classification
+ */
 public class UnusedTermsClassificationIndex
 {
-
     private String[] sgTermList;
     private int igTermListCount;
     private int igTermListMax;
@@ -33,6 +35,9 @@ public class UnusedTermsClassificationIndex
     private int[][] igTermListBinaryCorrectClass;
     private int[][] igTermListTrinaryCorrectClass;
 
+    /**
+     * Creates an UnusedTermsClassificationIndex object with null sgTermList and 0 igTermListCount.
+     */
     public UnusedTermsClassificationIndex()
     {
         sgTermList = null;
@@ -44,6 +49,10 @@ public class UnusedTermsClassificationIndex
     {
     }
 
+    /**
+     * Adds a term to the new term index.
+     * @param sTerm the term to be added.
+     */
     public void addTermToNewTermIndex(String sTerm)
     {
         if(sgTermList == null)
@@ -63,6 +72,13 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     * Adds a new index to the main index with positive and negative values.
+     * @param iCorrectPosClass the number of correctly classified positive terms.
+     * @param iEstPosClass the number of positive terms.
+     * @param iCorrectNegClass the number of correctly classified negative terms.
+     * @param iEstNegClass the number of negative terms.
+     */
     public void addNewIndexToMainIndexWithPosNegValues(int iCorrectPosClass, int iEstPosClass, int iCorrectNegClass, int iEstNegClass)
     {
         if(iCorrectNegClass > 0 && iCorrectPosClass > 0)
@@ -90,6 +106,11 @@ public class UnusedTermsClassificationIndex
         iTermsAddedIDTempCount = 0;
     }
 
+    /**
+     * Adds a new index to the main index with scale values.
+     * @param iCorrectScaleClass the number of correctly classified terms in the scale
+     * @param iEstScaleClass the estimated number of terms in the scale
+     */
     public void addNewIndexToMainIndexWithScaleValues(int iCorrectScaleClass, int iEstScaleClass)
     {
         for(int iTerm = 1; iTerm <= iTermsAddedIDTempCount; iTerm++)
@@ -112,6 +133,11 @@ public class UnusedTermsClassificationIndex
         iTermsAddedIDTempCount = 0;
     }
 
+    /**
+     * Adds a new index to the main index with trinary values.
+     * @param iCorrectTrinaryClass the number of correctly classified trinary terms
+     * @param iEstTrinaryClass the number of trinary terms
+     */
     public void addNewIndexToMainIndexWithTrinaryValues(int iCorrectTrinaryClass, int iEstTrinaryClass)
     {
         for(int iTerm = 1; iTerm <= iTermsAddedIDTempCount; iTerm++)
@@ -134,6 +160,11 @@ public class UnusedTermsClassificationIndex
         iTermsAddedIDTempCount = 0;
     }
 
+    /**
+     * Adds a new index to the main index with binary values.
+     * @param iCorrectBinaryClass the number of correctly classified binary terms
+     * @param iEstBinaryClass the number of binary terms
+     */
     public void addNewIndexToMainIndexWithBinaryValues(int iCorrectBinaryClass, int iEstBinaryClass)
     {
         for(int iTerm = 1; iTerm <= iTermsAddedIDTempCount; iTerm++)
@@ -158,6 +189,13 @@ public class UnusedTermsClassificationIndex
         iTermsAddedIDTempCount = 0;
     }
 
+    /**
+     * Initializes the indexing data structures for this class, including the term list, frequency, and classification arrays.
+     * @param bInitialiseScale boolean indicating whether to initialize the scaling classification arrays.
+     * @param bInitialisePosNeg boolean indicating whether to initialize the positive/negative classification arrays.
+     * @param bInitialiseBinary boolean indicating whether to initialize the binary classification arrays.
+     * @param bInitialiseTrinary boolean indicating whether to initialize the trinary classification arrays.
+     */
     public void initialise(boolean bInitialiseScale, boolean bInitialisePosNeg, boolean bInitialiseBinary, boolean bInitialiseTrinary)
     {
         igTermListCount = 0;
@@ -193,6 +231,12 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     * Prints the index with positive and negative values to a specified output file, for terms with frequency greater than or
+     * equal to the specified minimum frequency.
+     * @param sOutputFile the name of the output file to write to
+     * @param iMinFreq the minimum frequency a term must have to be included in the output
+     */
     public void printIndexWithPosNegValues(String sOutputFile, int iMinFreq)
     {
         try
@@ -234,6 +278,12 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     * Prints the index with scale values to a specified output file, for terms with frequency greater than or
+     *      * equal to the specified minimum frequency.
+     * @param sOutputFile the name of the output file to write to
+     * @param iMinFreq the minimum frequency a term must have to be included in the output
+     */
     public void printIndexWithScaleValues(String sOutputFile, int iMinFreq)
     {
         try
@@ -263,6 +313,12 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     * Writes a trinary index with specified minimum frequency to a given output file. The index includes the term,
+     * term frequency, trinary class difference, trinary class average difference, and correct class for each trinary value.
+     * @param sOutputFile the name of the output file to write to
+     * @param iMinFreq the minimum frequency a term must have to be included in the output
+     */
     public void printIndexWithTrinaryValues(String sOutputFile, int iMinFreq)
     {
         try
@@ -292,6 +348,12 @@ public class UnusedTermsClassificationIndex
         }
     }
 
+    /**
+     * Writes a binary index with specified minimum frequency to a given output file. The index includes the term,
+     * term frequency, binary class difference, binary class average difference, and correct class for each binary value.
+     * @param sOutputFile the name of the output file to write to
+     * @param iMinFreq the minimum frequency a term must have to be included in the output
+     */
     public void printIndexWithBinaryValues(String sOutputFile, int iMinFreq)
     {
         try
