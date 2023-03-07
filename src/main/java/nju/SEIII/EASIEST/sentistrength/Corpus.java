@@ -19,6 +19,33 @@ import nju.SEIII.EASIEST.utilities.Sort;
 
 /**
  * A class representing a corpus of text documents, with methods for indexing, classifying, and analyzing the corpus.
+ *
+ * @UC
+ * <p><ul>
+ * <li> UC-1 Assigning Sentiment Scores for Words
+ * <li> UC-2 Assigning Sentiment Scores for Phrases
+ * <li> UC-3 Spelling Correction
+ * <li> UC-4 Booster Word Rule
+ * <li> UC-5 Negating Word Rule
+ * <li> UC-10 Negative Sentiment Ignored in Questions
+ * <li> UC-11 Classify a single text
+ * <li> UC-12 Classify all lines of text in a file for sentiment [includes accuracy evaluations]
+ * <li> UC-13 Classify texts in a column within a file or folder
+ * <li> UC-14 Listen at a port for texts to classify
+ * <li> UC-15 Run interactively from the command line
+ * <li> UC-19 Location of output folder
+ * <li> UC-20 File name extension for output
+ * <li> UC-21 Classify positive (1 to 5) and negative (-1 to -5) sentiment strength separately
+ * <li> UC-22 Use trinary classification (positive-negative-neutral)
+ * <li> UC-23 Use binary classification (positive-negative)
+ * <li> UC-24 Use a single positive-negative scale classification
+ * <li> UC-25 Explain the classification
+ * <li> UC-26 Set Classification Algorithm Parameters
+ * <li> UC-27 Optimise sentiment strengths of existing sentiment terms
+ * <li> UC-28 Suggest new sentiment terms (from terms in misclassified texts)
+ * <li> UC-29 Machine learning evaluations
+ * </ul>
+ * <p>
  */
 public class Corpus
 {

@@ -16,6 +16,15 @@ import nju.SEIII.EASIEST.utilities.Sort;
  * This class implements a lemmatizer, which is used to reduce words to their base or dictionary form,
  * in order to improve the accuracy of text analysis.
  * It reads a file containing a list of word-lemma pairs, and uses them to lemmatize input words.
+ *
+ * @UC
+ * <p><ul>
+ * <li> UC-17 Location of linguistic data folder
+ * <li> UC-18 Location of sentiment term weights
+ * <li> UC-19 Location of output folder
+ * <li> UC-20 File name extension for output
+ * </ul>
+ * <p>
  */
 public class Lemmatiser
 {
