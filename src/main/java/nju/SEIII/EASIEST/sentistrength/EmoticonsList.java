@@ -1,8 +1,3 @@
-// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) fieldsfirst 
-// Source File Name:   EmoticonsList.java
-
 package nju.SEIII.EASIEST.sentistrength;
 
 import java.io.*;
@@ -11,8 +6,18 @@ import java.nio.charset.StandardCharsets;
 import nju.SEIII.EASIEST.utilities.FileOps;
 import nju.SEIII.EASIEST.utilities.Sort;
 
-// Referenced classes of package nju.SEIII.EASIEST.sentistrength:
-//            ClassificationOptions
+/**
+ * This class represents a list of emoticons and their strengths.
+ * It has methods for initializing the list from a file,
+ * getting the strength of an emoticon.
+ *
+ * @UC
+ * <p><ul>
+ * <li> UC-10 Negative Sentiment Ignored in Questions
+ * <li> UC-17 Location of linguistic data folder
+ * <li> UC-18 Location of sentiment term weights
+ * </ul></p>
+ */
 
 public class EmoticonsList {
 
