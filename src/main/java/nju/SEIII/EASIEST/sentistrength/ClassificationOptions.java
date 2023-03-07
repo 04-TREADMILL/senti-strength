@@ -15,6 +15,23 @@ import java.util.Objects;
 /**
  * The ClassificationOptions class represents the options used for sentiment analysis in the SentiStrength program.
  * These options can be set or modified to customize the sentiment analysis process.
+ * @UC
+ * <p><ul>
+ * <li>UC-6 Repeated Letter Rule</li>
+ * <li>UC-11 Classify a single text</li>
+ * <li>UC-12 Classify all lines of text in a file for sentiment [includes accuracy evaluations]</li>
+ * <li>UC-13 Classify texts in a column within a file or folder</li>
+ * <li>UC-14 Listen at a port for texts to classify</li>
+ * <li>UC-15 Run interactively from the command line</li>
+ * <li>UC-17 Location of linguistic data folder</li>
+ * <li>UC-18 Location of sentiment term weights</li>
+ * <li>UC-20 File name extension for output</li>
+ * <li>UC-21 Classify positive (1 to 5) and negative (-1 to -5) sentiment strength separately</li>
+ * <li>UC-22 Use trinary classification (positive-negative-neutral)</li>
+ * <li>UC-23 Use binary classification (positive-negative)</li>
+ * <li>UC-24 Use a single positive-negative scale classification</li>
+ * <li>UC-25 Explain the classification</li>
+ * </ul></p>
  */
 public class ClassificationOptions {
     public boolean bgTensiStrength = false;

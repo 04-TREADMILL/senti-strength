@@ -13,6 +13,13 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * This is a test class that demonstrates detecting ASCII strings and doing URL encoding.
+ * @UC
+ * <p><ul>
+ * <li>UC-17 Location of linguistic data folder</li>
+ * <li>UC-18 Location of sentiment term weights</li>
+ * <li>UC-19 Location of output folder</li>
+ * <li>UC-20 File name extension for output</li>
+ * </ul></p>
  */
 public class Test
 {

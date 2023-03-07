@@ -8,6 +8,14 @@ package nju.SEIII.EASIEST.sentistrength;
 
 /**
  * TextParsingOptions class provides settings for text parsing options.
+ * @UC
+ * <p><ul>
+ * <li>UC-16 Process stdin and send to stdout</li>
+ * <li>UC-17 Location of linguistic data folder</li>
+ * <li>UC-18 Location of sentiment term weights</li>
+ * <li>UC-19 Location of output folder</li>
+ * <li>UC-20 File name extension for output</li>
+ * </ul></p>
  */
 public class TextParsingOptions
 {

@@ -18,6 +18,28 @@ import nju.SEIII.EASIEST.utilities.FileOps;
 
 /**
  * The SentiStrength entry class, which provides a number of command-line arguments to drive SentiStrength.
+ * @UC
+ * <p><ul>
+ * <li>UC-1 Assigning Sentiment Scores for Words</li>
+ * <li>UC-2 Assigning Sentiment Scores for Phrases</li>
+ * <li>UC-3 Spelling Correction</li>
+ * <li>UC-4 Booster Word Rule</li>
+ * <li>UC-5 Negating Word Rule</li>
+ * <li>UC-11 Classify a single text</li>
+ * <li>UC-12 Classify all lines of text in a file for sentiment [includes accuracy evaluations]</li>
+ * <li>UC-13 Classify texts in a column within a file or folder</li>
+ * <li>UC-14 Listen at a port for texts to classify</li>
+ * <li>UC-15 Run interactively from the command line</li>
+ * <li>UC-21 Classify positive (1 to 5) and negative (-1 to -5) sentiment strength separately</li>
+ * <li>UC-22 Use trinary classification (positive-negative-neutral)</li>
+ * <li>UC-23 Use binary classification (positive-negative)</li>
+ * <li>UC-24 Use a single positive-negative scale classification</li>
+ * <li>UC-25 Explain the classification</li>
+ * <li>UC-26 Set Classification Algorithm Parameters</li>
+ * <li>UC-27 Optimise sentiment strengths of existing sentiment terms</li>
+ * <li>UC-28 Suggest new sentiment terms (from terms in misclassified texts)</li>
+ * <li>UC-29 Machine learning evaluations</li>
+ * </ul></p>
  */
 public class SentiStrength {
    Corpus c = new Corpus();
