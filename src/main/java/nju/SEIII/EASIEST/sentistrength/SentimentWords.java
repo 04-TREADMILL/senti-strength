@@ -19,6 +19,13 @@ import nju.SEIII.EASIEST.utilities.Sort;
 /**
  * This class represents a list of sentiment words used in sentiment analysis.
  * It provides methods for accessing individual sentiment words from the list.
+ *
+ * UC-1 Assigning Sentiment Scores for Words
+ * UC-16 Process stdin and send to stdout
+ * UC-17 Location of linguistic data folder
+ * UC-18 Location of sentiment term weights
+ * UC-27 Optimise sentiment strengths of existing sentiment terms
+ * UC-29 Machine learning evaluations
  */
 public class SentimentWords
 {
