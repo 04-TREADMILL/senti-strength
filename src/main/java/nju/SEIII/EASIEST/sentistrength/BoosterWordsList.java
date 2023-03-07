@@ -18,6 +18,15 @@ import nju.SEIII.EASIEST.utilities.Sort;
 
 /**
  * This class stores data about booster words and their strengths into two arrays.
+ *
+ * @UC
+ * <p><ul>
+ * <li>UC-2 Assigning Sentiment Scores for Phrases
+ * <li>UC-17 Location of linguistic data folder
+ * <li>UC-18 Location of sentiment term weights
+ * <li>UC-19 Location of output folder
+ * <li>UC-20 File name extension for output
+ * </ul><p>
  */
 public class BoosterWordsList {
     /**

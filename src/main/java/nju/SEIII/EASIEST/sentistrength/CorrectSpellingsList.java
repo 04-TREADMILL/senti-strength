@@ -13,6 +13,13 @@ import nju.SEIII.EASIEST.utilities.Sort;
 
 /**
  * A class for storing and checking a list of correctly spelled words.
+ *
+ * @UC
+ * <p><ul>
+ * <li>UC-6 Repeated Letter Rule
+ * <li>UC-17 Location of linguistic data folder
+ * <li>UC-18 Location of sentiment term weights
+ * </ul><p>
  */
 public class CorrectSpellingsList
 {

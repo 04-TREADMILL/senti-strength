@@ -16,6 +16,12 @@ import nju.SEIII.EASIEST.utilities.FileOps;
 
 /**
  * This class represents evaluative terms.
+ *
+ * @UC
+ * <p><ul>
+ * <li>UC-19 Location of output folder
+ * <li>UC-20 File name extension for output
+ * </ul><p>
  */
 public class EvaluativeTerms
 {
