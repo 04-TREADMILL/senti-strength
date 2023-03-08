@@ -13,20 +13,12 @@ import nju.SEIII.EASIEST.utilities.Sort;
  *
  * @UC
  * <p><ul>
- * <li> UC-10 Negative Sentiment Ignored in Questions
+ * <li> UC-7 Emoji Rule
  * <li> UC-17 Location of linguistic data folder
  * <li> UC-18 Location of sentiment term weights
  * </ul></p>
  */
 
-/**
- * @UC
- * <p><ul>
- * <li>UC-7 Emoji Rule
- * <li>UC-17 Location of linguistic data folder
- * <li>UC-18 Location of sentiment term weights
- * </ul><p>
- */
 public class EmoticonsList {
 
     /**
@@ -35,7 +27,7 @@ public class EmoticonsList {
     private String[] sgEmoticon;
     /**
      * Array of emoticon strengths
-    */
+     */
     private int[] igEmoticonStrength;
     /**
      * Number of emoticons
@@ -46,7 +38,7 @@ public class EmoticonsList {
      */
     private int igEmoticonMax;
 
-     /**
+    /**
      * Constructor for EmoticonsList. Initializes instance variables.
      */
     public EmoticonsList() {
@@ -90,25 +82,25 @@ public class EmoticonsList {
             igEmoticonCount = 0;
             sgEmoticon = new String[igEmoticonMax];
             igEmoticonStrength = new int[igEmoticonMax];
-            
+
             // Create a BufferedReader to read from the file
             BufferedReader rReader;
             if (options.bgForceUTF8)
                 rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sSourceFile), StandardCharsets.UTF_8));
             else
                 rReader = new BufferedReader(new FileReader(sSourceFile));
-            
+
             String sLine;
-            
+
             // Read each line from the file
             while ((sLine = rReader.readLine()) != null)
                 if (!sLine.equals("")) {
                     String[] sData = sLine.split("\t"); // Split line using tab character as delimiter
-                    
+
                     if (sData.length > 1) {
                         igEmoticonCount++;
                         sgEmoticon[igEmoticonCount] = sData[0];
-                        
+
                         try {
                             igEmoticonStrength[igEmoticonCount] = Integer.parseInt(sData[1].trim());
                         } catch (NumberFormatException e) {
@@ -118,7 +110,7 @@ public class EmoticonsList {
                         }
                     }
                 }
-            
+
             // Close reader
             rReader.close();
         } catch (FileNotFoundException e) {
@@ -130,11 +122,11 @@ public class EmoticonsList {
             e.printStackTrace();
             return false;
         }
-        
+
         // Sort emoticons and their strengths if there is more than one emoticon
         if (igEmoticonCount > 1)
             Sort.quickSortStringsWithInt(sgEmoticon, igEmoticonStrength, 1, igEmoticonCount);
-        
+
         return true;
     }
 }
