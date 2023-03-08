@@ -17,6 +17,36 @@ import nju.SEIII.EASIEST.utilities.Sort;
 //            ClassificationOptions, ClassificationResources, UnusedTermsClassificationIndex, Paragraph, 
 //            ClassificationStatistics, SentimentWords
 
+/**
+ * A class representing a corpus of text documents, with methods for indexing, classifying, and analyzing the corpus.
+ *
+ * @UC
+ * <p><ul>
+ * <li> UC-1 Assigning Sentiment Scores for Words
+ * <li> UC-2 Assigning Sentiment Scores for Phrases
+ * <li> UC-3 Spelling Correction
+ * <li> UC-4 Booster Word Rule
+ * <li> UC-5 Negating Word Rule
+ * <li> UC-10 Negative Sentiment Ignored in Questions
+ * <li> UC-11 Classify a single text
+ * <li> UC-12 Classify all lines of text in a file for sentiment [includes accuracy evaluations]
+ * <li> UC-13 Classify texts in a column within a file or folder
+ * <li> UC-14 Listen at a port for texts to classify
+ * <li> UC-15 Run interactively from the command line
+ * <li> UC-19 Location of output folder
+ * <li> UC-20 File name extension for output
+ * <li> UC-21 Classify positive (1 to 5) and negative (-1 to -5) sentiment strength separately
+ * <li> UC-22 Use trinary classification (positive-negative-neutral)
+ * <li> UC-23 Use binary classification (positive-negative)
+ * <li> UC-24 Use a single positive-negative scale classification
+ * <li> UC-25 Explain the classification
+ * <li> UC-26 Set Classification Algorithm Parameters
+ * <li> UC-27 Optimise sentiment strengths of existing sentiment terms
+ * <li> UC-28 Suggest new sentiment terms (from terms in misclassified texts)
+ * <li> UC-29 Machine learning evaluations
+ * </ul>
+ * <p>
+ */
 public class Corpus
 {
 
@@ -41,6 +71,9 @@ public class Corpus
     private boolean[] bgSupcorpusMember;
     int igSupcorpusMemberCount;
 
+    /**
+     * Constructs a new Corpus object.
+     */
     public Corpus()
     {
         options = new ClassificationOptions();
@@ -52,6 +85,9 @@ public class Corpus
         unusedTermsClassificationIndex = null;
     }
 
+    /**
+     * Indexes the classified corpus.
+     */
     public void indexClassifiedCorpus()
     {
         unusedTermsClassificationIndex = new UnusedTermsClassificationIndex();
@@ -84,6 +120,12 @@ public class Corpus
         }
     }
 
+    /**
+     * Prints the classification index for unused terms in the corpus to a file.
+     * The minimum frequency of the terms to be included in the index can be specified
+     * @param saveFile the location and name of the file to save the index to
+     * @param iMinFreq the minimum frequency of the terms to be included in the index
+     */
     public void printCorpusUnusedTermsClassificationIndex(String saveFile, int iMinFreq)
     {
         if(!bgCorpusClassified)
@@ -103,6 +145,10 @@ public class Corpus
         System.out.println("Term weights saved to " + saveFile);
     }
 
+    /**
+     * Sets the subcorpus by specifying which paragraphs belong to it.
+     * @param bSubcorpusMember an array of booleans indicating which paragraphs belong to the subcorpus
+     */
     public void setSubcorpus(boolean[] bSubcorpusMember)
     {
         igSupcorpusMemberCount = 0;
@@ -118,6 +164,10 @@ public class Corpus
 
     }
 
+    /**
+     * Sets all paragraphs in the corpus as members of the super corpus, effectively using the entire corpus instead of a subcorpus.
+     * Updates the super corpus member count accordingly.
+     */
     public void useWholeCorpusNotSubcorpus()
     {
         for(int i = 0; i <= igParagraphCount; i++)
@@ -126,11 +176,22 @@ public class Corpus
         igSupcorpusMemberCount = igParagraphCount;
     }
 
+    /**
+     * Returns the total number of paragraphs in the corpus.
+     * @return the corpus size as an integer.
+     */
     public int getCorpusSize()
     {
         return igParagraphCount;
     }
 
+    /**
+     * Sets a single text as the corpus, with the given positive and negative correct classifications.
+     * @param sText the text to set as the corpus
+     * @param iPosCorrect the number of positive correct classifications for the text
+     * @param iNegCorrect the number of negative correct classifications for the text (if negative, will be multiplied by -1)
+     * @return true if the corpus was successfully set, false otherwise
+     */
     public boolean setSingleTextAsCorpus(String sText, int iPosCorrect, int iNegCorrect)
     {
         if(resources == null && !resources.initialise(options))
@@ -153,6 +214,12 @@ public class Corpus
         return true;
     }
 
+    /**
+     * Sets the corpus by reading in a text file and creating Paragraph objects for each non-empty line in the file.
+     * It also parses the classification information for each paragraph according to the options set in the resources object.
+     * @param sInFilenameAndPath the filename and path of the input text file.
+     * @return true if the corpus was successfully set, false otherwise.
+     */
     public boolean setCorpus(String sInFilenameAndPath)
     {
         if(resources == null && !resources.initialise(options))
@@ -277,11 +344,19 @@ public class Corpus
         return true;
     }
 
+    /**
+     * Initializes the resources with the given options.
+     * @return true if the initialization was successful, false otherwise
+     */
     public boolean initialise()
     {
         return resources.initialise(options);
     }
 
+    /**
+     * Recalculates the sentiment scores for each paragraph in the corpus that is a member of the supcorpus,
+     * and then calculates the overall sentiment scores for the corpus.
+     */
     public void reCalculateCorpusSentimentScores()
     {
         for(int i = 1; i <= igParagraphCount; i++)
@@ -291,6 +366,13 @@ public class Corpus
         calculateCorpusSentimentScores();
     }
 
+
+    /**
+     * Returns the positive sentiment score of the corpus member at index i.
+     * If the index is out of range, it returns 0.
+     * @param i the index of the corpus member
+     * @return the positive sentiment score of the corpus member at index i
+     */
     public int getCorpusMemberPositiveSentimentScore(int i)
     {
         if(i < 1 || i > igParagraphCount)
@@ -299,6 +381,12 @@ public class Corpus
             return paragraph[i].getParagraphPositiveSentiment();
     }
 
+    /**
+     * Returns the negative sentiment score of the corpus member at index i.
+     * If the index is out of range, it returns 0.
+     * @param i the index of the corpus member
+     * @return the negative sentiment score of the corpus member at index i
+     */
     public int getCorpusMemberNegativeSentimentScore(int i)
     {
         if(i < 1 || i > igParagraphCount)
@@ -307,6 +395,11 @@ public class Corpus
             return paragraph[i].getParagraphNegativeSentiment();
     }
 
+    /**
+     * Calculates the sentiment scores for all corpus members.
+     * If there are no corpus members, it does nothing.
+     * If the sentiment classification options are set, it also calculates the trinary and/or scale sentiment scores.
+     */
     public void calculateCorpusSentimentScores()
     {
         if(igParagraphCount == 0)
@@ -332,6 +425,11 @@ public class Corpus
         bgCorpusClassified = true;
     }
 
+    /**
+     * Re-classifies the classified corpus for a change in sentiment of the given sentiment word ID.
+     * @param iSentimentWordID the ID of the sentiment word
+     * @param iMinParasToContainWord the minimum number of paragraphs the sentiment word needs to appear in to be considered
+     */
     public void reClassifyClassifiedCorpusForSentimentChange(int iSentimentWordID, int iMinParasToContainWord)
     {
         if(igParagraphCount == 0)
@@ -360,6 +458,11 @@ public class Corpus
         bgCorpusClassified = true;
     }
 
+    /**
+     * Prints the sentiment scores for each paragraph in the supcorpus to a file.
+     * @param sOutFilenameAndPath the filename and path of the output file.
+     * @return true if the file was written successfully, false otherwise.
+     */
     public boolean printCorpusSentimentScores(String sOutFilenameAndPath)
     {
         if(!bgCorpusClassified)
@@ -387,6 +490,10 @@ public class Corpus
         return true;
     }
 
+    /**
+     * Returns the proportion of supcorpus members that were correctly classified as positive.
+     * @return the positive classification accuracy proportion.
+     */
     public float getClassificationPositiveAccuracyProportion()
     {
         if(igSupcorpusMemberCount == 0)
@@ -395,6 +502,10 @@ public class Corpus
             return (float)getClassificationPositiveNumberCorrect() / (float)igSupcorpusMemberCount;
     }
 
+    /**
+     * Returns the proportion of supcorpus members that were correctly classified as negative.
+     * @return the negative classification accuracy proportion.
+     */
     public float getClassificationNegativeAccuracyProportion()
     {
         if(igSupcorpusMemberCount == 0)
@@ -403,6 +514,10 @@ public class Corpus
             return (float)getClassificationNegativeNumberCorrect() / (float)igSupcorpusMemberCount;
     }
 
+    /**
+     * Returns the proportion of correctly classified negative supcorpus members that would result from always predicting the majority class.
+     * @return the baseline negative classification accuracy proportion.
+     */
     public double getBaselineNegativeAccuracyProportion()
     {
         if(igParagraphCount == 0)
@@ -411,6 +526,10 @@ public class Corpus
             return ClassificationStatistics.baselineAccuracyMajorityClassProportion(igNegCorrect, igParagraphCount);
     }
 
+    /**
+     * Returns the proportion of correctly classified positive supcorpus members that would result from always predicting the majority class.
+     * @return the baseline positive classification accuracy proportion.
+     */
     public double getBaselinePositiveAccuracyProportion()
     {
         if(igParagraphCount == 0)
@@ -419,6 +538,10 @@ public class Corpus
             return ClassificationStatistics.baselineAccuracyMajorityClassProportion(igPosCorrect, igParagraphCount);
     }
 
+    /**
+     * Returns the number of supcorpus members correctly classified as negative.
+     * @return the number of correct negative classifications.
+     */
     public int getClassificationNegativeNumberCorrect()
     {
         if(igParagraphCount == 0)
@@ -433,6 +556,10 @@ public class Corpus
         return iMatches;
     }
 
+    /**
+     * Returns the number of supcorpus members correctly classified as positive.
+     * @return the number of correct positive classifications.
+     */
     public int getClassificationPositiveNumberCorrect()
     {
         if(igParagraphCount == 0)
@@ -447,6 +574,11 @@ public class Corpus
         return iMatches;
     }
 
+    /**
+     * Calculates the mean absolute difference between the correct and classified positive scores for the
+     * paragraphs in the corpus that are members of the super-corpus.
+     * @return the mean absolute difference between the correct and classified positive scores
+     */
     public double getClassificationPositiveMeanDifference()
     {
         if(igParagraphCount == 0)
@@ -468,6 +600,11 @@ public class Corpus
             return 0.0D;
     }
 
+    /**
+     * Calculates the total absolute difference between the correct and classified positive scores for the
+     * paragraphs in the corpus that are members of the super-corpus.
+     * @return the total absolute difference between the correct and classified positive scores
+     */
     public int getClassificationPositiveTotalDifference()
     {
         if(igParagraphCount == 0)
@@ -482,6 +619,11 @@ public class Corpus
         return iTotalDiff;
     }
 
+    /**
+     * Calculates the number of paragraphs in the corpus that are members of the super-corpus and have
+     * correctly classified trinary sentiment scores.
+     * @return the number of paragraphs with correctly classified trinary sentiment scores
+     */
     public int getClassificationTrinaryNumberCorrect()
     {
         if(igParagraphCount == 0)
@@ -496,6 +638,10 @@ public class Corpus
         return iTrinaryCorrect;
     }
 
+    /**
+     * Calculates the correlation between the correct and classified scale scores for the whole corpus.
+     * @return the correlation between the correct and classified scale scores
+     */
     public float getClassificationScaleCorrelationWholeCorpus()
     {
         if(igParagraphCount == 0)
@@ -504,6 +650,11 @@ public class Corpus
             return (float)ClassificationStatistics.correlation(igScaleCorrect, igScaleClass, igParagraphCount);
     }
 
+    /**
+     * Calculates the proportion of paragraphs in the corpus that are members of the super-corpus and have
+     * correctly classified scale sentiment scores.
+     * @return the proportion of paragraphs with correctly classified scale sentiment scores
+     */
     public float getClassificationScaleAccuracyProportion()
     {
         if(igSupcorpusMemberCount == 0)
@@ -512,6 +663,10 @@ public class Corpus
             return (float)getClassificationScaleNumberCorrect() / (float)igSupcorpusMemberCount;
     }
 
+    /**
+     * Returns the correlation coefficient between the correct and classified positive sentiment scores for the whole corpus.
+     * @return the correlation coefficient between the correct and classified positive sentiment scores for the whole corpus
+     */
     public float getClassificationPosCorrelationWholeCorpus()
     {
         if(igParagraphCount == 0)
@@ -520,6 +675,10 @@ public class Corpus
             return (float)ClassificationStatistics.correlationAbs(igPosCorrect, igPosClass, igParagraphCount);
     }
 
+    /**
+     * Returns the correlation coefficient between the correct and classified negative sentiment scores for the whole corpus.
+     * @return the correlation coefficient between the correct and classified negative sentiment scores for the whole corpus
+     */
     public float getClassificationNegCorrelationWholeCorpus()
     {
         if(igParagraphCount == 0)
@@ -528,6 +687,10 @@ public class Corpus
             return (float)ClassificationStatistics.correlationAbs(igNegCorrect, igNegClass, igParagraphCount);
     }
 
+    /**
+     * Returns the number of paragraphs where the correct and classified sentiment scale values are equal.
+     * @return the number of paragraphs where the correct and classified sentiment scale values are equal
+     */
     public int getClassificationScaleNumberCorrect()
     {
         if(igParagraphCount == 0)
@@ -542,6 +705,10 @@ public class Corpus
         return iScaleCorrect;
     }
 
+    /**
+     * Returns the total difference between the correct and classified negative sentiment scores for the whole corpus.
+     * @return the total difference between the correct and classified negative sentiment scores for the whole corpus
+     */
     public int getClassificationNegativeTotalDifference()
     {
         if(igParagraphCount == 0)
@@ -556,6 +723,12 @@ public class Corpus
         return iTotalDiff;
     }
 
+    /**
+     * Calculates the mean difference between the negative sentiment classification and the correct negative sentiment
+     * classification for all paragraphs in the corpus.
+     * @return The mean difference between the negative sentiment classification and the correct negative sentiment
+     * classification for all paragraphs in the corpus, or 0.0D if there are no paragraphs in the corpus.
+     */
     public double getClassificationNegativeMeanDifference()
     {
         if(igParagraphCount == 0)
@@ -577,6 +750,11 @@ public class Corpus
             return 0.0D;
     }
 
+    /**
+     * Prints a summary of the sentiment classification results for all paragraphs in the corpus to a specified file.
+     * @param sOutFilenameAndPath The file path and name for the output file.
+     * @return true if the summary was successfully printed to the output file, false otherwise.
+     */
     public boolean printClassificationResultsSummary_NOT_DONE(String sOutFilenameAndPath)
     {
         if(!bgCorpusClassified)
@@ -604,6 +782,10 @@ public class Corpus
         return true;
     }
 
+    /**
+     * Creates a list of all the sentiment IDs in the complete corpus (ignoring subcorpus divisions) and counts how many
+     * times each ID appears in the corpus.
+     */
     public void makeSentimentIDListForCompleteCorpusIgnoringSubcorpus()
     {
         igSentimentIDListCount = 0;
@@ -648,6 +830,15 @@ public class Corpus
         bSentimentIDListMade = true;
     }
 
+    /**
+     * Runs 10-fold cross-validation multiple times and writes the results to a file.
+     * @param iMinImprovement the minimum improvement required for a multi-optimisation to be used
+     * @param bUseTotalDifference whether to use total difference instead of binary difference for multi-optimisation
+     * @param iReplications the number of times to run the cross-validation
+     * @param iMultiOptimisations the number of times to perform multi-optimisation for each replication
+     * @param sWriter the writer to output the results to
+     * @param wTermStrengthWriter the writer to output the term strength variables to
+     */
     private void run10FoldCrossValidationMultipleTimes(int iMinImprovement, boolean bUseTotalDifference, int iReplications, int iMultiOptimisations, BufferedWriter sWriter, BufferedWriter wTermStrengthWriter)
     {
         for(int i = 1; i <= iReplications; i++)
@@ -655,6 +846,15 @@ public class Corpus
 
         System.out.println("Set of " + iReplications + " 10-fold cross validations finished");
     }
+
+    /**
+     * Runs 10-fold cross-validation multiple times and writes the results to a file.
+     * @param iMinImprovement the minimum improvement required for a multi-optimisation to be used
+     * @param bUseTotalDifference whether to use total difference instead of binary difference for multi-optimisation
+     * @param iReplications the number of times to run the cross-validation
+     * @param iMultiOptimisations the number of times to perform multi-optimisation for each replication
+     * @param sOutFileName the name of the file to output the results to
+     */
 
     public void run10FoldCrossValidationMultipleTimes(int iMinImprovement, boolean bUseTotalDifference, int iReplications, int iMultiOptimisations, String sOutFileName)
     {
@@ -676,6 +876,13 @@ public class Corpus
         }
     }
 
+    /**
+     * Classifies all lines of text in a file and writes the results, including IDs, to a file.
+     * @param sInputFile the name of the file to read text from
+     * @param iTextCol the column number of the text to classify
+     * @param iIDCol the column number of the ID for each text
+     * @param sOutputFile the name of the file to output the results to
+     */
     public void classifyAllLinesAndRecordWithID(String sInputFile, int iTextCol, int iIDCol, String sOutputFile)
     {
         int iPos = 0;
@@ -744,6 +951,15 @@ public class Corpus
         System.out.println("Processed " + iCount1 + " lines from file: " + sInputFile + ". Last line was:\n" + sLine);
     }
 
+    /**
+     * This method reads in an input file, annotates each line with sentiment analysis using the specified text column,
+     * and writes the annotated lines to a temporary file. The original input file is then deleted and the temporary file
+     * is renamed to the original file name. The annotation can be done in trinary mode (positive, negative, or neutral),
+     * scale mode (a sentiment score between -10 and 10), or binary mode (positive or negative). The mode is determined
+     * by the options specified in the calling code.
+     * @param sInputFile The path to the input file to be annotated
+     * @param iTextCol The index of the text column in the input file to be analyzed
+     */
     public void annotateAllLinesInInputFile(String sInputFile, int iTextCol)
     {
         int iPos = 0;
@@ -810,6 +1026,13 @@ public class Corpus
         }
     }
 
+    /**
+     * This method reads the input file, classifies all lines in it using the parameters specified in the method
+     * signature, and writes the classification results to the output file.
+     * @param sInputFile The name of the input file to be classified.
+     * @param iTextCol The index of the text column in the input file.
+     * @param sOutputFile The name of the output file to be written with the classification results.
+     */
     public void classifyAllLinesInInputFile(String sInputFile, int iTextCol, String sOutputFile)
     {
         int iPos = 0;
@@ -1030,6 +1253,11 @@ public class Corpus
         }
     }
 
+    /**
+     * Writes the headings for classification statistics to the given BufferedWriter.
+     * @param w the BufferedWriter to write the headings to
+     * @throws IOException if an I/O error occurs while writing to the BufferedWriter
+     */
     private void writeClassificationStatsHeadings(BufferedWriter w)
         throws IOException
     {
@@ -1041,6 +1269,14 @@ public class Corpus
         w.write("\tPosCorrect\tiPosCorrect/Total\tNegCorrect\tNegCorrect/Total\tPosWithin1\tPosWithin1/Total\tNegWithin1\tNegWithin1/Total\t" + sPosOrScale + "\tNegCorrel" + "\tPosMPE\tNegMPE\tPosMPEnoDiv\tNegMPEnoDiv" + "\tTrinaryOrScaleCorrect\tTrinaryOrScaleCorrect/TotalClassified" + "\tTrinaryOrScaleCorrectWithin1\tTrinaryOrScaleCorrectWithin1/TotalClassified" + "\test-1corr-1\test-1corr0\test-1corr1" + "\test0corr-1\test0corr0\test0corr1" + "\test1corr-1\test1corr0\test1corr1" + "\tTotalClassified\n");
     }
 
+    /**
+     * Runs 10-fold cross-validation for all possible option variations.
+     * @param iMinImprovement The minimum improvement required to stop early
+     * @param bUseTotalDifference Whether to use the total difference or the average difference in convergence calculations
+     * @param iReplications The number of replications to perform
+     * @param iMultiOptimisations The number of multi-optimisations to perform
+     * @param sOutFileName The name of the output file to write the results to
+     */
     public void run10FoldCrossValidationForAllOptionVariations(int iMinImprovement, boolean bUseTotalDifference, int iReplications, int iMultiOptimisations, String sOutFileName)
     {
         try
@@ -1162,6 +1398,14 @@ public class Corpus
         }
     }
 
+    /**
+     * Runs 10-fold cross-validation once.
+     * @param iMinImprovement the minimum improvement in accuracy required to stop the optimisation process
+     * @param bUseTotalDifference whether to use the total difference instead of the difference in proportions in the optimisation process
+     * @param iMultiOptimisations the number of times to perform optimisation on the dictionary weightings
+     * @param wWriter the BufferedWriter object for writing the results to a file
+     * @param wTermStrengthWriter the BufferedWriter object for writing the term strengths to a file
+     */
     private void run10FoldCrossValidationOnce(int iMinImprovement, boolean bUseTotalDifference, int iMultiOptimisations, BufferedWriter wWriter, BufferedWriter wTermStrengthWriter)
     {
         int iTotalSentimentWords = resources.sentimentWords.getSentimentWordCount();
@@ -1206,6 +1450,14 @@ public class Corpus
         printClassificationResultsRow(iPosClassAll, iNegClassAll, iTrinaryOrScaleClassAll, wWriter);
     }
 
+    /**
+     * Prints a row of classification results to the specified output file.
+     * @param iPosClassAll an array of integers representing the correct positive classification for each paragraph
+     * @param iNegClassAll an array of integers representing the correct negative classification for each paragraph
+     * @param iTrinaryOrScaleClassAll an array of integers representing the correct trinary or scale classification for each paragraph
+     * @param wWriter a BufferedWriter object used to write the results to the output file
+     * @return true if the row was successfully printed, false otherwise
+     */
     private boolean printClassificationResultsRow(int[] iPosClassAll, int[] iNegClassAll, int[] iTrinaryOrScaleClassAll, BufferedWriter wWriter)
     {
         int iPosCorrect = -1;
@@ -1273,6 +1525,12 @@ public class Corpus
         return true;
     }
 
+    /**
+     * Selects a decile of paragraphs from the corpus based on the given decile and optionally inverts the selection.
+     * @param iParagraphRand an array of randomly generated integers representing the paragraphs in the corpus.
+     * @param iDecile the decile of paragraphs to select (1-10).
+     * @param bInvert a boolean value indicating whether or not to invert the selection.
+     */
     private void selectDecileAsSubcorpus(int[] iParagraphRand, int iDecile, boolean bInvert)
     {
         if(igParagraphCount == 0)
@@ -1299,6 +1557,14 @@ public class Corpus
 
     }
 
+    /**
+     * Optimizes the dictionary weightings for the corpus multiple times by running the
+     * {@link #optimiseDictionaryWeightingsForCorpus(int, boolean)} method repeatedly.
+     * @param iMinImprovement the minimum improvement required for the optimization to continue
+     * @param bUseTotalDifference if true, the total difference in score is used to determine improvement,
+     *  otherwise the average difference is used
+     * @param iOptimisationTotal the number of times to run the optimization
+     */
     public void optimiseDictionaryWeightingsForCorpusMultipleTimes(int iMinImprovement, boolean bUseTotalDifference, int iOptimisationTotal)
     {
         if(iOptimisationTotal < 1)
@@ -1334,6 +1600,11 @@ public class Corpus
         optimiseDictionaryWeightingsForCorpus(iMinImprovement, bUseTotalDifference);
     }
 
+    /**
+     * Optimizes dictionary weightings for the entire corpus based on the specified parameters.
+     * @param iMinImprovement The minimum improvement required to continue optimizing.
+     * @param bUseTotalDifference Whether to use the total difference or not.
+     */
     public void optimiseDictionaryWeightingsForCorpus(int iMinImprovement, boolean bUseTotalDifference)
     {
         if(options.bgTrinaryMode)
@@ -1345,6 +1616,13 @@ public class Corpus
             optimiseDictionaryWeightingsForCorpusPosNeg(iMinImprovement, bUseTotalDifference);
     }
 
+    /**
+     * Optimizes the weighting of sentiment words in the dictionary for a corpus using a scale-based approach.
+     * The method modifies the sentiment strengths of the words in the dictionary and reclassifies the corpus to evaluate the improvement.
+     * If the improvement is greater than or equal to the specified minimum improvement, the change is kept; otherwise, it is reverted.
+     * The method continues modifying the dictionary until no more changes result in improvement.
+     * @param iMinImprovement The minimum improvement required to continue optimizing.
+     */
     public void optimiseDictionaryWeightingsForCorpusScale(int iMinImprovement)
     {
         boolean bFullListChanges = true;
@@ -1399,6 +1677,12 @@ public class Corpus
         }
     }
 
+    /**
+     * Optimizes the weightings of sentiment words in the sentiment dictionary for binary or trinary classification.
+     * The optimization process involves randomly selecting a sentiment word from the dictionary and modifying its sentiment score.
+     * If the modified score results in an improvement in the classification accuracy, the score is updated, and the process continues until no further improvements are made.
+     * @param iMinImprovement The minimum improvement required to continue optimizing.
+     */
     public void optimiseDictionaryWeightingsForCorpusTrinaryOrBinary(int iMinImprovement)
     {
         boolean bFullListChanges = true;
@@ -1453,6 +1737,11 @@ public class Corpus
         }
     }
 
+    /**
+     * Optimizes the weightings of sentiment words in the dictionary for a corpus of positive and negative texts.
+     * @param iMinImprovement The minimum improvement required to continue optimizing.
+     * @param bUseTotalDifference a flag to determine whether to use total difference or number of correct classifications to measure improvement.
+     */
     public void optimiseDictionaryWeightingsForCorpusPosNeg(int iMinImprovement, boolean bUseTotalDifference)
     {
         boolean bFullListChanges = true;
@@ -1542,6 +1831,13 @@ public class Corpus
         }
     }
 
+    /**
+     * Summarizes the results of multiple 10-fold validations from an input file and writes them to an output file.
+     * The input file is assumed to be tab-separated and have 28 rows of data and 24 option columns.
+     * The output file will have the same format as the input file, with the addition of a "Number" column that indicates the number of rows used to calculate each set of averages.
+     * @param sInputFile The path of the input file to read.
+     * @param sOutputFile The path of the output file to write.
+     */
     public void SummariseMultiple10FoldValidations(String sInputFile, String sOutputFile)
     {
         int iDataRows = 28;
