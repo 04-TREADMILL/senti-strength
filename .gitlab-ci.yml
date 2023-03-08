@@ -10,6 +10,9 @@ image: gradle:jdk11
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
+  - chmod +x ./gradlew
+  - uname -a
+  - sudo apt-get update -y && sudo apt-get install openjdk-11-jdk -y
 
 cache:
   paths:
