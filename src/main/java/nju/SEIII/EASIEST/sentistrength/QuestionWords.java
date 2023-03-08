@@ -17,6 +17,12 @@ import nju.SEIII.EASIEST.utilities.Sort;
 /**
  *  The QuestionWords class is used to load and manage a list of question words from a file.
  *  It provides a method to check whether a given word is a question word or not.
+ *
+ *  UC-9 Repeated Punctuation Rule
+ *  UC-16 Process stdin and send to stdout
+ *  UC-17 Location of linguistic data folder
+ *  UC-18 Location of sentiment term weights
+ *
  */
 
 public class QuestionWords

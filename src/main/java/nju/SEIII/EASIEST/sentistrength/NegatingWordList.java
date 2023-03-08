@@ -18,6 +18,13 @@ import nju.SEIII.EASIEST.utilities.Sort;
 /**
  * This class represents a list of negating words used in sentiment analysis.
  * It provides methods for initializing the list from a file and checking if a given word is a negating word.
+ *
+ * UC-5 Negating Word Rule
+ * UC-7 Emoji Rule
+ * UC-8 Exclamation Mark Rule
+ * UC-16 Process stdin and send to stdout
+ * UC-17 Location of linguistic data folder
+ * UC-18 Location of sentiment term weights
  */
 public class NegatingWordList
 {
