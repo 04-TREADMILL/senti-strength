@@ -17,6 +17,8 @@ import nju.SEIII.EASIEST.utilities.FileOps;
 //            IronyList, Lemmatiser, ClassificationOptions
 
 /**
+ * This class represents a collection of resources used for text classification.
+ *
  * @UC
  * <p><ul>
  * <li>UC-6 Repeated Letter Rule
@@ -39,31 +41,126 @@ import nju.SEIII.EASIEST.utilities.FileOps;
 public class ClassificationResources
 {
 
+    /**
+     * A list of emoticons used for text classification.
+     */
     public EmoticonsList emoticons;
+    
+    /**
+     * A list of correct spellings used for text classification.
+     */
     public CorrectSpellingsList correctSpellings;
+    
+    /**
+     * A list of sentiment words used for text classification.
+     */
     public SentimentWords sentimentWords;
+    
+    /**
+     * A list of negating words used for text classification.
+     */
     public NegatingWordList negatingWords;
+    
+    /**
+     * A list of question words used for text classification.
+     */
     public QuestionWords questionWords;
+    
+    /**
+     * A list of booster words used for text classification.
+     */
     public BoosterWordsList boosterWords;
+    
+    /**
+     * A list of idioms used for text classification.
+     */
     public IdiomList idiomList;
+    /**
+     * A list of evaluative terms used for text classification.
+     */
     public EvaluativeTerms evaluativeTerms;
+    
+    /**
+     * A list of irony words used for text classification.
+     */
     public IronyList ironyList;
+    
+    /**
+     * A lemmatiser used for text classification.
+     */
     public Lemmatiser lemmatiser;
+    /**
+     * The path to the SentiStrength folder.
+     */
     public String sgSentiStrengthFolder;
+    
+    /**
+     * The name of the sentiment words file.
+     */
     public String sgSentimentWordsFile;
+    /**
+     * The file path for sentiment words.
+     */
     public String sgSentimentWordsFile2;
+
+    /**
+     * The file path for emoticon lookup table.
+     */
     public String sgEmoticonLookupTable;
+
+    /**
+     * The file path for correct spelling file.
+     */
     public String sgCorrectSpellingFileName;
+
+    /**
+     * The file path for second correct spelling file.
+     */
     public String sgCorrectSpellingFileName2;
+
+    /**
+     * The file path for slang lookup table.
+     */
     public String sgSlangLookupTable;
+
+    /**
+     * The file path for negating word list.
+     */
     public String sgNegatingWordListFile;
+
+    /**
+     * The file path for booster list.
+     */
     public String sgBoosterListFile;
+
+    /**
+     * The file path for idiom lookup table.
+     */
     public String sgIdiomLookupTableFile;
+
+    /**
+     * The file path for question word list.
+     */
     public String sgQuestionWordListFile;
+
+    /**
+     * The file path for irony word list.
+     */
     public String sgIronyWordListFile;
+
+    /**
+     * Additional File
+     */
     public String sgAdditionalFile;
+
+    /**
+     * Lemma File
+     */ 
     public String sgLemmaFile;
 
+    /**
+     * constructor
+     */
     public ClassificationResources()
     {
         emoticons = new EmoticonsList();
