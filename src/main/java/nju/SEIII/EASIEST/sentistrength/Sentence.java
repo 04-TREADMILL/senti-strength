@@ -15,6 +15,22 @@ import nju.SEIII.EASIEST.wkaclass.Arff;
  * other information such as the sentiment score of the sentence, whether any idioms or object evaluations
  * have been applied to the term strengths, and the classification resources and options used to parse and
  * classify the sentence.
+ *
+ *  @UC
+ *  <p><ul>
+ *  <li>UC-11 Classify a single text
+ *  <li>UC-12 Classify all lines of text in a file for sentiment [includes accuracy evaluations]
+ *  <li>UC-13 Classify texts in a column within a file or folder
+ *  <li>UC-14 Listen at a port for texts to classify
+ *  <li>UC-15 Run interactively from the command line
+ *  <li>UC-17 Location of linguistic data folder
+ *  <li>UC-19 Location of output folder
+ *  <li>UC-20 File name extension for output
+ *  <li>UC-26 Set Classification Algorithm Parameters
+ *  <li>UC-27 Optimise sentiment strengths of existing sentiment terms
+ *  <li>UC-28 Suggest new sentiment terms (from terms in misclassified texts)
+ *  <li>UC-29 Machine learning evaluations
+ *  </ul></p>
  */
 public class Sentence {
     private Term[] term;
