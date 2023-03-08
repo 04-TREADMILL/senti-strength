@@ -9,6 +9,12 @@ import nju.SEIII.EASIEST.utilities.Sort;
 
 /**
  * IronyList is a class that stores a list of ironic terms and provides a method to check whether a term is ironic or not.
+ *
+ * @UC
+ * <p><ul>
+ * <li> UC-19 Location of output folder
+ * <li> UC-20 File name extension for output
+ * </ul></p>
  */
 public class IronyList {
 

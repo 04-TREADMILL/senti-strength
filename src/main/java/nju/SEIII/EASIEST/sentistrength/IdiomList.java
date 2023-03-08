@@ -11,6 +11,13 @@ import nju.SEIII.EASIEST.utilities.FileOps;
  * This class represents a list of idioms and their strengths.
  * It has methods for initializing the list from a file, adding an extra idiom,
  * converting idiom strings to word lists, and getting the count of idioms.
+ *
+ * @UC
+ * <p><ul>
+ * <li> UC-2 Assigning Sentiment Scores for Phrases
+ * <li> UC-19 Location of output folder
+ * <li> UC-20 File name extension for output
+ * </ul></p>
  */
 
 public class IdiomList {
