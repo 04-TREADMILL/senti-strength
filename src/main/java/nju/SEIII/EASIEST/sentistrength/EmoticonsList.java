@@ -14,6 +14,14 @@ import nju.SEIII.EASIEST.utilities.Sort;
 // Referenced classes of package nju.SEIII.EASIEST.sentistrength:
 //            ClassificationOptions
 
+/**
+ * @UC
+ * <p><ul>
+ * <li>UC-7 Emoji Rule
+ * <li>UC-17 Location of linguistic data folder
+ * <li>UC-18 Location of sentiment term weights
+ * </ul><p>
+ */
 public class EmoticonsList {
 
     /**
