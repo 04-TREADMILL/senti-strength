@@ -1,7 +1,20 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.8'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'nju.SEIII.EASIEST.Main'
+    }
+}
+
+allprojects {
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.compilerArgs << "-Xlint:deprecation"
+            options.compilerArgs << "-Xlint:unchecked"
+        }
+    }
 }
 
 group 'nju.SEIII'
@@ -21,11 +34,6 @@ dependencies {
     // for machine learning
     implementation 'nz.ac.waikato.cms.weka:weka-stable:3.8.6'
     implementation files('libs/LibSVM.jar', 'libs/LibLINEAR.jar')
-
-    // for spring boot
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

@@ -14,6 +14,7 @@ import java.util.Objects;
 // Referenced classes of package nju.SEIII.EASIEST.utilities:
 //            SentiStrengthOld
 
+@SuppressWarnings({"deprecation"})
 public class SentiStrengthTestAppletOld extends Applet
     implements ActionListener
 {
