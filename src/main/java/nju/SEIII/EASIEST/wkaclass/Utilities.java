@@ -30,6 +30,7 @@ public class Utilities
 
     }
 
+    @SuppressWarnings({"unchecked", "deprecation"})
     public static void addToClassPath(String s)
         throws Exception
     {

@@ -179,6 +179,7 @@ public class IdiomList {
      * @return the strength level of the idiom, ranging from -5 (very negative) to 5 (very positive), or 999 if no idiom is found
      * @deprecated This method is no longer useful
      */
+    @Deprecated
     public int getIdiomStrength_oldNotUseful(String sPhrase) {
         sPhrase = sPhrase.toLowerCase();
         for (int i = 1; i <= igIdiomCount; i++)
