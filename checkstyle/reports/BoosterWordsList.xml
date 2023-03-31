@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="10.9.3">
+<file name="C:\Users\70903\Study\NJUSE\2023_Spring\SEIII\senti-strength\checkstyle\..\src\main\java\nju\SEIII\EASIEST\sentistrength\BoosterWordsList.java">
+<error line="6" column="9" severity="warning" message="Package name &apos;nju.SEIII.EASIEST.sentistrength&apos; must match pattern &apos;^[a-z]+(\.[a-z][a-z0-9]*)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.PackageNameCheck"/>
+<error line="8" column="15" severity="warning" message="不应使用 &apos;.*&apos; 形式的导入 - java.io.* 。" source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="12" column="1" severity="warning" message="导入组之前的额外空行 &apos;nju.SEIII.EASIEST.utilities.FileOps&apos;。" source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="23" severity="warning" message="多余的 &lt;p&gt; 标签。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocParagraphCheck"/>
+<error line="23" severity="warning" message="Javadoc 缩进级别错误，应为 4 个缩进符。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+<error line="24" severity="warning" message="Javadoc 缩进级别错误，应为 4 个缩进符。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+<error line="25" severity="warning" message="Javadoc 缩进级别错误，应为 4 个缩进符。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+<error line="26" severity="warning" message="Javadoc 缩进级别错误，应为 4 个缩进符。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+<error line="27" severity="warning" message="Javadoc 缩进级别错误，应为 4 个缩进符。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+<error line="28" severity="warning" message="Javadoc 缩进级别错误，应为 4 个缩进符。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+<error line="29" severity="warning" message="&lt;p&gt; 标签前应有空行。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocParagraphCheck"/>
+<error line="29" severity="warning" message="&lt;p&gt; 标签应在第一个字符之前，紧邻后者，之间不允许有空格。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocParagraphCheck"/>
+<error line="29" severity="warning" message="Javadoc 缩进级别错误，应为 4 个缩进符。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+<error line="35" column="5" severity="warning" message="&apos;member def modifier&apos; 缩进了4个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="39" column="5" severity="warning" message="&apos;member def modifier&apos; 缩进了4个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="43" column="5" severity="warning" message="&apos;member def modifier&apos; 缩进了4个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="48" column="5" severity="warning" message="&apos;ctor def modifier&apos; 缩进了4个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="49" column="5" severity="warning" message="第 5 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="50" column="9" severity="warning" message="&apos;ctor def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="53" severity="warning" message="本行字符数 170个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="55" severity="warning" message="本行字符数 128个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="56" severity="warning" message="本行字符数 133个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="58" severity="warning" message="Javadoc tag &apos;@param&apos; 前面应有一个空行。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.RequireEmptyLineBeforeBlockTagGroupCheck"/>
+<error line="60" severity="warning" message="本行字符数 105个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="63" severity="warning" message="本行字符数 116个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="63" column="5" severity="warning" message="&apos;method def modifier&apos; 缩进了4个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="63" column="5" severity="warning" message="“METHOD_DEF”之前应该有一个空白行。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.EmptyLineSeparatorCheck"/>
+<error line="63" column="38" severity="warning" message="Parameter name &apos;sFilename&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="63" column="84" severity="warning" message="Parameter name &apos;iExtraBlankArrayEntriesToInclude&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="64" column="5" severity="warning" message="第 5 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="65" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="65" column="13" severity="warning" message="Local variable name &apos;iLinesInFile&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck"/>
+<error line="66" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="66" column="13" severity="warning" message="Local variable name &apos;iWordStrength&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck"/>
+<error line="67" column="9" severity="warning" message="&apos;if&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="67" column="9" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="67" column="9" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="68" column="9" severity="warning" message="第 9 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="69" column="13" severity="warning" message="&apos;if&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="70" column="13" severity="warning" message="&apos;if&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="72" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="73" column="9" severity="warning" message="&apos;if&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="73" column="9" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="73" column="9" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="74" column="9" severity="warning" message="第 9 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="75" column="13" severity="warning" message="&apos;if&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="76" column="13" severity="warning" message="&apos;if&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="78" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="79" column="9" severity="warning" message="&apos;if&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="79" column="9" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="79" column="9" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="80" column="9" severity="warning" message="第 9 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="81" column="13" severity="warning" message="&apos;if&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="82" column="13" severity="warning" message="&apos;if&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="85" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="86" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="87" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="88" column="9" severity="warning" message="&apos;try&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="89" column="9" severity="warning" message="第 9 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="90" column="13" severity="warning" message="&apos;try&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="90" column="28" severity="warning" message="Local variable name &apos;rReader&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck"/>
+<error line="91" column="13" severity="warning" message="&apos;if&apos; 结构必须使用大括号 &apos;{}&apos;。" source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="91" column="13" severity="warning" message="&apos;if&apos; 缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="91" column="13" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="91" column="13" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="92" severity="warning" message="本行字符数 124个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="93" column="13" severity="warning" message="&apos;else&apos; 结构必须使用大括号 &apos;{}&apos;。" source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="93" column="13" severity="warning" message="&apos;else&apos; 缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="95" column="13" severity="warning" message="&apos;try&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="95" column="20" severity="warning" message="Local variable name &apos;sLine&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck"/>
+<error line="96" column="13" severity="warning" message="&apos;while&apos; 结构必须使用大括号 &apos;{}&apos;。" source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="96" column="13" severity="warning" message="&apos;while&apos; 缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="96" column="13" severity="warning" message="&apos;while&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="96" column="13" severity="warning" message="WhitespaceAround: &apos;while&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="97" column="17" severity="warning" message="&apos;if&apos; 缩进了16个缩进符，应为以下缩进之一：10, 12。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="97" column="17" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="97" column="17" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="98" column="17" severity="warning" message="第 17 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="98" column="17" severity="warning" message="&apos;if lcurly&apos; 缩进了16个缩进符，应为以下缩进之一：12, 14。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="100" column="21" severity="warning" message="&apos;if&apos; 子元素缩进了20个缩进符，应为以下缩进之一：14, 18。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="100" column="25" severity="warning" message="Local variable name &apos;iFirstTabLocation&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck"/>
+<error line="101" column="21" severity="warning" message="&apos;if&apos; 缩进了20个缩进符，应为以下缩进之一：14, 18。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="101" column="21" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="101" column="21" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="102" column="21" severity="warning" message="第 21 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="104" column="25" severity="warning" message="&apos;if&apos; 子元素缩进了24个缩进符，应为以下缩进之一：18, 22。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="104" column="29" severity="warning" message="Local variable name &apos;iSecondTabLocation&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck"/>
+<error line="105" column="25" severity="warning" message="&apos;try&apos; 缩进了24个缩进符，应为以下缩进之一：18, 22。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="106" column="25" severity="warning" message="第 25 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="107" severity="warning" message="本行字符数 179个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="108" column="29" severity="warning" message="&apos;if&apos; 结构必须使用大括号 &apos;{}&apos;。" source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="108" column="29" severity="warning" message="&apos;if&apos; 缩进了28个缩进符，应为以下缩进之一：22, 26。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="108" column="29" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="108" column="29" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="109" severity="warning" message="本行字符数 125个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="110" column="29" severity="warning" message="&apos;else&apos; 结构必须使用大括号 &apos;{}&apos;。" source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="110" column="29" severity="warning" message="&apos;else&apos; 缩进了28个缩进符，应为以下缩进之一：22, 26。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="111" severity="warning" message="本行字符数 112个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="112" column="25" severity="warning" message="第 25 个字符 &apos;}&apos;应该与当前多代码块的下一部分 （if/else-if/else, do/while 或 try/catch/finally）位于同一行。" source="RightCurlySame"/>
+<error line="113" column="25" severity="warning" message="&apos;catch&apos; 缩进了24个缩进符，应为以下缩进之一：18, 22。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="113" column="25" severity="warning" message="&apos;catch&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="113" column="25" severity="warning" message="WhitespaceAround: &apos;catch&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="114" column="25" severity="warning" message="第 25 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="115" severity="warning" message="本行字符数 122个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="115" column="29" severity="warning" message="&apos;catch&apos; 子元素缩进了28个缩进符，应为以下缩进之一：22, 26。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="116" column="29" severity="warning" message="&apos;catch&apos; 子元素缩进了28个缩进符，应为以下缩进之一：22, 26。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="117" column="29" severity="warning" message="&apos;catch&apos; 子元素缩进了28个缩进符，应为以下缩进之一：22, 26。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="119" severity="warning" message="本行字符数 124个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="120" column="25" severity="warning" message="&apos;if&apos; 子元素缩进了24个缩进符，应为以下缩进之一：18, 22。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="121" column="25" severity="warning" message="&apos;if&apos; 结构必须使用大括号 &apos;{}&apos;。" source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="121" column="25" severity="warning" message="&apos;if&apos; 缩进了24个缩进符，应为以下缩进之一：18, 22。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="121" column="25" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="121" column="25" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="123" column="25" severity="warning" message="&apos;if&apos; 缩进了24个缩进符，应为以下缩进之一：18, 22。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="123" column="25" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="123" column="25" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="124" column="25" severity="warning" message="第 25 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="126" column="29" severity="warning" message="&apos;if&apos; 子元素缩进了28个缩进符，应为以下缩进之一：22, 26。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="127" column="29" severity="warning" message="&apos;if&apos; 子元素缩进了28个缩进符，应为以下缩进之一：22, 26。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="128" column="29" severity="warning" message="&apos;if&apos; 子元素缩进了28个缩进符，应为以下缩进之一：22, 26。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="131" column="17" severity="warning" message="&apos;if rcurly&apos; 缩进了16个缩进符，应为以下缩进之一：12, 14。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="132" severity="warning" message="本行字符数 104个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="132" column="13" severity="warning" message="&apos;try&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="133" column="13" severity="warning" message="&apos;try&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="134" column="9" severity="warning" message="第 9 个字符 &apos;}&apos;应该与当前多代码块的下一部分 （if/else-if/else, do/while 或 try/catch/finally）位于同一行。" source="RightCurlySame"/>
+<error line="135" column="9" severity="warning" message="&apos;catch&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="135" column="9" severity="warning" message="&apos;catch&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="135" column="9" severity="warning" message="WhitespaceAround: &apos;catch&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="136" column="9" severity="warning" message="第 9 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="137" column="13" severity="warning" message="&apos;catch&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="138" column="13" severity="warning" message="&apos;catch&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="139" column="13" severity="warning" message="&apos;catch&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="140" column="9" severity="warning" message="第 9 个字符 &apos;}&apos;应该与当前多代码块的下一部分 （if/else-if/else, do/while 或 try/catch/finally）位于同一行。" source="RightCurlySame"/>
+<error line="141" column="9" severity="warning" message="&apos;catch&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="141" column="9" severity="warning" message="&apos;catch&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="141" column="9" severity="warning" message="WhitespaceAround: &apos;catch&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="142" column="9" severity="warning" message="第 9 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="143" column="13" severity="warning" message="&apos;catch&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="144" column="13" severity="warning" message="&apos;catch&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="145" column="13" severity="warning" message="&apos;catch&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="147" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="155" severity="warning" message="本行字符数 108个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="158" severity="warning" message="本行字符数 105个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="158" column="5" severity="warning" message="&apos;method def modifier&apos; 缩进了4个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="158" column="40" severity="warning" message="Parameter name &apos;sText&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="158" column="51" severity="warning" message="Parameter name &apos;iWordStrength&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="158" column="74" severity="warning" message="Parameter name &apos;bSortBoosterListAfterAddingTerm&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="159" column="5" severity="warning" message="第 5 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="160" column="9" severity="warning" message="&apos;try&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="161" column="9" severity="warning" message="第 9 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="162" column="13" severity="warning" message="&apos;try&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="163" column="13" severity="warning" message="&apos;try&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="164" column="13" severity="warning" message="&apos;try&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="165" column="13" severity="warning" message="&apos;if&apos; 结构必须使用大括号 &apos;{}&apos;。" source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="165" column="13" severity="warning" message="&apos;if&apos; 缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="165" column="13" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="165" column="13" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="166" severity="warning" message="本行字符数 108个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="167" column="9" severity="warning" message="第 9 个字符 &apos;}&apos;应该与当前多代码块的下一部分 （if/else-if/else, do/while 或 try/catch/finally）位于同一行。" source="RightCurlySame"/>
+<error line="168" column="9" severity="warning" message="&apos;catch&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="168" column="9" severity="warning" message="&apos;catch&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="168" column="9" severity="warning" message="WhitespaceAround: &apos;catch&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="169" column="9" severity="warning" message="第 9 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="170" column="13" severity="warning" message="&apos;catch&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="171" column="13" severity="warning" message="&apos;catch&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="172" column="13" severity="warning" message="&apos;catch&apos; 子元素缩进了12个缩进符，应为以下缩进之一：8, 10。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="174" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="180" column="5" severity="warning" message="&apos;method def modifier&apos; 缩进了4个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="181" column="5" severity="warning" message="第 5 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="182" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="189" severity="warning" message="本行字符数 104个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="191" column="5" severity="warning" message="&apos;method def modifier&apos; 缩进了4个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="191" column="42" severity="warning" message="Parameter name &apos;sWord&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="192" column="5" severity="warning" message="第 5 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="193" severity="warning" message="本行字符数 122个，最多：100个。" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="193" column="9" severity="warning" message="&apos;method def&apos; 子元素缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="193" column="13" severity="warning" message="名称 &apos;iWordID&apos; 中不能出现超过 &apos;1&apos; 个连续大写字母。" source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="193" column="13" severity="warning" message="Local variable name &apos;iWordID&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck"/>
+<error line="194" column="9" severity="warning" message="&apos;if&apos; 结构必须使用大括号 &apos;{}&apos;。" source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="194" column="9" severity="warning" message="&apos;if&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="194" column="9" severity="warning" message="&apos;if&apos; 后应有空格。" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAfterCheck"/>
+<error line="194" column="9" severity="warning" message="WhitespaceAround: &apos;if&apos; is not followed by whitespace. Empty blocks                may only be represented as {} when not part of a multi-block statement (4.1.3)" source="com.puppycrawl.tools.checkstyle.checks.whitespace.WhitespaceAroundCheck"/>
+<error line="196" column="9" severity="warning" message="&apos;else&apos; 结构必须使用大括号 &apos;{}&apos;。" source="com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck"/>
+<error line="196" column="9" severity="warning" message="&apos;else&apos; 缩进了8个缩进符，应为以下缩进之一：4, 6。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+</file>
+</checkstyle>

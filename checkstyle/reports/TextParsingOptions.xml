@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="10.9.3">
+<file name="C:\Users\70903\Study\NJUSE\2023_Spring\SEIII\senti-strength\checkstyle\..\src\main\java\nju\SEIII\EASIEST\sentistrength\TextParsingOptions.java">
+<error line="6" column="9" severity="warning" message="Package name &apos;nju.SEIII.EASIEST.sentistrength&apos; must match pattern &apos;^[a-z]+(\.[a-z][a-z0-9]*)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.PackageNameCheck"/>
+<error line="11" severity="warning" message="Javadoc tag &apos;@UC&apos; 前面应有一个空行。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.RequireEmptyLineBeforeBlockTagGroupCheck"/>
+<error line="12" severity="warning" message="Javadoc 缩进级别错误，应为 4 个缩进符。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+<error line="21" column="1" severity="warning" message="第 1 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="21" column="1" severity="warning" message="&apos;class def lcurly&apos; 缩进了0个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="28" column="5" severity="warning" message="缺少 Javadoc 。" source="com.puppycrawl.tools.checkstyle.checks.javadoc.MissingJavadocMethodCheck"/>
+<error line="29" column="5" severity="warning" message="第 5 个字符 &apos;{&apos; 应位于前一行。" source="com.puppycrawl.tools.checkstyle.checks.blocks.LeftCurlyCheck"/>
+<error line="30" column="9" severity="warning" message="&apos;ctor def&apos; 子元素缩进了8个缩进符，应为6个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="31" column="9" severity="warning" message="&apos;ctor def&apos; 子元素缩进了8个缩进符，应为6个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="32" column="9" severity="warning" message="&apos;ctor def&apos; 子元素缩进了8个缩进符，应为6个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="33" column="9" severity="warning" message="&apos;ctor def&apos; 子元素缩进了8个缩进符，应为6个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+<error line="35" column="1" severity="warning" message="&apos;class def rcurly&apos; 缩进了0个缩进符，应为2个。" source="com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"/>
+</file>
+</checkstyle>
