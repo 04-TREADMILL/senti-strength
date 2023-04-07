@@ -34,6 +34,9 @@ dependencies {
     // for machine learning
     implementation 'nz.ac.waikato.cms.weka:weka-stable:3.8.6'
     implementation files('libs/LibSVM.jar', 'libs/LibLINEAR.jar')
+    //lombok
+    implementation 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
 }
 
 test {

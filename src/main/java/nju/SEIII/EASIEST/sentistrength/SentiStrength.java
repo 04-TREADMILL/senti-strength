@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import nju.SEIII.EASIEST.utilities.FileOps;
+import nju.SEIII.EASIEST.utilities.VO.OutputVO;
 
 /**
  * The SentiStrength entry class, which provides a number of command-line arguments to drive SentiStrength.
@@ -79,7 +80,6 @@ public class SentiStrength {
 
     public static void main(String[] args) {
         SentiStrength classifier = new SentiStrength();
-
         classifier.initialiseAndRun(args);
     }
 
@@ -536,32 +536,30 @@ public class SentiStrength {
 
     }
 
-    public String computeSentimentScores(String sentence) {
-        int iPos = 1;
-        int iNeg = 1;
-        int iTrinary = 0;
-        int iScale = 0;
+    public OutputVO computeSentimentScores(String sentence, String separator) {
+        OutputVO output = new OutputVO();
         Paragraph paragraph = new Paragraph();
         paragraph.setParagraph(sentence, this.c.resources, this.c.options);
-        iNeg = paragraph.getParagraphNegativeSentiment();
-        iPos = paragraph.getParagraphPositiveSentiment();
-        iTrinary = paragraph.getParagraphTrinarySentiment();
-        iScale = paragraph.getParagraphScaleSentiment();
+        output.setINeg(paragraph.getParagraphNegativeSentiment());
+        output.setIPos(paragraph.getParagraphPositiveSentiment());
+        output.setITrinary(paragraph.getParagraphTrinarySentiment());
+        output.setIScale(paragraph.getParagraphScaleSentiment());
         String sRationale = "";
         if (this.c.options.bgEchoText) {
-            sRationale = " " + sentence;
+            sRationale = separator + sentence;
         }
 
         if (this.c.options.bgExplainClassification) {
-            sRationale = " " + paragraph.getClassificationRationale();
+            sRationale = separator + paragraph.getClassificationRationale();
         }
 
         if (this.c.options.bgTrinaryMode) {
-            return iPos + " " + iNeg + " " + iTrinary + sRationale;
+            output.setOutputMessage(output.getIPos() + separator + output.getINeg() + separator + output.getITrinary() + sRationale);
         } else {
-            return this.c.options.bgScaleMode ? iPos + " " + iNeg + " " + iScale + sRationale :
-                    iPos + " " + iNeg + sRationale;
+            output.setOutputMessage(this.c.options.bgScaleMode ? output.getIPos() + separator + output.getINeg() + separator + output.getIScale() + sRationale :
+                    output.getIPos() + separator + output.getINeg() + sRationale);
         }
+        return output;
     }
 
     private void runMachineLearning(Corpus c, String sInputFile, boolean bDoAll, int iMinImprovement,
@@ -570,55 +568,55 @@ public class SentiStrength {
         if (iMinImprovement < 1) {
             System.out.println("No action taken because min improvement < 1");
             this.showBriefHelp();
+            return;
+        }
+        c.setCorpus(sInputFile);
+        c.calculateCorpusSentimentScores();
+        int corpusSize = c.getCorpusSize();
+        if (c.options.bgTrinaryMode) {
+            if (c.options.bgBinaryVersionOfTrinaryMode) {
+                System.out.print(
+                        "Before training, binary accuracy: " + c.getClassificationTrinaryNumberCorrect() +
+                                " " +
+                                (float) c.getClassificationTrinaryNumberCorrect() / (float) corpusSize * 100.0F +
+                                "%");
+            } else {
+                System.out.print(
+                        "Before training, trinary accuracy: " + c.getClassificationTrinaryNumberCorrect() +
+                                " " +
+                                (float) c.getClassificationTrinaryNumberCorrect() / (float) corpusSize * 100.0F +
+                                "%");
+            }
+        } else if (c.options.bgScaleMode) {
+            System.out.print(
+                    "Before training, scale accuracy: " + c.getClassificationScaleNumberCorrect() + " " +
+                            (float) c.getClassificationScaleNumberCorrect() * 100.0F / (float) corpusSize +
+                            "% corr " + c.getClassificationScaleCorrelationWholeCorpus());
         } else {
-            c.setCorpus(sInputFile);
-            c.calculateCorpusSentimentScores();
-            int corpusSize = c.getCorpusSize();
-            if (c.options.bgTrinaryMode) {
-                if (c.options.bgBinaryVersionOfTrinaryMode) {
-                    System.out.print(
-                            "Before training, binary accuracy: " + c.getClassificationTrinaryNumberCorrect() +
-                                    " " +
-                                    (float) c.getClassificationTrinaryNumberCorrect() / (float) corpusSize * 100.0F +
-                                    "%");
-                } else {
-                    System.out.print(
-                            "Before training, trinary accuracy: " + c.getClassificationTrinaryNumberCorrect() +
-                                    " " +
-                                    (float) c.getClassificationTrinaryNumberCorrect() / (float) corpusSize * 100.0F +
-                                    "%");
-                }
-            } else if (c.options.bgScaleMode) {
-                System.out.print(
-                        "Before training, scale accuracy: " + c.getClassificationScaleNumberCorrect() + " " +
-                                (float) c.getClassificationScaleNumberCorrect() * 100.0F / (float) corpusSize +
-                                "% corr " + c.getClassificationScaleCorrelationWholeCorpus());
-            } else {
-                System.out.print(
-                        "Before training, positive: " + c.getClassificationPositiveNumberCorrect() + " " +
-                                c.getClassificationPositiveAccuracyProportion() * 100.0F + "% negative " +
-                                c.getClassificationNegativeNumberCorrect() + " " +
-                                c.getClassificationNegativeAccuracyProportion() * 100.0F + "% ");
-                System.out.print(
-                        "   Positive corr: " + c.getClassificationPosCorrelationWholeCorpus() + " negative " +
-                                c.getClassificationNegCorrelationWholeCorpus());
-            }
+            System.out.print(
+                    "Before training, positive: " + c.getClassificationPositiveNumberCorrect() + " " +
+                            c.getClassificationPositiveAccuracyProportion() * 100.0F + "% negative " +
+                            c.getClassificationNegativeNumberCorrect() + " " +
+                            c.getClassificationNegativeAccuracyProportion() * 100.0F + "% ");
+            System.out.print(
+                    "   Positive corr: " + c.getClassificationPosCorrelationWholeCorpus() + " negative " +
+                            c.getClassificationNegCorrelationWholeCorpus());
+        }
 
-            System.out.println(" out of " + c.getCorpusSize());
-            if (bDoAll) {
-                System.out.println(
-                        "Running " + iIterations + " iteration(s) of all options on file " + sInputFile +
-                                "; results in " + sOutputFile);
-                c.run10FoldCrossValidationForAllOptionVariations(iMinImprovement, bUseTotalDifference,
-                        iIterations, iMultiOptimisations, sOutputFile);
-            } else {
-                System.out.println(
-                        "Running " + iIterations + " iteration(s) for standard or selected options on file " +
-                                sInputFile + "; results in " + sOutputFile);
-                c.run10FoldCrossValidationMultipleTimes(iMinImprovement, bUseTotalDifference, iIterations,
-                        iMultiOptimisations, sOutputFile);
-            }
-
+        System.out.println(" out of " + c.getCorpusSize());
+        // core
+        if (bDoAll) {
+            System.out.println(
+                    "Running " + iIterations + " iteration(s) of all options on file " + sInputFile +
+                            "; results in " + sOutputFile);
+            c.run10FoldCrossValidationForAllOptionVariations(iMinImprovement, bUseTotalDifference,
+                    iIterations, iMultiOptimisations, sOutputFile);
+        } else {
+            System.out.println(
+                    "Running " + iIterations + " iteration(s) for standard or selected options on file " +
+                            sInputFile + "; results in " + sOutputFile);
+            c.run10FoldCrossValidationMultipleTimes(iMinImprovement, bUseTotalDifference, iIterations,
+                    iMultiOptimisations, sOutputFile);
         }
     }
 
@@ -627,32 +625,31 @@ public class SentiStrength {
         if (!sInputFile.equals("")) {
             c.classifyAllLinesAndRecordWithID(sInputFile, iTextCol - 1, iIdCol - 1,
                     FileOps.s_ChopFileNameExtension(sInputFile) + "_classID.txt");
-        } else {
-            if (sInputFolder.equals("")) {
-                System.out.println("No annotations done because no input file or folder specfied");
-                this.showBriefHelp();
-                return;
-            }
-
-            File folder = new File(sInputFolder);
-            File[] listOfFiles = folder.listFiles();
-            if (listOfFiles == null) {
-                System.out.println("Incorrect or empty input folder specfied");
-                this.showBriefHelp();
-                return;
-            }
-
-            for (int i = 0; i < listOfFiles.length; ++i) {
-                if (listOfFiles[i].isFile()) {
-                    System.out.println("Classify + save with ID: " + listOfFiles[i].getName());
-                    c.classifyAllLinesAndRecordWithID(sInputFolder + "/" + listOfFiles[i].getName(),
-                            iTextCol - 1, iIdCol - 1,
-                            sInputFolder + "/" + FileOps.s_ChopFileNameExtension(listOfFiles[i].getName()) +
-                                    "_classID.txt");
-                }
-            }
+            return;
+        }
+        if (sInputFolder.equals("")) {
+            System.out.println("No annotations done because no input file or folder specfied");
+            this.showBriefHelp();
+            return;
+        }
+        // inputFile == "" and InputFolder != ""
+        File folder = new File(sInputFolder);
+        File[] listOfFiles = folder.listFiles();
+        if (listOfFiles == null) {
+            System.out.println("Incorrect or empty input folder specfied");
+            this.showBriefHelp();
+            return;
         }
 
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                System.out.println("Classify + save with ID: " + listOfFile.getName());
+                c.classifyAllLinesAndRecordWithID(sInputFolder + "/" + listOfFile.getName(),
+                        iTextCol - 1, iIdCol - 1,
+                        sInputFolder + "/" + FileOps.s_ChopFileNameExtension(listOfFile.getName()) +
+                                "_classID.txt");
+            }
+        }
     }
 
     private void annotationTextCol(Corpus c, String sInputFile, String sInputFolder,
@@ -660,78 +657,52 @@ public class SentiStrength {
                                    boolean bOkToOverwrite) {
         if (!bOkToOverwrite) {
             System.out.println("Must include parameter overwrite to annotate");
-        } else {
-            if (!sInputFile.equals("")) {
-                c.annotateAllLinesInInputFile(sInputFile, iTextColForAnnotation - 1);
-            } else {
-                if (sInputFolder.equals("")) {
-                    System.out.println("No annotations done because no input file or folder specfied");
-                    this.showBriefHelp();
-                    return;
-                }
-                File folder = new File(sInputFolder);
-                File[] listOfFiles = folder.listFiles();
-                for (int i = 0; i < listOfFiles.length; ++i) {
-                    if (listOfFiles[i].isFile()) {
-                        if (!sFileSubString.equals("") &&
-                                listOfFiles[i].getName().indexOf(sFileSubString) <= 0) {
-                            System.out.println("  Ignoring " + listOfFiles[i].getName());
-                        } else {
-                            System.out.println("Annotate: " + listOfFiles[i].getName());
-                            c.annotateAllLinesInInputFile(sInputFolder + "/" + listOfFiles[i].getName(),
-                                    iTextColForAnnotation - 1);
-                        }
-                    }
+            return;
+        }
+        if (!sInputFile.equals("")) {
+            c.annotateAllLinesInInputFile(sInputFile, iTextColForAnnotation - 1);
+            return;
+        }
+        if (sInputFolder.equals("")) {
+            System.out.println("No annotations done because no input file or folder specfied");
+            this.showBriefHelp();
+            return;
+        }
+        File folder = new File(sInputFolder);
+        File[] listOfFiles = folder.listFiles();
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                if (!sFileSubString.equals("") &&
+                        listOfFile.getName().indexOf(sFileSubString) <= 0) {
+                    System.out.println("  Ignoring " + listOfFile.getName());
+                } else {
+                    System.out.println("Annotate: " + listOfFile.getName());
+                    c.annotateAllLinesInInputFile(sInputFolder + "/" + listOfFile.getName(),
+                            iTextColForAnnotation - 1);
                 }
             }
-
         }
     }
 
     private void parseOneText(Corpus c, String sTextToParse, boolean bURLEncodedOutput) {
-        int iPos = 1;
-        int iNeg = 1;
-        int iTrinary = 0;
-        int iScale = 0;
-        Paragraph paragraph = new Paragraph();
-        paragraph.setParagraph(sTextToParse, c.resources, c.options);
-        iNeg = paragraph.getParagraphNegativeSentiment();
-        iPos = paragraph.getParagraphPositiveSentiment();
-        iTrinary = paragraph.getParagraphTrinarySentiment();
-        iScale = paragraph.getParagraphScaleSentiment();
-        String sRationale = "";
-        if (c.options.bgEchoText) {
-            sRationale = " " + sTextToParse;
-        }
-
-        if (c.options.bgExplainClassification) {
-            sRationale = " " + paragraph.getClassificationRationale();
-        }
-
-        String sOutput = "";
-        if (c.options.bgTrinaryMode) {
-            sOutput = iPos + " " + iNeg + " " + iTrinary + sRationale;
-        } else if (c.options.bgScaleMode) {
-            sOutput = iPos + " " + iNeg + " " + iScale + sRationale;
-        } else {
-            sOutput = iPos + " " + iNeg + sRationale;
-        }
+        //int iPos = 1;
+        OutputVO output=computeSentimentScores(sTextToParse, " ");
 
         if (bURLEncodedOutput) {
             try {
-                System.out.println(URLEncoder.encode(sOutput, "UTF-8"));
+                System.out.println(URLEncoder.encode(output.getOutputMessage(), "UTF-8"));
             } catch (UnsupportedEncodingException var13) {
                 var13.printStackTrace();
             }
         } else if (c.options.bgForceUTF8) {
             try {
-                System.out.println(new String(sOutput.getBytes("UTF-8"), "UTF-8"));
+                System.out.println(new String(output.getOutputMessage().getBytes("UTF-8"), "UTF-8"));
             } catch (UnsupportedEncodingException var12) {
                 System.out.println("UTF-8 Not found on your system!");
                 var12.printStackTrace();
             }
         } else {
-            System.out.println(sOutput);
+            System.out.println(output.getOutputMessage());
         }
 
     }
@@ -817,39 +788,14 @@ public class SentiStrength {
                             return;
                         }
 
-                        int iPos = 1;
-                        int iNeg = 1;
-                        int iTrinary = 0;
-                        int iScale = 0;
-                        Paragraph paragraph = new Paragraph();
-                        paragraph.setParagraph(sTextToParse, c.resources, c.options);
-                        iNeg = paragraph.getParagraphNegativeSentiment();
-                        iPos = paragraph.getParagraphPositiveSentiment();
-                        iTrinary = paragraph.getParagraphTrinarySentiment();
-                        iScale = paragraph.getParagraphScaleSentiment();
-                        String sRationale = "";
-                        if (c.options.bgEchoText) {
-                            sRationale = " " + sTextToParse;
-                        }
-
-                        if (c.options.bgExplainClassification) {
-                            sRationale = " " + paragraph.getClassificationRationale();
-                        }
-
-                        String sOutput;
-                        if (c.options.bgTrinaryMode) {
-                            sOutput = iPos + " " + iNeg + " " + iTrinary + sRationale;
-                        } else if (c.options.bgScaleMode) {
-                            sOutput = iPos + " " + iNeg + " " + iScale + sRationale;
-                        } else {
-                            sOutput = iPos + " " + iNeg + sRationale;
-                        }
+                        //int iPos = 1;
+                        OutputVO output=computeSentimentScores(sTextToParse," ");
 
                         if (!c.options.bgForceUTF8) {
-                            System.out.println(sOutput);
+                            System.out.println(output.getOutputMessage());
                         } else {
                             System.out.println(
-                                    new String(sOutput.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                                    new String(output.getOutputMessage().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
                         }
                     }
                 } catch (IOException var13) {
@@ -934,38 +880,13 @@ public class SentiStrength {
                 decodedText = "";
             }
 
-            int iPos = 1;
-            int iNeg = 1;
-            int iTrinary = 0;
-            int iScale = 0;
-            Paragraph paragraph = new Paragraph();
-            paragraph.setParagraph(decodedText, c.resources, c.options);
-            iNeg = paragraph.getParagraphNegativeSentiment();
-            iPos = paragraph.getParagraphPositiveSentiment();
-            iTrinary = paragraph.getParagraphTrinarySentiment();
-            iScale = paragraph.getParagraphScaleSentiment();
-            String sRationale = "";
-            if (c.options.bgEchoText) {
-                sRationale = " " + decodedText;
-            }
-
-            if (c.options.bgExplainClassification) {
-                sRationale = " " + paragraph.getClassificationRationale();
-            }
-
-            String sOutput;
-            if (c.options.bgTrinaryMode) {
-                sOutput = iPos + " " + iNeg + " " + iTrinary + sRationale;
-            } else if (c.options.bgScaleMode) {
-                sOutput = iPos + " " + iNeg + " " + iScale + sRationale;
-            } else {
-                sOutput = iPos + " " + iNeg + sRationale;
-            }
+            //int iPos = 1;
+            OutputVO output=computeSentimentScores(decodedText," ");
 
             if (c.options.bgForceUTF8) {
-                out.print(new String(sOutput.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                out.print(new String(output.getOutputMessage().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
             } else {
-                out.print(sOutput);
+                out.print(output.getOutputMessage());
             }
 
             try {
