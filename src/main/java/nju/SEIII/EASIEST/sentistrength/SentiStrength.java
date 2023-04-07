@@ -89,7 +89,7 @@ public class SentiStrength {
 
     public void initialiseAndRun(String[] args) {
 
-        boolean[] bArgumentRecognised = recongniseArgs(args);
+        boolean[] bArgumentRecognised = recogniseArgs(args);
         if (bArgumentRecognised == null) return;
         this.parseParametersForCorpusOptions(args, bArgumentRecognised);
         if (sLanguage.length() > 1) {
@@ -686,7 +686,7 @@ public class SentiStrength {
 
     private void parseOneText(Corpus c, String sTextToParse, boolean bURLEncodedOutput) {
         //int iPos = 1;
-        OutputVO output=computeSentimentScores(sTextToParse, " ");
+        OutputVO output = computeSentimentScores(sTextToParse, " ");
 
         if (bURLEncodedOutput) {
             try {
@@ -724,7 +724,6 @@ public class SentiStrength {
                     }
                 } else {
                     int iPos = 1;
-                    bSuccess = false;
                     int iTrinary = 0;
                     int iScale = 0;
                     Paragraph paragraph = new Paragraph();
@@ -773,34 +772,29 @@ public class SentiStrength {
             System.out.println("Error reading input");
             var14.printStackTrace();
         }
-
     }
 
     private void listenForCmdInput(Corpus c) {
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
-            while (true) {
-                try {
-                    while (true) {
-                        String sTextToParse = stdin.readLine();
-                        if (sTextToParse.equalsIgnoreCase("@end")) {
-                            return;
-                        }
-
-                        //int iPos = 1;
-                        OutputVO output=computeSentimentScores(sTextToParse," ");
-
-                        if (!c.options.bgForceUTF8) {
-                            System.out.println(output.getOutputMessage());
-                        } else {
-                            System.out.println(
-                                    new String(output.getOutputMessage().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
-                        }
+            try {
+                while (true) {
+                    String sTextToParse = stdin.readLine();
+                    if (sTextToParse.equalsIgnoreCase("@end")) {
+                        return;
                     }
-                } catch (IOException var13) {
-                    System.out.println(var13);
+                    OutputVO output = computeSentimentScores(sTextToParse, " ");
+
+                    if (!c.options.bgForceUTF8) {
+                        System.out.println(output.getOutputMessage());
+                    } else {
+                        System.out.println(
+                                new String(output.getOutputMessage().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                    }
                 }
+            } catch (IOException var13) {
+                System.out.println(var13);
             }
         }
     }
@@ -879,9 +873,7 @@ public class SentiStrength {
                 System.out.println("Non-IOException " + var25.getMessage());
                 decodedText = "";
             }
-
-            //int iPos = 1;
-            OutputVO output=computeSentimentScores(decodedText," ");
+            OutputVO output = computeSentimentScores(decodedText, " ");
 
             if (c.options.bgForceUTF8) {
                 out.print(new String(output.getOutputMessage().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
@@ -1065,7 +1057,7 @@ public class SentiStrength {
         return this.c;
     }
 
-    private boolean[] recongniseArgs(String[] args) {
+    private boolean[] recogniseArgs(String[] args) {
         boolean[] bArgumentRecognised = new boolean[args.length];
 
 
