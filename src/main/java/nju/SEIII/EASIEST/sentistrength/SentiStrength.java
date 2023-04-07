@@ -670,6 +670,7 @@ public class SentiStrength {
         }
         File folder = new File(sInputFolder);
         File[] listOfFiles = folder.listFiles();
+        assert listOfFiles != null;
         for (File listOfFile : listOfFiles) {
             if (listOfFile.isFile()) {
                 if (!sFileSubString.equals("") &&
