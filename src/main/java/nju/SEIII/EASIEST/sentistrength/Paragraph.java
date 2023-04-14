@@ -1,5 +1,6 @@
 package nju.SEIII.EASIEST.sentistrength;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import nju.SEIII.EASIEST.utilities.Sort;
 import nju.SEIII.EASIEST.utilities.StringIndex;
@@ -112,7 +113,7 @@ public class Paragraph {
    * @return the number of terms checked
    */
   public int addToStringIndex(StringIndex stringIndex, TextParsingOptions textParsingOptions,
-                              boolean bRecordCount, boolean bArffIndex) {
+                              boolean bRecordCount, boolean bArffIndex) throws UnsupportedEncodingException {
     int iTermsChecked = 0;
 
     for (int i = 1; i <= this.igSentenceCount; ++i) {
@@ -534,9 +535,9 @@ public class Paragraph {
       this.options.getClass();
       if (var10000 == 1) {
         this.igPositiveSentiment =
-            (int) ((double) ((float) iPosTotal / (float) iSentencesUsed) + 0.5D);
+            (int) (((float) iPosTotal / (float) iSentencesUsed) + 0.5D);
         this.igNegativeSentiment =
-            (int) ((double) ((float) iNegTotal / (float) iSentencesUsed) - 0.5D);
+            (int) (((float) iNegTotal / (float) iSentencesUsed) - 0.5D);
         if (this.options.bgExplainClassification) {
           this.sgClassificationRationale =
               this.sgClassificationRationale + "[result = average (" + iPosTotal + " and " +
@@ -600,8 +601,8 @@ public class Paragraph {
               }
             }
           } else {
-            if ((float) this.igPositiveSentiment >
-                this.options.fgNegativeSentimentMultiplier * (float) (-this.igNegativeSentiment)) {
+            if (this.igPositiveSentiment >
+                this.options.fgNegativeSentimentMultiplier * (-this.igNegativeSentiment)) {
               this.igTrinarySentiment = 1;
               if (this.options.bgExplainClassification) {
                 this.sgClassificationRationale =
@@ -612,8 +613,8 @@ public class Paragraph {
               return;
             }
 
-            if ((float) this.igPositiveSentiment <
-                this.options.fgNegativeSentimentMultiplier * (float) (-this.igNegativeSentiment)) {
+            if ( this.igPositiveSentiment <
+                this.options.fgNegativeSentimentMultiplier * (-this.igNegativeSentiment)) {
               this.igTrinarySentiment = -1;
               if (this.options.bgExplainClassification) {
                 this.sgClassificationRationale =

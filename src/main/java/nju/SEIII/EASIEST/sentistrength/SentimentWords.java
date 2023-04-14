@@ -158,7 +158,6 @@ public class SentimentWords {
           return true;
         }
       }
-
     }
     return false;
   }

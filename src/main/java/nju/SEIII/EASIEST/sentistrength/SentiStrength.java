@@ -578,19 +578,19 @@ public class SentiStrength {
                 System.out.print(
                         "Before training, binary accuracy: " + c.getClassificationTrinaryNumberCorrect() +
                                 " " +
-                                (float) c.getClassificationTrinaryNumberCorrect() / (float) corpusSize * 100.0F +
+                                c.getClassificationTrinaryNumberCorrect() / corpusSize * 100.0F +
                                 "%");
             } else {
                 System.out.print(
                         "Before training, trinary accuracy: " + c.getClassificationTrinaryNumberCorrect() +
                                 " " +
-                                (float) c.getClassificationTrinaryNumberCorrect() / (float) corpusSize * 100.0F +
+                                c.getClassificationTrinaryNumberCorrect() / corpusSize * 100.0F +
                                 "%");
             }
         } else if (c.options.bgScaleMode) {
             System.out.print(
                     "Before training, scale accuracy: " + c.getClassificationScaleNumberCorrect() + " " +
-                            (float) c.getClassificationScaleNumberCorrect() * 100.0F / (float) corpusSize +
+                            c.getClassificationScaleNumberCorrect() * 100.0F / corpusSize +
                             "% corr " + c.getClassificationScaleCorrelationWholeCorpus());
         } else {
             System.out.print(

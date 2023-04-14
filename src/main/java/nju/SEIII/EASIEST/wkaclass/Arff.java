@@ -519,10 +519,10 @@ public class Arff {
       return iCount;
    }
 
-   public static String arffSafeWordEncode(String sWord, boolean bCodeNumbersForQuestionMarksNotUsed) {
+   public static String arffSafeWordEncode(String sWord, boolean bCodeNumbersForQuestionMarksNotUsed) throws UnsupportedEncodingException {
       String sEncodedWord = "";
 
-      sEncodedWord = URLEncoder.encode(sWord, StandardCharsets.UTF_8);
+      sEncodedWord = URLEncoder.encode(sWord, String.valueOf(StandardCharsets.UTF_8));
 
       if (sEncodedWord.equals(sWord)) {
          return "U_" + sWord;
@@ -1327,7 +1327,7 @@ public class Arff {
                }
             }
 
-            fAttributeEntropySum += fAttributeEntropy * (double)iAttributeValueFreq / (double)iDataCount;
+            fAttributeEntropySum += fAttributeEntropy * iAttributeValueFreq / iDataCount;
          }
 
          fColIG[iCol] = fOverallEntropy - fAttributeEntropySum;

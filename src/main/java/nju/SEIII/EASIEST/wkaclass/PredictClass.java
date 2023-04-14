@@ -333,7 +333,7 @@ public class PredictClass {
 
          for(i = 0; i < unlabeledData.numInstances(); ++i) {
             if (labeledData.instance(i).classValue() == 0.0D) {
-               labeledData.instance(i).setClassValue((double)iClassFor0);
+               labeledData.instance(i).setClassValue(iClassFor0);
             }
          }
       } else {
