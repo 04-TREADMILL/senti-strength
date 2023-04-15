@@ -48,16 +48,13 @@ public class FileOps {
       try {
          BufferedReader rReader;
          for(rReader = new BufferedReader(new FileReader(sFileLocation)); rReader.ready(); ++iLines) {
-            String sLine = rReader.readLine();
+            rReader.readLine();
          }
 
          rReader.close();
          return iLines;
-      } catch (FileNotFoundException var5) {
+      } catch (IOException var5) {
          var5.printStackTrace();
-         return -1;
-      } catch (IOException var6) {
-         var6.printStackTrace();
          return -1;
       }
    }

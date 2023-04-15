@@ -86,8 +86,8 @@ public class Sentence {
      */
     public int addToStringIndex(StringIndex stringIndex, TextParsingOptions textParsingOptions,
                                 boolean bRecordCount, boolean bArffIndex) throws UnsupportedEncodingException {
-        String sEncoded = "";
-        int iStringPos = 1;
+        String sEncoded;
+        int iStringPos;
         int iTermsChecked = 0;
         if (textParsingOptions.bgIncludePunctuation && textParsingOptions.igNgramSize == 1 &&
                 !textParsingOptions.bgUseTranslations && !textParsingOptions.bgAddEmphasisCode) {
@@ -164,15 +164,15 @@ public class Sentence {
         int iMaxTermListLength = sSentence.length() + 1;
         this.term = new Term[iMaxTermListLength];
         this.bgSpaceAfterTerm = new boolean[iMaxTermListLength];
-        int iPos = 0;
+        int iPos;
         this.igTermCount = 0;
 
-        for (int iSegment = 0; iSegment < iSegmentListLength; ++iSegment) {
-            for (iPos = 0; iPos >= 0 && iPos < sSegmentList[iSegment].length();
+        for (String s : sSegmentList) {
+            for (iPos = 0; iPos >= 0 && iPos < s.length();
                  this.bgSpaceAfterTerm[this.igTermCount] = false) {
                 this.term[++this.igTermCount] = new Term();
                 int iOffset = this.term[this.igTermCount].extractNextWordOrPunctuationOrEmoticon(
-                        sSegmentList[iSegment].substring(iPos), this.resources, this.options);
+                        s.substring(iPos), this.resources, this.options);
                 if (iOffset < 0) {
                     iPos = iOffset;
                 } else {
@@ -205,7 +205,7 @@ public class Sentence {
      * If the sentiment ID list has not been made, it generates it and stores it.
      */
     public void makeSentimentIDList() {
-        int iSentimentIDTemp = 0;
+        int iSentimentIDTemp;
         this.igSentimentIDListCount = 0;
 
         int i;
@@ -491,10 +491,8 @@ public class Sentence {
                                         this.options.igMinPunctuationWithExclamationToChangeSentenceSentiment &&
                                         this.term[iTerm].punctuationContains("!") && iWordTotal > 0) {
                                     bSentencePunctuationBoost = true;
-                                    if (this.options.bgExplainClassification) {
-                                        this.sgClassificationRationale.append(this.term[iTerm].getOriginalText());
-                                    }
-                                } else if (this.options.bgExplainClassification) {
+                                }
+                                if (this.options.bgExplainClassification) {
                                     this.sgClassificationRationale.append(this.term[iTerm].getOriginalText());
                                 }
                             }
@@ -731,7 +729,6 @@ public class Sentence {
                                 ((fTotalNeg - iNegWords) + 0.55D) / iNegWords);
                     }
                 } else {
-                    var10000 = this.options.igEmotionSentenceCombineMethod;
                     this.options.getClass();
                     if (var10000 == 2) {
                         this.igPositiveSentiment = Math.round(fTotalPos) + iPosWords;
@@ -916,8 +913,8 @@ public class Sentence {
      * @param recalculateIfAlreadyDone If set to true, reapply the object evaluations even if they were already applied.
      */
     public void overrideTermStrengthsWithObjectEvaluationStrengths(boolean recalculateIfAlreadyDone) {
-        boolean bMatchingObject = false;
-        boolean bMatchingEvaluation = false;
+        boolean bMatchingObject;
+        boolean bMatchingEvaluation;
         if (!this.bgObjectEvaluationsApplied || recalculateIfAlreadyDone) {
             for (int iObject = 1; iObject < this.resources.evaluativeTerms.igObjectEvaluationCount;
                  ++iObject) {

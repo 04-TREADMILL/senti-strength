@@ -110,7 +110,7 @@ public class Corpus {
                         igTrinaryCorrect[i], igTrinaryClass[i]);
             }
 
-        } else if (options.bgTrinaryMode && !options.bgBinaryVersionOfTrinaryMode) {
+        } else if (options.bgTrinaryMode) {
             unusedTermsClassificationIndex.initialise(false, false, false, true);
             for (int i = 1; i <= igParagraphCount; i++) {
                 paragraph[i].addParagraphToIndexWithTrinaryValues(unusedTermsClassificationIndex,
@@ -250,7 +250,7 @@ public class Corpus {
             BufferedReader rReader = new BufferedReader(new FileReader(sInFilenameAndPath));
             String sLine;
             if (rReader.ready()) {
-                sLine = rReader.readLine();
+                rReader.readLine();
             }
             while ((sLine = rReader.readLine()) != null) {
                 if (!sLine.equals("")) {
@@ -337,9 +337,6 @@ public class Corpus {
                 }
             }
             rReader.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -587,21 +584,9 @@ public class Corpus {
      * @return the number of correct positive classifications.
      */
     public int getClassificationPositiveNumberCorrect() {
-        if (igParagraphCount == 0) {
-            return 0;
-        }
-        int iMatches = 0;
-        if (!bgCorpusClassified) {
-            calculateCorpusSentimentScores();
-        }
-        for (int i = 1; i <= igParagraphCount; i++) {
-            if (bgSupcorpusMember[i] && igPosCorrect[i] == igPosClass[i]) {
-                iMatches++;
-            }
-        }
-
-        return iMatches;
+        return calculateCorrect(igPosCorrect, igPosClass);
     }
+
 
     /**
      * Calculates the mean absolute difference between the correct and classified positive scores for the
@@ -662,20 +647,7 @@ public class Corpus {
      * @return the number of paragraphs with correctly classified trinary sentiment scores
      */
     public int getClassificationTrinaryNumberCorrect() {
-        if (igParagraphCount == 0) {
-            return 0;
-        }
-        int iTrinaryCorrect = 0;
-        if (!bgCorpusClassified) {
-            calculateCorpusSentimentScores();
-        }
-        for (int i = 1; i <= igParagraphCount; i++) {
-            if (bgSupcorpusMember[i] && igTrinaryCorrect[i] == igTrinaryClass[i]) {
-                iTrinaryCorrect++;
-            }
-        }
-
-        return iTrinaryCorrect;
+        return calculateCorrect(igTrinaryCorrect, igTrinaryClass);
     }
 
     /**
@@ -740,20 +712,7 @@ public class Corpus {
      * @return the number of paragraphs where the correct and classified sentiment scale values are equal
      */
     public int getClassificationScaleNumberCorrect() {
-        if (igParagraphCount == 0) {
-            return 0;
-        }
-        int iScaleCorrect = 0;
-        if (!bgCorpusClassified) {
-            calculateCorpusSentimentScores();
-        }
-        for (int i = 1; i <= igParagraphCount; i++) {
-            if (bgSupcorpusMember[i] && igScaleCorrect[i] == igScaleClass[i]) {
-                iScaleCorrect++;
-            }
-        }
-
-        return iScaleCorrect;
+        return calculateCorrect(igScaleCorrect, igScaleClass);
     }
 
     /**
@@ -808,32 +767,32 @@ public class Corpus {
         }
     }
 
-    /**
-     * Prints a summary of the sentiment classification results for all paragraphs in the corpus to a specified file.
-     *
-     * @param sOutFilenameAndPath The file path and name for the output file.
-     * @return true if the summary was successfully printed to the output file, false otherwise.
-     */
-    public boolean printClassificationResultsSummary_NOT_DONE(String sOutFilenameAndPath) {
-        if (!bgCorpusClassified) {
-            calculateCorpusSentimentScores();
-        }
-        try {
-            BufferedWriter wWriter = new BufferedWriter(new FileWriter(sOutFilenameAndPath));
-            for (int i = 1; i <= igParagraphCount; i++) {
-                boolean _tmp = bgSupcorpusMember[i];
-            }
-
-            wWriter.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
+    ///**
+    // * Prints a summary of the sentiment classification results for all paragraphs in the corpus to a specified file.
+    // *
+    // * @param sOutFilenameAndPath The file path and name for the output file.
+    // * @return true if the summary was successfully printed to the output file, false otherwise.
+    // */
+    //public boolean printClassificationResultsSummary_NOT_DONE(String sOutFilenameAndPath) {
+    //    if (!bgCorpusClassified) {
+    //        calculateCorpusSentimentScores();
+    //    }
+    //    try {
+    //        BufferedWriter wWriter = new BufferedWriter(new FileWriter(sOutFilenameAndPath));
+    //        for (int i = 1; i <= igParagraphCount; i++) {
+    //            boolean _tmp = bgSupcorpusMember[i];
+    //        }
+    //
+    //        wWriter.close();
+    //    } catch (FileNotFoundException e) {
+    //        e.printStackTrace();
+    //        return false;
+    //    } catch (IOException e) {
+    //        e.printStackTrace();
+    //        return false;
+    //    }
+    //    return true;
+    //}
 
     /**
      * Creates a list of all the sentiment IDs in the complete corpus (ignoring subcorpus divisions) and counts how many
@@ -855,9 +814,9 @@ public class Corpus {
             for (int i = 1; i <= igParagraphCount; i++) {
                 int[] sentenceIDList = paragraph[i].getSentimentIDList();
                 if (sentenceIDList != null) {
-                    for (int j = 0; j < sentenceIDList.length; j++) {
-                        if (sentenceIDList[j] != 0) {
-                            igSentimentIDList[++igSentimentIDListCount] = sentenceIDList[j];
+                    for (int k : sentenceIDList) {
+                        if (k != 0) {
+                            igSentimentIDList[++igSentimentIDListCount] = k;
                         }
                     }
 
@@ -868,9 +827,9 @@ public class Corpus {
             for (int i = 1; i <= igParagraphCount; i++) {
                 int[] sentenceIDList = paragraph[i].getSentimentIDList();
                 if (sentenceIDList != null) {
-                    for (int j = 0; j < sentenceIDList.length; j++) {
-                        if (sentenceIDList[j] != 0) {
-                            igSentimentIDParagraphCount[Sort.i_FindIntPositionInSortedArray(sentenceIDList[j],
+                    for (int k : sentenceIDList) {
+                        if (k != 0) {
+                            igSentimentIDParagraphCount[Sort.i_FindIntPositionInSortedArray(k,
                                     igSentimentIDList, 1, igSentimentIDListCount)]++;
                         }
                     }
@@ -1223,9 +1182,7 @@ public class Corpus {
                             iCorrectNegCount++;
                         }
                         iNegAbsDiff += Math.abs(iNeg + iFileNeg);
-                        if (iClassified < maxClassifyForCorrelation) {
-                            iNegClassCorr[iClassified] = iFileNeg;
-                        }
+                        iNegClassCorr[iClassified] = iFileNeg;
                         iNegClassPred[iClassified] = iNeg;
                     }
                 }
@@ -1436,7 +1393,7 @@ public class Corpus {
                     iMultiOptimisations, wResultsWriter, wTermStrengthWriter);
             options.bgBoosterWordsChangeEmotion = !options.bgBoosterWordsChangeEmotion;
             if (options.bgNegatingWordsFlipEmotion) {
-                options.bgNegatingWordsFlipEmotion = !options.bgNegatingWordsFlipEmotion;
+                options.bgNegatingWordsFlipEmotion = false;
                 run10FoldCrossValidationMultipleTimes(iMinImprovement, bUseTotalDifference, iReplications,
                         iMultiOptimisations, wResultsWriter, wTermStrengthWriter);
                 options.bgNegatingWordsFlipEmotion = !options.bgNegatingWordsFlipEmotion;
@@ -1555,12 +1512,12 @@ public class Corpus {
         int iNegWithin1 = -1;
         int iTrinaryCorrect = -1;
         int iTrinaryCorrectWithin1 = -1;
-        double fPosCorrectPoportion = -1D;
-        double fNegCorrectPoportion = -1D;
-        double fPosWithin1Poportion = -1D;
-        double fNegWithin1Poportion = -1D;
-        double fTrinaryCorrectPoportion = -1D;
-        double fTrinaryCorrectWithin1Poportion = -1D;
+        double fPosCorrectProportion = -1D;
+        double fNegCorrectProportion = -1D;
+        double fPosWithin1Proportion = -1D;
+        double fNegWithin1Proportion = -1D;
+        double fTrinaryCorrectProportion = -1D;
+        double fTrinaryCorrectWithin1Proportion = -1D;
         double fPosOrScaleCorr = 9999D;
         double fNegCorr = 9999D;
         double fPosMPE = 9999D;
@@ -1578,8 +1535,8 @@ public class Corpus {
                 iTrinaryCorrectWithin1 =
                         ClassificationStatistics.accuracyWithin1(igTrinaryCorrect, iTrinaryOrScaleClassAll,
                                 igParagraphCount, false);
-                fTrinaryCorrectPoportion = (float) iTrinaryCorrect / (float) igParagraphCount;
-                fTrinaryCorrectWithin1Poportion = (float) iTrinaryCorrectWithin1 / (float) igParagraphCount;
+                fTrinaryCorrectProportion = (float) iTrinaryCorrect / (float) igParagraphCount;
+                fTrinaryCorrectWithin1Proportion = (float) iTrinaryCorrectWithin1 / (float) igParagraphCount;
                 ClassificationStatistics.trinaryOrBinaryConfusionTable(iTrinaryOrScaleClassAll,
                         igTrinaryCorrect, igParagraphCount, estCorr);
             } else if (options.bgScaleMode) {
@@ -1588,8 +1545,8 @@ public class Corpus {
                 iTrinaryCorrectWithin1 =
                         ClassificationStatistics.accuracyWithin1(igScaleCorrect, iTrinaryOrScaleClassAll,
                                 igParagraphCount, false);
-                fTrinaryCorrectPoportion = (float) iTrinaryCorrect / (float) igParagraphCount;
-                fTrinaryCorrectWithin1Poportion = (float) iTrinaryCorrectWithin1 / (float) igParagraphCount;
+                fTrinaryCorrectProportion = (float) iTrinaryCorrect / (float) igParagraphCount;
+                fTrinaryCorrectWithin1Proportion = (float) iTrinaryCorrectWithin1 / (float) igParagraphCount;
                 fPosOrScaleCorr =
                         ClassificationStatistics.correlation(igScaleCorrect, iTrinaryOrScaleClassAll,
                                 igParagraphCount);
@@ -1616,17 +1573,17 @@ public class Corpus {
                         iPosClassAll, igParagraphCount, false);
                 fNegMPEnoDiv = ClassificationStatistics.absoluteMeanPercentageErrorNoDivision(igNegCorrect,
                         iNegClassAll, igParagraphCount, true);
-                fPosCorrectPoportion = (float) iPosCorrect / (float) igParagraphCount;
-                fNegCorrectPoportion = (float) iNegCorrect / (float) igParagraphCount;
-                fPosWithin1Poportion = (float) iPosWithin1 / (float) igParagraphCount;
-                fNegWithin1Poportion = (float) iNegWithin1 / (float) igParagraphCount;
+                fPosCorrectProportion = (float) iPosCorrect / (float) igParagraphCount;
+                fNegCorrectProportion = (float) iNegCorrect / (float) igParagraphCount;
+                fPosWithin1Proportion = (float) iPosWithin1 / (float) igParagraphCount;
+                fNegWithin1Proportion = (float) iNegWithin1 / (float) igParagraphCount;
             }
-            wWriter.write("\t" + iPosCorrect + "\t" + fPosCorrectPoportion + "\t" + iNegCorrect + "\t" +
-                    fNegCorrectPoportion + "\t" + iPosWithin1 + "\t" + fPosWithin1Poportion + "\t" +
-                    iNegWithin1 + "\t" + fNegWithin1Poportion + "\t" + fPosOrScaleCorr + "\t" + fNegCorr +
+            wWriter.write("\t" + iPosCorrect + "\t" + fPosCorrectProportion + "\t" + iNegCorrect + "\t" +
+                    fNegCorrectProportion + "\t" + iPosWithin1 + "\t" + fPosWithin1Proportion + "\t" +
+                    iNegWithin1 + "\t" + fNegWithin1Proportion + "\t" + fPosOrScaleCorr + "\t" + fNegCorr +
                     "\t" + fPosMPE + "\t" + fNegMPE + "\t" + fPosMPEnoDiv + "\t" + fNegMPEnoDiv + "\t" +
-                    iTrinaryCorrect + "\t" + fTrinaryCorrectPoportion + "\t" + iTrinaryCorrectWithin1 + "\t" +
-                    fTrinaryCorrectWithin1Poportion + "\t" + estCorr[0][0] + "\t" + estCorr[0][1] + "\t" +
+                    iTrinaryCorrect + "\t" + fTrinaryCorrectProportion + "\t" + iTrinaryCorrectWithin1 + "\t" +
+                    fTrinaryCorrectWithin1Proportion + "\t" + estCorr[0][0] + "\t" + estCorr[0][1] + "\t" +
                     estCorr[0][2] + "\t" + estCorr[1][0] + "\t" + estCorr[1][1] + "\t" + estCorr[1][2] +
                     "\t" + estCorr[2][0] + "\t" + estCorr[2][1] + "\t" + estCorr[2][2] + "\t" +
                     igParagraphCount + "\n");
@@ -1751,7 +1708,7 @@ public class Corpus {
     public void optimiseDictionaryWeightingsForCorpusScale(int iMinImprovement) {
         boolean bFullListChanges = true;
         int iLastScaleNumberCorrect = getClassificationScaleNumberCorrect();
-        int iNewScaleNumberCorrect = 0;
+        int iNewScaleNumberCorrect;
         int iTotalSentimentWords = resources.sentimentWords.getSentimentWordCount();
         int[] iWordRand = new int[iTotalSentimentWords + 1];
         while (bFullListChanges) {
@@ -1760,8 +1717,8 @@ public class Corpus {
             for (int i = 1; i <= iTotalSentimentWords; i++) {
                 int iOldTermSentimentStrength = resources.sentimentWords.getSentiment(iWordRand[i]);
                 boolean bCurrentIDChange = false;
-                int iAddOneImprovement = 0;
-                int iSubtractOneImprovement = 0;
+                int iAddOneImprovement;
+                int iSubtractOneImprovement;
                 if (iOldTermSentimentStrength < 4) {
                     resources.sentimentWords.setSentiment(iWordRand[i], iOldTermSentimentStrength + 1);
                     reClassifyClassifiedCorpusForSentimentChange(iWordRand[i], 1);
@@ -1803,7 +1760,7 @@ public class Corpus {
     public void optimiseDictionaryWeightingsForCorpusTrinaryOrBinary(int iMinImprovement) {
         boolean bFullListChanges = true;
         int iLastTrinaryCorrect = getClassificationTrinaryNumberCorrect();
-        int iNewTrinary = 0;
+        int iNewTrinary;
         int iTotalSentimentWords = resources.sentimentWords.getSentimentWordCount();
         int[] iWordRand = new int[iTotalSentimentWords + 1];
         while (bFullListChanges) {
@@ -1812,8 +1769,8 @@ public class Corpus {
             for (int i = 1; i <= iTotalSentimentWords; i++) {
                 int iOldSentimentStrength = resources.sentimentWords.getSentiment(iWordRand[i]);
                 boolean bCurrentIDChange = false;
-                int iAddOneImprovement = 0;
-                int iSubtractOneImprovement = 0;
+                int iAddOneImprovement;
+                int iSubtractOneImprovement;
                 if (iOldSentimentStrength < 4) {
                     resources.sentimentWords.setSentiment(iWordRand[i], iOldSentimentStrength + 1);
                     reClassifyClassifiedCorpusForSentimentChange(iWordRand[i], 1);
@@ -1917,12 +1874,11 @@ public class Corpus {
                     if (bUseTotalDifference) {
                         iLastNegTotalDiff = iNewNegTotalDiff;
                         iLastPosTotalDiff = iNewPosTotalDiff;
-                        bFullListChanges = true;
                     } else {
                         iLastNeg = iNewNeg;
                         iLastPos = iNewPos;
-                        bFullListChanges = true;
                     }
+                    bFullListChanges = true;
                 } else {
                     resources.sentimentWords.setSentiment(iWordRand[i], iOldSentimentStrength);
                     reClassifyClassifiedCorpusForSentimentChange(iWordRand[i], 1);
@@ -1943,8 +1899,8 @@ public class Corpus {
     public void summariseMultiple10FoldValidations(String sInputFile, String sOutputFile) {
         int iDataRows = 28;
         int iLastOptionCol = 24;
-        BufferedReader rResults = null;
-        BufferedWriter wSummary = null;
+        BufferedReader rResults;
+        BufferedWriter wSummary;
         String sLine = null;
         String[] sPrevData = null;
         String[] sData = null;
@@ -2014,5 +1970,20 @@ public class Corpus {
             System.out.println("Value of i: " + i);
             e.printStackTrace();
         }
+    }
+    private int calculateCorrect(int[] igPosCorrect, int[] igPosClass) {
+        if (igParagraphCount == 0) {
+            return 0;
+        }
+        int iMatches = 0;
+        if (!bgCorpusClassified) {
+            calculateCorpusSentimentScores();
+        }
+        for (int i = 1; i <= igParagraphCount; i++) {
+            if (bgSupcorpusMember[i] && igPosCorrect[i] == igPosClass[i]) {
+                iMatches++;
+            }
+        }
+        return iMatches;
     }
 }

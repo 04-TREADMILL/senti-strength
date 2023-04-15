@@ -87,11 +87,11 @@ public class PredictClass {
       Date start = Utilities.getNow();
       sClassifier = sClassifier.toLowerCase();
       int i = -1;
-      String options = null;
-      String sClassDefinition = "";
-      String sResultsFile = "";
-      Instances labeledData = null;
-      Instances unlabeledData = null;
+      String options;
+      String sClassDefinition;
+      String sResultsFile;
+      Instances labeledData;
+      Instances unlabeledData;
 
       Instances trainData;
       try {

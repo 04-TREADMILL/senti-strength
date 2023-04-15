@@ -96,8 +96,7 @@ public class SentiStrength {
             Locale l = new Locale(sLanguage);
             Locale.setDefault(l);
         }
-        int i = 0;
-        for (i = 0; i < args.length; ++i) {
+        for (int i = 0; i < args.length; ++i) {
             if (!bArgumentRecognised[i]) {
                 System.out.println("Unrecognised command - wrong spelling or case?: " + args[i]);
                 this.showBriefHelp();
@@ -696,12 +695,7 @@ public class SentiStrength {
                 var13.printStackTrace();
             }
         } else if (c.options.bgForceUTF8) {
-            try {
-                System.out.println(new String(output.getOutputMessage().getBytes("UTF-8"), "UTF-8"));
-            } catch (UnsupportedEncodingException var12) {
-                System.out.println("UTF-8 Not found on your system!");
-                var12.printStackTrace();
-            }
+            System.out.println(new String(output.getOutputMessage().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
         } else {
             System.out.println(output.getOutputMessage());
         }
@@ -724,9 +718,9 @@ public class SentiStrength {
                         System.out.println("0");
                     }
                 } else {
-                    int iPos = 1;
-                    int iTrinary = 0;
-                    int iScale = 0;
+                    int iPos;
+                    int iTrinary;
+                    int iScale;
                     Paragraph paragraph = new Paragraph();
                     if (iTextCol > -1) {
                         String[] sData = sTextToParse.split("\t");
@@ -801,9 +795,8 @@ public class SentiStrength {
     }
 
     private void listenAtPort(Corpus c, int iListenPort) {
-        ServerSocket serverSocket = null;
+        ServerSocket serverSocket;
         String decodedText = "";
-        boolean var6 = false;
 
         try {
             serverSocket = new ServerSocket(iListenPort);
@@ -817,7 +810,7 @@ public class SentiStrength {
                 "Listening on port: " + iListenPort + " IP: " + serverSocket.getInetAddress());
 
         while (true) {
-            Socket clientSocket = null;
+            Socket clientSocket;
 
             try {
                 clientSocket = serverSocket.accept();
