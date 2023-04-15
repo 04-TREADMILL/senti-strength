@@ -870,7 +870,6 @@ public class SentiStrength {
             } else {
                 out.print(output.getOutputMessage());
             }
-
             try {
                 out.close();
                 in.close();

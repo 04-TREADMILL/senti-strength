@@ -654,7 +654,6 @@ public class Term {
                     this.sgWordEmphasis.append(
                             this.sgTranslatedWord, 3, this.sgTranslatedWord.indexOf("hehe") + 2);
                     this.sgTranslatedWord = "hehe";
-                    return;
                 }
             }
 
