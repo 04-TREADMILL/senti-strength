@@ -49,7 +49,7 @@ public class Sentence {
     private boolean[] bgIncludeTerm;
     private boolean bgIdiomsApplied = false;
     private boolean bgObjectEvaluationsApplied = false;
-    private String sgClassificationRationale = "";
+    private StringBuilder sgClassificationRationale = new StringBuilder();
 
     public Sentence() {
     }
@@ -266,7 +266,7 @@ public class Sentence {
      * @return String classification rationale.
      */
     public String getClassificationRationale() {
-        return this.sgClassificationRationale;
+        return this.sgClassificationRationale.toString();
     }
 
     /**
@@ -436,7 +436,7 @@ public class Sentence {
      */
     private void calculateSentenceSentimentScore() {
         if (this.options.bgExplainClassification && this.sgClassificationRationale.length() > 0) {
-            this.sgClassificationRationale = "";
+            this.sgClassificationRationale = new StringBuilder();
         }
 
         this.igNegativeSentiment = 1;
@@ -476,17 +476,13 @@ public class Sentence {
                                         fSentiment[iWordTotal] +=
                                                 this.term[iTerm].getEmoticonSentimentStrength();
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale =
-                                                    this.sgClassificationRationale + this.term[iTerm].getEmoticon() + " [" +
-                                                            this.term[iTerm].getEmoticonSentimentStrength() + " emoticon] ";
+                                            this.sgClassificationRationale.append(this.term[iTerm].getEmoticon()).append(" [").append(this.term[iTerm].getEmoticonSentimentStrength()).append(" emoticon] ");
                                         }
                                     } else {
                                         ++iWordTotal;
                                         fSentiment[iWordTotal] = iTermsChecked;
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale =
-                                                    this.sgClassificationRationale + this.term[iTerm].getEmoticon() + " [" +
-                                                            this.term[iTerm].getEmoticonSentimentStrength() + " emoticon]";
+                                            this.sgClassificationRationale.append(this.term[iTerm].getEmoticon()).append(" [").append(this.term[iTerm].getEmoticonSentimentStrength()).append(" emoticon]");
                                         }
                                     }
                                 }
@@ -496,12 +492,10 @@ public class Sentence {
                                         this.term[iTerm].punctuationContains("!") && iWordTotal > 0) {
                                     bSentencePunctuationBoost = true;
                                     if (this.options.bgExplainClassification) {
-                                        this.sgClassificationRationale =
-                                                this.sgClassificationRationale + this.term[iTerm].getOriginalText();
+                                        this.sgClassificationRationale.append(this.term[iTerm].getOriginalText());
                                     }
                                 } else if (this.options.bgExplainClassification) {
-                                    this.sgClassificationRationale =
-                                            this.sgClassificationRationale + this.term[iTerm].getOriginalText();
+                                    this.sgClassificationRationale.append(this.term[iTerm].getOriginalText());
                                 }
                             }
                         } else {
@@ -521,18 +515,13 @@ public class Sentence {
                                     }
 
                                     if (iTemp == 1) {
-                                        this.sgClassificationRationale =
-                                                this.sgClassificationRationale + this.term[iTerm].getOriginalText() + " ";
+                                        this.sgClassificationRationale.append(this.term[iTerm].getOriginalText()).append(" ");
                                     } else {
-                                        this.sgClassificationRationale =
-                                                this.sgClassificationRationale + this.term[iTerm].getOriginalText() + "[" +
-                                                        iTemp + "] ";
+                                        this.sgClassificationRationale.append(this.term[iTerm].getOriginalText()).append("[").append(iTemp).append("] ");
                                     }
                                 }
                             } else if (this.options.bgExplainClassification) {
-                                this.sgClassificationRationale =
-                                        this.sgClassificationRationale + this.term[iTerm].getOriginalText() +
-                                                " [proper noun] ";
+                                this.sgClassificationRationale.append(this.term[iTerm].getOriginalText()).append(" [proper noun] ");
                             }
 
                             if (this.options.bgMultipleLettersBoostSentiment &&
@@ -546,26 +535,22 @@ public class Sentence {
                                     if (fSentiment[iWordTotal] < 0.0F) {
                                         fSentiment[iWordTotal] = (float) (fSentiment[iWordTotal] - 0.6D);
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale =
-                                                    this.sgClassificationRationale + "[-0.6 spelling emphasis] ";
+                                            this.sgClassificationRationale.append("[-0.6 spelling emphasis] ");
                                         }
                                     } else if (fSentiment[iWordTotal] > 0.0F) {
                                         fSentiment[iWordTotal] = (float) ((double) fSentiment[iWordTotal] + 0.6D);
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale =
-                                                    this.sgClassificationRationale + "[+0.6 spelling emphasis] ";
+                                            this.sgClassificationRationale.append("[+0.6 spelling emphasis] ");
                                         }
                                     } else if (this.options.igMoodToInterpretNeutralEmphasis > 0) {
                                         fSentiment[iWordTotal] = (float) (fSentiment[iWordTotal] + 0.6D);
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale =
-                                                    this.sgClassificationRationale + "[+0.6 spelling mood emphasis] ";
+                                            this.sgClassificationRationale.append("[+0.6 spelling mood emphasis] ");
                                         }
                                     } else if (this.options.igMoodToInterpretNeutralEmphasis < 0) {
                                         fSentiment[iWordTotal] = (float) (fSentiment[iWordTotal] - 0.6D);
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale =
-                                                    this.sgClassificationRationale + "[-0.6 spelling mood emphasis] ";
+                                            this.sgClassificationRationale.append("[-0.6 spelling mood emphasis] ");
                                         }
                                     }
                                 }
@@ -577,14 +562,12 @@ public class Sentence {
                                 if (fSentiment[iWordTotal] > 0.0F) {
                                     var10002 = (int) fSentiment[iWordTotal]++;
                                     if (this.options.bgExplainClassification) {
-                                        this.sgClassificationRationale =
-                                                this.sgClassificationRationale + "[+1 CAPITALS] ";
+                                        this.sgClassificationRationale.append("[+1 CAPITALS] ");
                                     }
                                 } else {
                                     var10002 = (int) fSentiment[iWordTotal]--;
                                     if (this.options.bgExplainClassification) {
-                                        this.sgClassificationRationale =
-                                                this.sgClassificationRationale + "[-1 CAPITALS] ";
+                                        this.sgClassificationRationale.append("[-1 CAPITALS] ");
                                     }
                                 }
                             }
@@ -594,16 +577,12 @@ public class Sentence {
                                     if (fSentiment[iWordTotal] > 0.0F) {
                                         fSentiment[iWordTotal] += iLastBoosterWordScore;
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale =
-                                                    this.sgClassificationRationale + "[+" + iLastBoosterWordScore +
-                                                            " booster word] ";
+                                            this.sgClassificationRationale.append("[+").append(iLastBoosterWordScore).append(" booster word] ");
                                         }
                                     } else if (fSentiment[iWordTotal] < 0.0F) {
                                         fSentiment[iWordTotal] -= iLastBoosterWordScore;
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale =
-                                                    this.sgClassificationRationale + "[-" + iLastBoosterWordScore +
-                                                            " booster word] ";
+                                            this.sgClassificationRationale.append("[-").append(iLastBoosterWordScore).append(" booster word] ");
                                         }
                                     }
                                 }
@@ -617,9 +596,7 @@ public class Sentence {
                                         fSentiment[iWordTotal] =
                                                 -fSentiment[iWordTotal] * this.options.fgStrengthMultiplierForNegatedWords;
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale = this.sgClassificationRationale + "[*-" +
-                                                    this.options.fgStrengthMultiplierForNegatedWords +
-                                                    " approx. negated multiplier] ";
+                                            this.sgClassificationRationale.append("[*-").append(this.options.fgStrengthMultiplierForNegatedWords).append(" approx. negated multiplier] ");
                                         }
                                     }
                                 } else {
@@ -628,8 +605,7 @@ public class Sentence {
                                             iWordsSinceNegative <= this.options.igMaxWordsBeforeSentimentToNegate) {
                                         fSentiment[iWordTotal] = 0.0F;
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale =
-                                                    this.sgClassificationRationale + "[=0 negation] ";
+                                            this.sgClassificationRationale.append("[=0 negation] ");
                                         }
                                     }
 
@@ -639,9 +615,7 @@ public class Sentence {
                                         fSentiment[iWordTotal] =
                                                 -fSentiment[iWordTotal] * this.options.fgStrengthMultiplierForNegatedWords;
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale = this.sgClassificationRationale + "[*-" +
-                                                    this.options.fgStrengthMultiplierForNegatedWords +
-                                                    " approx. negated multiplier] ";
+                                            this.sgClassificationRationale.append("[*-").append(this.options.fgStrengthMultiplierForNegatedWords).append(" approx. negated multiplier] ");
                                         }
                                     }
                                 }
@@ -664,17 +638,14 @@ public class Sentence {
                                         fSentiment[iPriorWord] =
                                                 -fSentiment[iPriorWord] * this.options.fgStrengthMultiplierForNegatedWords;
                                         if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale = this.sgClassificationRationale + "[*-" +
-                                                    this.options.fgStrengthMultiplierForNegatedWords +
-                                                    " approx. negated multiplier] ";
+                                            this.sgClassificationRationale.append("[*-").append(this.options.fgStrengthMultiplierForNegatedWords).append(" approx. negated multiplier] ");
                                         }
                                     } else {
                                         if (this.options.bgNegatingNegativeNeutralisesEmotion &&
                                                 fSentiment[iPriorWord] < 0.0F) {
                                             fSentiment[iPriorWord] = 0.0F;
                                             if (this.options.bgExplainClassification) {
-                                                this.sgClassificationRationale =
-                                                        this.sgClassificationRationale + "[=0 negation] ";
+                                                this.sgClassificationRationale.append("[=0 negation] ");
                                             }
                                         }
 
@@ -683,9 +654,7 @@ public class Sentence {
                                             fSentiment[iPriorWord] = -fSentiment[iPriorWord] *
                                                     this.options.fgStrengthMultiplierForNegatedWords;
                                             if (this.options.bgExplainClassification) {
-                                                this.sgClassificationRationale = this.sgClassificationRationale + "[*-" +
-                                                        this.options.fgStrengthMultiplierForNegatedWords +
-                                                        " approx. negated multiplier] ";
+                                                this.sgClassificationRationale.append("[*-").append(this.options.fgStrengthMultiplierForNegatedWords).append(" approx. negated multiplier] ");
                                             }
                                         }
                                     }
@@ -702,8 +671,7 @@ public class Sentence {
                                     fSentiment[iWordTotal - 1] < -1.0F) {
                                 var10002 = (int) fSentiment[iWordTotal]--;
                                 if (this.options.bgExplainClassification) {
-                                    this.sgClassificationRationale =
-                                            this.sgClassificationRationale + "[-1 consecutive negative words] ";
+                                    this.sgClassificationRationale.append("[-1 consecutive negative words] ");
                                 }
                             }
 
@@ -712,8 +680,7 @@ public class Sentence {
                                     fSentiment[iWordTotal - 1] > 1.0F) {
                                 var10002 = (int) fSentiment[iWordTotal]++;
                                 if (this.options.bgExplainClassification) {
-                                    this.sgClassificationRationale =
-                                            this.sgClassificationRationale + "[+1 consecutive positive words] ";
+                                    this.sgClassificationRationale.append("[+1 consecutive positive words] ");
                                 }
                             }
 
@@ -783,8 +750,7 @@ public class Sentence {
                                     this.term[iTerm].getTranslatedWord().toLowerCase())) {
                                 ++this.igNegativeSentiment;
                                 if (this.options.bgExplainClassification) {
-                                    this.sgClassificationRationale =
-                                            this.sgClassificationRationale + "[+1 negative for question word]";
+                                    this.sgClassificationRationale.append("[+1 negative for question word]");
                                 }
                                 break;
                             }
@@ -792,8 +758,7 @@ public class Sentence {
                                 this.term[iTerm].punctuationContains("?")) {
                             ++this.igNegativeSentiment;
                             if (this.options.bgExplainClassification) {
-                                this.sgClassificationRationale =
-                                        this.sgClassificationRationale + "[+1 negative for question mark ?]";
+                                this.sgClassificationRationale.append("[+1 negative for question mark ?]");
                             }
                             break;
                         }
@@ -806,8 +771,7 @@ public class Sentence {
                                 this.term[iTerm].getTranslatedWord().toLowerCase().compareTo("miss") == 0) {
                             this.igPositiveSentiment = 2;
                             if (this.options.bgExplainClassification) {
-                                this.sgClassificationRationale =
-                                        this.sgClassificationRationale + "[pos = 2 for term 'miss']";
+                                this.sgClassificationRationale.append("[pos = 2 for term 'miss']");
                             }
                             break;
                         }
@@ -818,26 +782,22 @@ public class Sentence {
                     if (this.igPositiveSentiment < -this.igNegativeSentiment) {
                         --this.igNegativeSentiment;
                         if (this.options.bgExplainClassification) {
-                            this.sgClassificationRationale =
-                                    this.sgClassificationRationale + "[-1 punctuation emphasis] ";
+                            this.sgClassificationRationale.append("[-1 punctuation emphasis] ");
                         }
                     } else if (this.igPositiveSentiment > -this.igNegativeSentiment) {
                         ++this.igPositiveSentiment;
                         if (this.options.bgExplainClassification) {
-                            this.sgClassificationRationale =
-                                    this.sgClassificationRationale + "[+1 punctuation emphasis] ";
+                            this.sgClassificationRationale.append("[+1 punctuation emphasis] ");
                         }
                     } else if (this.options.igMoodToInterpretNeutralEmphasis > 0) {
                         ++this.igPositiveSentiment;
                         if (this.options.bgExplainClassification) {
-                            this.sgClassificationRationale =
-                                    this.sgClassificationRationale + "[+1 punctuation mood emphasis] ";
+                            this.sgClassificationRationale.append("[+1 punctuation mood emphasis] ");
                         }
                     } else if (this.options.igMoodToInterpretNeutralEmphasis < 0) {
                         --this.igNegativeSentiment;
                         if (this.options.bgExplainClassification) {
-                            this.sgClassificationRationale =
-                                    this.sgClassificationRationale + "[-1 punctuation mood emphasis] ";
+                            this.sgClassificationRationale.append("[-1 punctuation mood emphasis] ");
                         }
                     }
                 }
@@ -848,7 +808,7 @@ public class Sentence {
                         if (this.term[iTerm].isPunctuation() && this.term[iTerm].punctuationContains("!")) {
                             this.igPositiveSentiment = 2;
                             if (this.options.bgExplainClassification) {
-                                this.sgClassificationRationale = this.sgClassificationRationale + "[pos = 2 for !]";
+                                this.sgClassificationRationale.append("[pos = 2 for !]");
                             }
                             break;
                         }
@@ -864,8 +824,7 @@ public class Sentence {
                                     sTranslatedWord.compareTo("whats") == 0) {
                                 this.igPositiveSentiment = 2;
                                 if (this.options.bgExplainClassification) {
-                                    this.sgClassificationRationale =
-                                            this.sgClassificationRationale + "[pos = 2 for you/your/whats]";
+                                    this.sgClassificationRationale.append("[pos = 2 for you/your/whats]");
                                 }
                                 break;
                             }
@@ -887,9 +846,7 @@ public class Sentence {
                 }
 
                 if (this.options.bgExplainClassification) {
-                    this.sgClassificationRationale =
-                            this.sgClassificationRationale + "[sentence: " + this.igPositiveSentiment + "," +
-                                    this.igNegativeSentiment + "]";
+                    this.sgClassificationRationale.append("[sentence: ").append(this.igPositiveSentiment).append(",").append(this.igNegativeSentiment).append("]");
                 }
 
             }
@@ -916,9 +873,7 @@ public class Sentence {
                     }
 
                     this.igPositiveSentiment = 1;
-                    this.sgClassificationRationale =
-                            this.sgClassificationRationale + "[Irony change: pos = 1, neg = " +
-                                    this.igNegativeSentiment + "]";
+                    this.sgClassificationRationale.append("[Irony change: pos = 1, neg = ").append(this.igNegativeSentiment).append("]");
                     return;
                 }
             }
@@ -933,9 +888,7 @@ public class Sentence {
                     }
 
                     this.igPositiveSentiment = 1;
-                    this.sgClassificationRationale =
-                            this.sgClassificationRationale + "[Irony change: pos = 1, neg = " +
-                                    this.igNegativeSentiment + "]";
+                    this.sgClassificationRationale.append("[Irony change: pos = 1, neg = ").append(this.igNegativeSentiment).append("]");
                     return;
                 }
             }
@@ -949,9 +902,7 @@ public class Sentence {
                     }
 
                     this.igPositiveSentiment = 1;
-                    this.sgClassificationRationale =
-                            this.sgClassificationRationale + "[Irony change: pos = 1, neg = " +
-                                    this.igNegativeSentiment + "]";
+                    this.sgClassificationRationale.append("[Irony change: pos = 1, neg = ").append(this.igNegativeSentiment).append("]");
                     return;
                 }
             }
@@ -994,8 +945,7 @@ public class Sentence {
 
                 if (bMatchingEvaluation) {
                     if (this.options.bgExplainClassification) {
-                        this.sgClassificationRationale =
-                                this.sgClassificationRationale + "[term weight changed by object/evaluation]";
+                        this.sgClassificationRationale.append("[term weight changed by object/evaluation]");
                     }
 
                     this.term[iTerm].setSentimentOverrideValue(
@@ -1033,9 +983,7 @@ public class Sentence {
 
                             if (bMatchingIdiom) {
                                 if (this.options.bgExplainClassification) {
-                                    this.sgClassificationRationale =
-                                            this.sgClassificationRationale + "[term weight(s) changed by idiom " +
-                                                    this.resources.idiomList.getIdiom(iIdiom) + "]";
+                                    this.sgClassificationRationale.append("[term weight(s) changed by idiom ").append(this.resources.idiomList.getIdiom(iIdiom)).append("]");
                                 }
 
                                 this.term[iTerm].setSentimentOverrideValue(

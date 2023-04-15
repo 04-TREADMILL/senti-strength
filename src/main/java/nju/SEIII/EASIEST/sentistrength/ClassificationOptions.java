@@ -232,10 +232,10 @@ public class ClassificationOptions {
             this.bgBoosterWordsChangeEmotion = Boolean.parseBoolean(sData[1]);
           } else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
             this.bgNegatingWordsFlipEmotion = Boolean.parseBoolean(sData[1]);
-          } else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
-            this.bgNegatingPositiveFlipsEmotion = Boolean.parseBoolean(sData[1]);
-          } else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
-            this.bgNegatingNegativeNeutralisesEmotion = Boolean.parseBoolean(sData[1]);
+          //} else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
+          //  this.bgNegatingPositiveFlipsEmotion = Boolean.parseBoolean(sData[1]);
+          //} else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
+          //  this.bgNegatingNegativeNeutralisesEmotion = Boolean.parseBoolean(sData[1]);
           } else if (Objects.equals(sData[0], "CorrectSpellingsWithRepeatedLetter")) {
             this.bgCorrectSpellingsWithRepeatedLetter = Boolean.parseBoolean(sData[1]);
           } else if (Objects.equals(sData[0], "UseEmoticons")) {
@@ -256,7 +256,6 @@ public class ClassificationOptions {
               rReader.close();
               return false;
             }
-
             this.bgScaleMode = true;
           }
         }
@@ -264,11 +263,8 @@ public class ClassificationOptions {
 
       rReader.close();
       return true;
-    } catch (FileNotFoundException var7) {
+    } catch (IOException var7) {
       var7.printStackTrace();
-      return false;
-    } catch (IOException var8) {
-      var8.printStackTrace();
       return false;
     }
   }
