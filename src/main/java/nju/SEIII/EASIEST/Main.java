@@ -1,6 +1,6 @@
 package nju.SEIII.EASIEST;
 
-import nju.SEIII.EASIEST.sentistrength.SentiStrength;
+import nju.SEIII.EASIEST.SentiStrength.SentiStrength;
 
 public class Main {
     public static void main(String[] args) {
