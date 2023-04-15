@@ -99,7 +99,7 @@ public class ClassificationStatistics {
      * @param iDataCount       the number of data points
      * @param estCorr          a 2D array to store the confusion table
      */
-    public static void TrinaryOrBinaryConfusionTable(int[] iTrinaryEstimate, int[] iTrinaryCorrect,
+    public static void trinaryOrBinaryConfusionTable(int[] iTrinaryEstimate, int[] iTrinaryCorrect,
                                                      int iDataCount, int[][] estCorr) {
         // Initialize the confusion table to 0
         for (int i = 0; i <= 2; i++) {

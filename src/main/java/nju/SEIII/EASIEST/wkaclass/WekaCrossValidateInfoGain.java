@@ -136,7 +136,7 @@ public class WekaCrossValidateInfoGain
             if(!bArgumentRecognised[i])
                 System.out.println("Unrecognised command - wrong spelling or case?: " + args[i]);
 
-        ReportParameters(args, minFeatures, maxFeatures, stepFeatures, iterations, classifierName, classifierExclude, addToClasspath, instructionFilename, inputArffFilename, resultsFileName, summaryResultsFileName);
+        reportParameters(args, minFeatures, maxFeatures, stepFeatures, iterations, classifierName, classifierExclude, addToClasspath, instructionFilename, inputArffFilename, resultsFileName, summaryResultsFileName);
         if(instructionFilename.equals("-"))
         {
             if(inputArffFilename.equals("-") || resultsFileName.equals("-") || summaryResultsFileName.equals("-"))
@@ -204,7 +204,7 @@ public class WekaCrossValidateInfoGain
         }
     }
 
-    public static void ReportParameters(String[] args, int minFeatures, int maxFeatures, int stepFeatures, int iterations, String classifierName, String classifierExclude, String addToClasspath,
+    public static void reportParameters(String[] args, int minFeatures, int maxFeatures, int stepFeatures, int iterations, String classifierName, String classifierExclude, String addToClasspath,
                                         String instructionFilename, String inputFilename, String resultsFileName, String summaryResultsFileName)
     {
         System.out.println("InfoGain method: default options or values set by command line:");
@@ -266,7 +266,7 @@ public class WekaCrossValidateInfoGain
                 options = " -i -o \u2013t";
                 schemeLibLINEAR.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeLibLINEAR, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "LibLin", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "LibLin", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -286,7 +286,7 @@ public class WekaCrossValidateInfoGain
                 options = "-s 0";
                 schemeLibSVM.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeLibSVM, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "LibSVM", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "LibSVM", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -305,7 +305,7 @@ public class WekaCrossValidateInfoGain
                 options = "-C 1.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"";
                 schemeSMO.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeSMO, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "SMO", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "SMO", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -324,7 +324,7 @@ public class WekaCrossValidateInfoGain
                 options = "-I 0 -M 500 -H 50 -W 0.0";
                 schemeSLOG.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeSLOG, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "SLOG", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "SLOG", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -339,7 +339,7 @@ public class WekaCrossValidateInfoGain
                 Evaluation eval = new Evaluation(data);
                 NaiveBayes schemeBayes = new NaiveBayes();
                 eval.crossValidateModel(schemeBayes, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "BAYES", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "BAYES", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -356,7 +356,7 @@ public class WekaCrossValidateInfoGain
                 options = "-P 100 -S 1 -I 10 -W weka.classifiers.trees.DecisionStump";
                 schemeAda.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeAda, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "ADA", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "ADA", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -373,7 +373,7 @@ public class WekaCrossValidateInfoGain
                 options = "-W weka.classifiers.functions.SMOreg -- -C 1.0 -N 0 -I \"weka.classifiers.functions.supportVector.RegSMOImproved -L 0.0010 -W 1 -P 1.0E-12 -T 0.0010 -V\" -K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"";
                 schemeSMOreg.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeSMOreg, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "SMOreg", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "SMOreg", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -390,7 +390,7 @@ public class WekaCrossValidateInfoGain
                 options = "-F 3 -N 2.0 -O 2 -S 1";
                 schemeJrip.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeJrip, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "JRIP", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "JRIP", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -407,7 +407,7 @@ public class WekaCrossValidateInfoGain
                 options = "-X 1 -S \"weka.attributeSelection.BestFirst -D 1 -N 5\"";
                 schemeDec.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeDec, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "DEC", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "DEC", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -424,7 +424,7 @@ public class WekaCrossValidateInfoGain
                 options = "-C 0.25 -M 2";
                 schemeJ48.setOptions(Utils.splitOptions(options));
                 eval.crossValidateModel(schemeJ48, data, 10, new Random(randomSeed), new Object[0]);
-                PrintClassificationResults(eval, arffFileName, "J48", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
+                printClassificationResults(eval, arffFileName, "J48", randomSeed, features, options, allResultsFilename, summaryResultsFilename);
                 System.out.println(Utilities.timeGap(start, Utilities.getNow()) + " taken");
             }
             catch(Exception e)
@@ -434,7 +434,7 @@ public class WekaCrossValidateInfoGain
         return lessFeaturesRequestedThanData;
     }
 
-    public static void PrintClassificationResults(Evaluation eval, String arffFilename, String classifierName, int randomSeed, int features, String options, String allResultsFilename, String summaryResultsFilename)
+    public static void printClassificationResults(Evaluation eval, String arffFilename, String classifierName, int randomSeed, int features, String options, String allResultsFilename, String summaryResultsFilename)
         throws Exception
     {
         FileOutputStream fout = new FileOutputStream(allResultsFilename, true);

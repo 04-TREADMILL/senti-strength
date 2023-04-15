@@ -216,14 +216,14 @@ public class Paragraph {
                 sNextSentence = sParagraph.substring(iLastSentenceEnd + 1, iPos);
                 iLastSentenceEnd = iPos + 3;
                 iNextBr = sParagraph.indexOf("<br>", iNextBr + 2);
-            } else if (this.b_IsSentenceEndPunctuation(sNextChar)) {
+            } else if (this.b_isSentenceEndPunctuation(sNextChar)) {
                 bPunctuationIndicatesSentenceEnd = true;
             } else if (sNextChar.compareTo(" ") == 0) {
                 if (bPunctuationIndicatesSentenceEnd) {
                     sNextSentence = sParagraph.substring(iLastSentenceEnd + 1, iPos);
                     iLastSentenceEnd = iPos;
                 }
-            } else if (this.b_IsAlphanumeric(sNextChar) && bPunctuationIndicatesSentenceEnd) {
+            } else if (this.b_isAlphanumeric(sNextChar) && bPunctuationIndicatesSentenceEnd) {
                 sNextSentence = sParagraph.substring(iLastSentenceEnd + 1, iPos);
                 iLastSentenceEnd = iPos - 1;
             }
@@ -452,7 +452,7 @@ public class Paragraph {
      * @param sChar the string to be checked
      * @return true if the string is "." or "!" or "?", false otherwise
      */
-    private boolean b_IsSentenceEndPunctuation(String sChar) {
+    private boolean b_isSentenceEndPunctuation(String sChar) {
         return sChar.compareTo(".") == 0 || sChar.compareTo("!") == 0 || sChar.compareTo("?") == 0;
     }
 
@@ -462,7 +462,7 @@ public class Paragraph {
      * @param sChar the string character to be checked
      * @return true if the character is alphanumeric, false otherwise
      */
-    private boolean b_IsAlphanumeric(String sChar) {
+    private boolean b_isAlphanumeric(String sChar) {
         return sChar.compareToIgnoreCase("a") >= 0 && sChar.compareToIgnoreCase("z") <= 0 ||
                 sChar.compareTo("0") >= 0 && sChar.compareTo("9") <= 0 || sChar.compareTo("$") == 0 ||
                 sChar.compareTo("£") == 0 || sChar.compareTo("'") == 0;

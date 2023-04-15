@@ -1472,7 +1472,7 @@ public class Corpus {
                     iMultiOptimisations, wResultsWriter, wTermStrengthWriter);
             wResultsWriter.close();
             wTermStrengthWriter.close();
-            SummariseMultiple10FoldValidations(sOutFileName, sOutFileName + "_sum.txt");
+            summariseMultiple10FoldValidations(sOutFileName, sOutFileName + "_sum.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1580,7 +1580,7 @@ public class Corpus {
                                 igParagraphCount, false);
                 fTrinaryCorrectPoportion = (float) iTrinaryCorrect / (float) igParagraphCount;
                 fTrinaryCorrectWithin1Poportion = (float) iTrinaryCorrectWithin1 / (float) igParagraphCount;
-                ClassificationStatistics.TrinaryOrBinaryConfusionTable(iTrinaryOrScaleClassAll,
+                ClassificationStatistics.trinaryOrBinaryConfusionTable(iTrinaryOrScaleClassAll,
                         igTrinaryCorrect, igParagraphCount, estCorr);
             } else if (options.bgScaleMode) {
                 iTrinaryCorrect = ClassificationStatistics.accuracy(igScaleCorrect, iTrinaryOrScaleClassAll,
@@ -1940,7 +1940,7 @@ public class Corpus {
      * @param sInputFile  The path of the input file to read.
      * @param sOutputFile The path of the output file to write.
      */
-    public void SummariseMultiple10FoldValidations(String sInputFile, String sOutputFile) {
+    public void summariseMultiple10FoldValidations(String sInputFile, String sOutputFile) {
         int iDataRows = 28;
         int iLastOptionCol = 24;
         BufferedReader rResults = null;
