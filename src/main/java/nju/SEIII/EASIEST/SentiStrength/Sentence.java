@@ -321,12 +321,9 @@ public class Sentence {
                 this.makeSentimentIDList();
             }
 
-            if (this.igSentimentIDListCount != 0) {
-                if (Sort.i_FindIntPositionInSortedArray(iSentimentWordID, this.igSentimentIDList, 1,
-                        this.igSentimentIDListCount) >= 0) {
-                    this.calculateSentenceSentimentScore();
-                }
-
+            if (this.igSentimentIDListCount != 0 && Sort.i_FindIntPositionInSortedArray(iSentimentWordID, this.igSentimentIDList, 1,
+                    this.igSentimentIDListCount) >= 0) {
+                this.calculateSentenceSentimentScore();
             }
         }
     }

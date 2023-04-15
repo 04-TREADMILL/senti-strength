@@ -81,7 +81,7 @@ public class EvaluativeTerms {
       while ((sLine = rReader.readLine()) != null)
       // Check if the line is not empty and does not start with "##"
       {
-        if (sLine != "" && sLine.indexOf("##") != 0 && sLine.indexOf("\t") > 0) {
+        if (!sLine.equals("") && sLine.indexOf("##") != 0 && sLine.indexOf("\t") > 0) {
           String[] sData = sLine.split("\t");
           // Check if the resulting array has more than two elements and the third element does not start with "##"
           if (sData.length > 2 && sData[2].indexOf("##") != 0) {

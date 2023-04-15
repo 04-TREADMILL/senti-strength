@@ -298,7 +298,7 @@ public class ClassificationStatistics {
                 iDataCount++;
             }
         }
-
+        if (iDataCount == 0) return 0;
         return fAMeanPE / (double) iDataCount;
     }
 
@@ -323,7 +323,7 @@ public class ClassificationStatistics {
                 iDataCount++;
             }
         }
-
+        if (iDataCount == 0) return 0;
         return fAMeanPE / (double) iDataCount;
     }
 

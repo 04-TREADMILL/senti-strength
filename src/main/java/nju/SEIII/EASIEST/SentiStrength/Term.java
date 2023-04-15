@@ -99,6 +99,9 @@ public class Term {
                     break;
                 case 2:
                     this.codePunctuation(sWordAndPunctuation);
+                    break;
+                default:
+                    break;
             }
 
             return -1;

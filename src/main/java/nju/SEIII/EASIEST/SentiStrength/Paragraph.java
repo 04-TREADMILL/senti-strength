@@ -374,17 +374,13 @@ public class Paragraph {
                 this.makeSentimentIDList();
             }
 
-            if (this.igSentimentIDListCount != 0) {
-                if (Sort.i_FindIntPositionInSortedArray(iSentimentWordID, this.igSentimentIDList, 1,
-                        this.igSentimentIDListCount) >= 0) {
-                    for (int iSentence = 1; iSentence <= this.igSentenceCount; ++iSentence) {
-                        this.sentence[iSentence].reClassifyClassifiedSentenceForSentimentChange(
-                                iSentimentWordID);
-                    }
-
-                    this.calculateParagraphSentimentScores();
+            if (this.igSentimentIDListCount != 0 && Sort.i_FindIntPositionInSortedArray(iSentimentWordID, this.igSentimentIDList, 1,
+                    this.igSentimentIDListCount) >= 0) {
+                for (int iSentence = 1; iSentence <= this.igSentenceCount; ++iSentence) {
+                    this.sentence[iSentence].reClassifyClassifiedSentenceForSentimentChange(
+                            iSentimentWordID);
                 }
-
+                this.calculateParagraphSentimentScores();
             }
         }
     }
@@ -598,7 +594,7 @@ public class Paragraph {
                             this.igTrinarySentiment = 1;
                             if (this.options.bgExplainClassification) {
                                 this.sgClassificationRationale.append("[overall result 1 as pos > -neg * " +
-                                                this.options.fgNegativeSentimentMultiplier + "]");
+                                        this.options.fgNegativeSentimentMultiplier + "]");
                             }
 
                             return;
@@ -609,7 +605,7 @@ public class Paragraph {
                             this.igTrinarySentiment = -1;
                             if (this.options.bgExplainClassification) {
                                 this.sgClassificationRationale.append("[overall result -1 as pos < -neg * " +
-                                                this.options.fgNegativeSentimentMultiplier + "]");
+                                        this.options.fgNegativeSentimentMultiplier + "]");
                             }
 
                             return;
@@ -625,7 +621,7 @@ public class Paragraph {
                             this.igTrinarySentiment = 0;
                             if (this.options.bgExplainClassification) {
                                 this.sgClassificationRationale.append("[trinary result = 0 as pos = -neg * " +
-                                                this.options.fgNegativeSentimentMultiplier + "]");
+                                        this.options.fgNegativeSentimentMultiplier + "]");
                             }
                         }
                     }

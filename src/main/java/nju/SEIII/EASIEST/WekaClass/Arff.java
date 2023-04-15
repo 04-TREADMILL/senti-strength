@@ -1337,7 +1337,6 @@ public class Arff {
                         fAttributeEntropy -= p * Math.log(p) / Math.log(2.0D);
                     }
                 }
-
                 fAttributeEntropySum += fAttributeEntropy * iAttributeValueFreq / iDataCount;
             }
 

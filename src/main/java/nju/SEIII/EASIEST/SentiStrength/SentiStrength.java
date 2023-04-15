@@ -83,8 +83,8 @@ public class SentiStrength {
         classifier.initialiseAndRun(args);
     }
 
-    public String[] getinput() {
-        return null;
+    public String[] getInput() {
+        return new String[0];
     }
 
     public void initialiseAndRun(String[] args) {
@@ -852,10 +852,6 @@ public class SentiStrength {
                             e.printStackTrace();
                         }
                         System.out.println("Analysis of text: " + decodedText);
-                        break;
-                    }
-
-                    if (inputLine.equals("MikeSpecialMessageToEnd.")) {
                         break;
                     }
                 }
