@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 import nju.SEIII.EASIEST.Utilities.FileOps;
@@ -145,7 +148,7 @@ public class Corpus {
             unusedTermsClassificationIndex.printIndexWithScaleValues(saveFile, iMinFreq);
         } else if (options.bgTrinaryMode && options.bgBinaryVersionOfTrinaryMode) {
             unusedTermsClassificationIndex.printIndexWithBinaryValues(saveFile, iMinFreq);
-        } else if (options.bgTrinaryMode && !options.bgBinaryVersionOfTrinaryMode) {
+        } else if (options.bgTrinaryMode) {
             unusedTermsClassificationIndex.printIndexWithTrinaryValues(saveFile, iMinFreq);
         } else {
             unusedTermsClassificationIndex.printIndexWithPosNegValues(saveFile, iMinFreq);
@@ -1003,10 +1006,10 @@ public class Corpus {
             }
             rReader.close();
             wWriter.close();
-            File original = new File(sInputFile);
-            original.delete();
+            Path original= Paths.get(sInputFile);
+            Files.delete(original);
             File newFile = new File(sTempFile);
-            newFile.renameTo(original);
+            newFile.renameTo(new File(sInputFile));
         } catch (FileNotFoundException e) {
             System.out.println("Could not find input file: " + sInputFile);
             e.printStackTrace();

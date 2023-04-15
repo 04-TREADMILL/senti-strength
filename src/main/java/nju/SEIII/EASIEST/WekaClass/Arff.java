@@ -12,6 +12,9 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -27,11 +30,11 @@ import nju.SEIII.EASIEST.SentiStrength.Paragraph;
 import nju.SEIII.EASIEST.SentiStrength.TextParsingOptions;
 
 public class Arff {
-    public static final int igArffNone = 0;
-    public static final int igArffBinary = 1;
-    public static final int igArffTrinary = 2;
-    public static final int igArffScale = 3;
-    public static final int igArffPosNeg = 4;
+    //public static final int igArffNone = 0;
+    //public static final int igArffBinary = 1;
+    //public static final int igArffTrinary = 2;
+    //public static final int igArffScale = 3;
+    //public static final int igArffPosNeg = 4;
     public static boolean bgSaveArffAsCondensed = true;
 
     public void main(String[] args) {
@@ -187,8 +190,6 @@ public class Arff {
                 System.out.println();
                 convertArffToText(sClassifiedUnlabelledArff, sClassifiedUnlabelledTextFile);
                 sMergedTextFile = FileOps.s_ChopFileNameExtension(sClassifiedUnlabelledTextFile) + "_Pmerged.txt";
-                System.out.println("mergeLabelledAndUnlabelledTextFiles " + sClassifiedUnlabelledTextFile + ", " + sUnlabelledTextFile + " -> " + sMergedTextFile);
-                mergeLabelledAndUnlabelledTextFiles(sClassifiedUnlabelledTextFile, sUnlabelledTextFile, sMergedTextFile);
             } else {
                 System.out.println("predictArffClass " + sLabelledUnlabelled[0] + " training for " + sLabelledUnlabelled[1]);
                 System.out.println();
@@ -198,9 +199,9 @@ public class Arff {
                 System.out.println();
                 convertArffToText(sClassifiedUnlabelledArff, sClassifiedUnlabelledTextFile);
                 sMergedTextFile = FileOps.s_ChopFileNameExtension(sClassifiedUnlabelledTextFile) + "_merged.txt";
-                System.out.println("mergeLabelledAndUnlabelledTextFiles " + sClassifiedUnlabelledTextFile + ", " + sUnlabelledTextFile + " -> " + sMergedTextFile);
-                mergeLabelledAndUnlabelledTextFiles(sClassifiedUnlabelledTextFile, sUnlabelledTextFile, sMergedTextFile);
             }
+            System.out.println("mergeLabelledAndUnlabelledTextFiles " + sClassifiedUnlabelledTextFile + ", " + sUnlabelledTextFile + " -> " + sMergedTextFile);
+            mergeLabelledAndUnlabelledTextFiles(sClassifiedUnlabelledTextFile, sUnlabelledTextFile, sMergedTextFile);
         } else if (sUnlabelledTextFile.length() > 0 && sLabelledTextFile.length() > 0 && sTextFileOut.length() > 0) {
             System.out.println("mergeLabelledAndUnlabelledTextFiles " + sLabelledTextFile + ", " + sUnlabelledTextFile + ", " + sTextFileOut);
             mergeLabelledAndUnlabelledTextFiles(sLabelledTextFile, sUnlabelledTextFile, sTextFileOut);
@@ -231,7 +232,9 @@ public class Arff {
         String[] sLabelledArffFiles = convertSentimentTextToArffMultiple(sLabelledTextFile, true, textParsingOptions, classOptions, resources, iClassType, iMinFeatureFrequency, "");
 
         int i;
-        for (i = 0; i < 99 && Objects.requireNonNull(sLabelledArffFiles)[i] != null && !sLabelledArffFiles[i].equals(""); ++i) {
+        for (i = 0; i < 99; ++i) {
+            if (Objects.requireNonNull(sLabelledArffFiles)[i] == null) break;
+            if (sLabelledArffFiles[i].equals("")) break;
         }
 
         int iLabelledArffFileCount = i;
@@ -311,7 +314,7 @@ public class Arff {
             BufferedReader rReader = new BufferedReader(new InputStreamReader(new FileInputStream(sSentiTextFileIn), StandardCharsets.UTF_8));
             String sLine;
             if (bHeaderLine && rReader.ready()) {
-                sLine = rReader.readLine();
+                rReader.readLine();
             }
 
             while (true) {
@@ -451,7 +454,7 @@ public class Arff {
     }
 
     private static boolean writeArffHeadersFromIndex(String sSourceFile, StringIndex stringIndex, int iSentimentType, int iNgram, int iMinFeatureFrequency, boolean bArffIndex, boolean[] bArffIndexEntryUsed, BufferedWriter wWriter) {
-        String sIndexWord = "";
+        String sIndexWord;
 
         try {
             wWriter.write("%Arff file from Arff.java\n");
@@ -678,14 +681,22 @@ public class Arff {
             String sArffTemp = sArffFileIn + ".temp";
             f = new File(sArffTemp);
             if (f.exists()) {
-                f.delete();
+                try {
+                    Path f_path = Paths.get(f.toURI());
+                    Files.delete(f_path);
+                } catch (IOException e) {
+                }
             }
 
             deleteColumnFromArff(sArffFileIn, iColToDelete, sArffTemp);
             moveColumnToEndOfArff(sArffTemp, 1, sArffFileOut);
             f = new File(sArffTemp);
             if (f.exists()) {
-                f.delete();
+                try {
+                    Path f_path = Paths.get(f.toURI());
+                    Files.delete(f_path);
+                } catch (IOException e) {
+                }
             }
 
             return true;
@@ -698,7 +709,7 @@ public class Arff {
             System.out.println("Could not find Arff file: " + sArffFileIn);
             return false;
         } else {
-            String[] sAttributes = null;
+            String[] sAttributes;
             int[] iAttArr = new int[1];
 
             try {
@@ -765,7 +776,11 @@ public class Arff {
                 sOutFile = ngramFileName(sSentiTextFileIn, iNgram);
                 f = new File(sOutFile);
                 if (f.exists()) {
-                    f.delete();
+                    try {
+                        Path f_path = Paths.get(f.toURI());
+                        Files.delete(f_path);
+                    } catch (IOException e) {
+                    }
                 }
 
                 convertSentimentTextToArff(sSentiTextFileIn, sOutFile, bHeaderLine, textParsingOptions, classOptions, resources, iSentimentType, iMinFeatureFrequency, arffStringIndex);
@@ -773,7 +788,11 @@ public class Arff {
                     String sNewCombinedOutFile = oneToNgramFileName(sSentiTextFileIn, iNgram);
                     f = new File(sNewCombinedOutFile);
                     if (f.exists()) {
-                        f.delete();
+                        try {
+                            Path f_path = Paths.get(f.toURI());
+                            Files.delete(f_path);
+                        } catch (IOException e) {
+                        }
                     }
 
                     combineTwoARFFs(sLastCombinedOutFile, sOutFile, false, sNewCombinedOutFile);
@@ -795,7 +814,11 @@ public class Arff {
                     sFinalOutFile[iOutfileLast] = ngramFileNamePosNeg(sSentiTextFileIn, iNgram, false);
                     deleteColAndMoveRemainingFirstColToEnd(sOutFile, 1, sFinalOutFile[iOutfileLast]);
                     f = new File(sOutFile);
-                    f.delete();
+                    try {
+                        Path f_path = Paths.get(f.toURI());
+                        Files.delete(f_path);
+                    } catch (IOException e) {
+                    }
                     if (iNgram > 1) {
                         sOutFile = oneToNgramFileName(sSentiTextFileIn, iNgram);
                         ++iOutfileLast;
@@ -805,7 +828,11 @@ public class Arff {
                         sFinalOutFile[iOutfileLast] = oneToNgramFileNamePosNeg(sSentiTextFileIn, iNgram, false);
                         deleteColAndMoveRemainingFirstColToEnd(sOutFile, 1, sFinalOutFile[iOutfileLast]);
                         f = new File(sOutFile);
-                        f.delete();
+                        try {
+                            Path f_path = Paths.get(f.toURI());
+                            Files.delete(f_path);
+                        } catch (IOException e) {
+                        }
                     }
                 }
             } else if (iSentimentType == 1 || iSentimentType == 2 || iSentimentType == 3) {
@@ -813,23 +840,29 @@ public class Arff {
                     ++iOutfileLast;
                     sFinalOutFile[iOutfileLast] = ngramFileName(sSentiTextFileIn, iNgram);
                     File g = new File(sFinalOutFile[iOutfileLast] + ".temp");
-                    f = new File(sFinalOutFile[iOutfileLast]);
-                    f.renameTo(g);
-                    moveColumnToEndOfArff(sFinalOutFile[iOutfileLast] + ".temp", 1, sFinalOutFile[iOutfileLast]);
-                    g.delete();
+                    deleteTmpFile(iOutfileLast, sFinalOutFile, g);
                     if (iNgram > 1) {
                         ++iOutfileLast;
                         sFinalOutFile[iOutfileLast] = oneToNgramFileName(sSentiTextFileIn, iNgram);
                         g = new File(sFinalOutFile[iOutfileLast] + ".temp");
-                        f = new File(sFinalOutFile[iOutfileLast]);
-                        f.renameTo(g);
-                        moveColumnToEndOfArff(sFinalOutFile[iOutfileLast] + ".temp", 1, sFinalOutFile[iOutfileLast]);
-                        g.delete();
+                        deleteTmpFile(iOutfileLast, sFinalOutFile, g);
                     }
                 }
             }
 
             return sFinalOutFile;
+        }
+    }
+
+    private static void deleteTmpFile(int iOutfileLast, String[] sFinalOutFile, File g) {
+        File f;
+        f = new File(sFinalOutFile[iOutfileLast]);
+        f.renameTo(g);
+        moveColumnToEndOfArff(sFinalOutFile[iOutfileLast] + ".temp", 1, sFinalOutFile[iOutfileLast]);
+        try {
+            Path g_path = Paths.get(g.toURI());
+            Files.delete(g_path);
+        } catch (IOException e) {
         }
     }
 
@@ -839,8 +872,8 @@ public class Arff {
             System.out.println("Could not find Arff file: " + sArffFile);
             return false;
         } else {
-            String[] sAttributes = null;
-            int iAttributesCount = 0;
+            String[] sAttributes;
+            int iAttributesCount;
             int[] iAttArr = new int[1];
 
             try {
@@ -904,7 +937,7 @@ public class Arff {
     private static boolean printSelectedData(BufferedReader srArff, boolean[] bDeleteCol, int iAttributeCount, BufferedWriter swOutput, boolean bPrintDeletedColsAtEnd, boolean bVerbose) {
         int[] iAttID = new int[iAttributeCount + 1];
         int[] iData = new int[iAttributeCount + 1];
-        int iPairs = 1;
+        int iPairs;
         int iCount = 0;
         int iLastPrintedAttribute = 0;
         int[] iNewAttributeID = new int[iAttributeCount + 1];
@@ -1229,7 +1262,8 @@ public class Arff {
         int[] iIndex = new int[iAttributeCount + 1];
 
         int iCol;
-        for (iCol = 1; iCol <= iAttributeCount; iIndex[iCol] = iCol++) {
+        for (iCol = 1; iCol <= iAttributeCount; iCol++) {
+            iIndex[iCol] = iCol;
         }
 
         Sort.quickSortNumbersDescendingViaIndex(fColIG, iIndex, 1, iAttributeCount);
@@ -1398,7 +1432,7 @@ public class Arff {
             writeArffAttributesAndData(sHeader, sAttributes, iData, iAttributeCount, iDataCount, bUseCol, sArffOut);
         } catch (Exception var11) {
             System.out.println("makeArffWithTopNAttributes error - probably insufficient to create attribute x data array");
-            System.out.println("attribute " + iAttributeCount + " data " + iDataCount + " attribute x data " + Integer.toString((iAttributeCount + 1) * (iAttributeCount + 1)));
+            System.out.println("attribute " + iAttributeCount + " data " + iDataCount + " attribute x data " + (iAttributeCount + 1) * (iAttributeCount + 1));
             var11.printStackTrace();
             System.exit(0);
         }

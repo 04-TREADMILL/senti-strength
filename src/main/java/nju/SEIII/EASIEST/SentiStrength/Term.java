@@ -22,9 +22,9 @@ import java.util.Objects;
  * </ul></p>
  */
 public class Term {
-    private final int igContentTypeWord = 1;
-    private final int igContentTypePunctuation = 2;
-    private final int igContentTypeEmoticon = 3;
+    //private final int igContentTypeWord = 1;
+    //private final int igContentTypePunctuation = 2;
+    //private final int igContentTypeEmoticon = 3;
     int igEmoticonStrength = 0;
     private int igContentType = 0;
     private String sgOriginalWord = "";
