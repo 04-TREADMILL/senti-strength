@@ -504,40 +504,40 @@ public class Sentence {
                 for (int iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
                     if (this.bgIncludeTerm[iTerm]) {
                         int iTermsChecked;
-                        if (!this.term[iTerm].isWord()) {
-                            if (this.term[iTerm].isEmoticon()) {
-                                // If the term is emoticon
-                                iTermsChecked = this.term[iTerm].getEmoticonSentimentStrength();
-                                if (iTermsChecked != 0) {
-                                    if (iWordTotal > 0) {
-                                        // If there are previous words, add the sentiment score to the word before
-                                        fSentiment[iWordTotal] +=
-                                                this.term[iTerm].getEmoticonSentimentStrength();
-                                        if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale.append(this.term[iTerm].getEmoticon()).append(" [").append(this.term[iTerm].getEmoticonSentimentStrength()).append(" emoticon] ");
-                                        }
-                                    } else {
-                                        // if there is no words, store the sentiment score in a new space
-                                        ++iWordTotal;
-                                        fSentiment[iWordTotal] = iTermsChecked;
-                                        if (this.options.bgExplainClassification) {
-                                            this.sgClassificationRationale.append(this.term[iTerm].getEmoticon()).append(" [").append(this.term[iTerm].getEmoticonSentimentStrength()).append(" emoticon]");
-                                        }
+
+                        if (this.term[iTerm].isEmoticon()) {
+                            // If the term is emoticon
+                            iTermsChecked = this.term[iTerm].getEmoticonSentimentStrength();
+                            if (iTermsChecked != 0) {
+                                if (iWordTotal > 0) {
+                                    // If there are previous words, add the sentiment score to the word before
+                                    fSentiment[iWordTotal] +=
+                                            this.term[iTerm].getEmoticonSentimentStrength();
+                                    if (this.options.bgExplainClassification) {
+                                        this.sgClassificationRationale.append(this.term[iTerm].getEmoticon()).append(" [").append(this.term[iTerm].getEmoticonSentimentStrength()).append(" emoticon] ");
+                                    }
+                                } else {
+                                    // if there is no words, store the sentiment score in a new space
+                                    ++iWordTotal;
+                                    fSentiment[iWordTotal] = iTermsChecked;
+                                    if (this.options.bgExplainClassification) {
+                                        this.sgClassificationRationale.append(this.term[iTerm].getEmoticon()).append(" [").append(this.term[iTerm].getEmoticonSentimentStrength()).append(" emoticon]");
                                     }
                                 }
-                            } else if (this.term[iTerm].isPunctuation()) {
-                                // If the term is punctuation,
-                                // Punctuation long enough && punctuation contains "!" && has word before
-                                if (this.term[iTerm].getPunctuationEmphasisLength() >=
-                                        this.options.igMinPunctuationWithExclamationToChangeSentenceSentiment &&
-                                        this.term[iTerm].punctuationContains("!") && iWordTotal > 0) {
-                                    bSentencePunctuationBoost = true;
-                                }
-                                if (this.options.bgExplainClassification) {
-                                    this.sgClassificationRationale.append(this.term[iTerm].getOriginalText());
-                                }
                             }
-                        } else {
+                        } else if (this.term[iTerm].isPunctuation()) {
+                            // If the term is punctuation,
+                            // Punctuation long enough && punctuation contains "!" && has word before
+                            if (this.term[iTerm].getPunctuationEmphasisLength() >=
+                                    this.options.igMinPunctuationWithExclamationToChangeSentenceSentiment &&
+                                    this.term[iTerm].punctuationContains("!") && iWordTotal > 0) {
+                                bSentencePunctuationBoost = true;
+                            }
+                            if (this.options.bgExplainClassification) {
+                                this.sgClassificationRationale.append(this.term[iTerm].getOriginalText());
+                            }
+
+                        } else if (this.term[iTerm].isWord()) {
                             // If the term is a word, get the sentiment score
                             ++iWordTotal;
                             // first term || not a proper noun || previous term is ":" || previous term like "@*"
@@ -769,9 +769,7 @@ public class Sentence {
                 ++fMaxPos;
 
                 // Calculate positive and negative score based on the method
-                int var10000 = this.options.igEmotionSentenceCombineMethod;
-                this.options.getClass();
-                if (var10000 == 1) {
+                if (this.options.igEmotionSentenceCombineMethod == 1) {
                     if (iPosWords == 0) {
                         this.igPositiveSentiment = 1;
                     } else {
@@ -786,8 +784,7 @@ public class Sentence {
                                 ((fTotalNeg - iNegWords) + 0.55D) / iNegWords);
                     }
                 } else {
-                    this.options.getClass();
-                    if (var10000 == 2) {
+                    if (this.options.igEmotionSentenceCombineMethod == 2) {
                         this.igPositiveSentiment = Math.round(fTotalPos) + iPosWords;
                         this.igNegativeSentiment = Math.round(fTotalNeg) - iNegWords;
                     } else {
@@ -892,9 +889,7 @@ public class Sentence {
                 }
 
                 this.adjustSentimentForIrony();
-                var10000 = this.options.igEmotionSentenceCombineMethod;
-                this.options.getClass();
-                if (var10000 != 2) {
+                if (this.options.igEmotionSentenceCombineMethod != 2) {
                     if (this.igPositiveSentiment > 5) {
                         this.igPositiveSentiment = 5;
                     }
