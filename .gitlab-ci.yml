@@ -18,6 +18,7 @@ cache:
   paths:
     - .gradle/wrapper
     - .gradle/caches
+    - build
 
 stages:
 - build
