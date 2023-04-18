@@ -30,11 +30,10 @@ dependencies {
     // for test
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-
     // for machine learning
     implementation 'nz.ac.waikato.cms.weka:weka-stable:3.8.6'
     implementation files('libs/LibSVM.jar', 'libs/LibLINEAR.jar')
-    //lombok
+    // lombok
     implementation 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
 }

@@ -22,6 +22,7 @@ cache:
 stages:
 - build
 - test
+- release
 
 build:
   stage: build
@@ -39,6 +40,20 @@ test:
   stage: test
   script:
     - ./gradlew check
+
+release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never                                  # Do not run this job when a tag is created manually
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  # Run this job when commits are pushed or merged to the default branch
+  script:
+    - echo "Running the release job."
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: 'Release $CI_COMMIT_TAG'
+    description: 'Release created using the release-cli.'
 
 after_script:
   - echo "End CI"
