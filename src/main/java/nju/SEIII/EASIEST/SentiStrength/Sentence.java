@@ -63,8 +63,7 @@ public class Sentence {
     }
 
     /**
-     * Adds each term's text in this object's term array to a new term index in the provided
-     * UnusedTermsClassificationIndex object.
+     * Adds each term's in this sentence to UnusedTermsClassificationIndex.
      *
      * @param unusedTermClassificationIndex The UnusedTermsClassificationIndex object to add the terms to
      */
@@ -76,7 +75,7 @@ public class Sentence {
     }
 
     /**
-     * Adds strings to a StringIndex object based on a text parsing options object and other options.
+     * Adds strings to a StringIndex object based on text parsing options and other options.
      *
      * @param stringIndex        The StringIndex object to add strings to
      * @param textParsingOptions The TextParsingOptions object to use for parsing the text
@@ -89,12 +88,15 @@ public class Sentence {
         String sEncoded;
         int iStringPos;
         int iTermsChecked = 0;
+
+        // Don't need special processing
         if (textParsingOptions.bgIncludePunctuation && textParsingOptions.igNgramSize == 1 &&
                 !textParsingOptions.bgUseTranslations && !textParsingOptions.bgAddEmphasisCode) {
             for (int i = 1; i <= this.igTermCount; ++i) {
                 stringIndex.addString(this.term[i].getText(), bRecordCount);
             }
 
+            // Update checked term
             iTermsChecked = this.igTermCount;
         } else {
             StringBuilder sText = new StringBuilder();
@@ -103,38 +105,46 @@ public class Sentence {
 
             while (iCurrentTerm < this.igTermCount) {
                 ++iCurrentTerm;
+                // Check if punctuation should be included or if term is not punctuation
                 if (textParsingOptions.bgIncludePunctuation || !this.term[iCurrentTerm].isPunctuation()) {
                     ++iTermCount;
+                    // Add space if not first term in sequence, otherwise reset StringBuilder
                     if (iTermCount > 1) {
                         sText.append(" ");
                     } else {
                         sText = new StringBuilder();
                     }
 
+                    // Append term text or translation to StringBuilder depending on options
                     if (textParsingOptions.bgUseTranslations) {
                         sText.append(this.term[iCurrentTerm].getTranslation());
                     } else {
                         sText.append(this.term[iCurrentTerm].getOriginalText());
                     }
 
+                    // Append emphasis code if enabled and term contains emphasis
                     if (textParsingOptions.bgAddEmphasisCode && this.term[iCurrentTerm].containsEmphasis()) {
                         sText.append("+");
                     }
                 }
 
                 if (iTermCount == textParsingOptions.igNgramSize) {
+                    // Check if the number of terms in sequence equals the desired n-gram size
                     if (bArffIndex) {
+                        // If using Arff format, encode and find index of n-gram in string index
                         sEncoded = Arff.arffSafeWordEncode(sText.toString().toLowerCase(), false);
                         iStringPos = stringIndex.findString(sEncoded);
                         iTermCount = 0;
+                        // If n-gram exists in string index, increment count, otherwise add to string index
                         if (iStringPos > -1) {
                             stringIndex.add1ToCount(iStringPos);
                         }
                     } else {
+                        // Add n-gram to string index
                         stringIndex.addString(sText.toString().toLowerCase(), bRecordCount);
                         iTermCount = 0;
                     }
-
+                    // Skip over terms already included in n-gram
                     iCurrentTerm += 1 - textParsingOptions.igNgramSize;
                     ++iTermsChecked;
                 }
@@ -153,8 +163,10 @@ public class Sentence {
      */
     public void setSentence(String sSentence, ClassificationResources classResources,
                             ClassificationOptions newClassificationOptions) {
+        // Set the classification resources and options.
         this.resources = classResources;
         this.options = newClassificationOptions;
+        // Replace apostrophes with spaces if bgAlwaysSplitWordsAtApostrophes option is enabled.
         if (this.options.bgAlwaysSplitWordsAtApostrophes && sSentence.contains("'")) {
             sSentence = sSentence.replace("'", " ");
         }
@@ -163,16 +175,20 @@ public class Sentence {
         int iSegmentListLength = sSegmentList.length;
         int iMaxTermListLength = sSentence.length() + 1;
         this.term = new Term[iMaxTermListLength];
+        // Create an array to hold the boolean values for whether there is a space after each term.
         this.bgSpaceAfterTerm = new boolean[iMaxTermListLength];
         int iPos;
         this.igTermCount = 0;
 
         for (String s : sSegmentList) {
+            // The extracted word is added to the term array.
             for (iPos = 0; iPos >= 0 && iPos < s.length();
                  this.bgSpaceAfterTerm[this.igTermCount] = false) {
                 this.term[++this.igTermCount] = new Term();
+                // Extract the next word, punctuation or emoticon from the segment.
                 int iOffset = this.term[this.igTermCount].extractNextWordOrPunctuationOrEmoticon(
                         s.substring(iPos), this.resources, this.options);
+                // If no word is extracted, set iPos negative.
                 if (iOffset < 0) {
                     iPos = iOffset;
                 } else {
@@ -201,13 +217,17 @@ public class Sentence {
     }
 
     /**
-     * Generates a list of sentiment IDs based on the terms in the sentence.
-     * If the sentiment ID list has not been made, it generates it and stores it.
+     * This method creates a list of sentiment IDs based on the terms in the sentence.
+     * It first counts the number of terms with non-zero sentiment IDs, and then creates an array to hold
+     * the unique sentiment IDs found. It then iterates over the terms again, checking each one for a non-zero sentiment ID.
+     * If a unique sentiment ID is found, it is added to the list. Finally, the list is sorted and the flag for whether
+     * the sentiment ID list has been made is set to true.
      */
     public void makeSentimentIDList() {
         int iSentimentIDTemp;
         this.igSentimentIDListCount = 0;
 
+        // Count the number of terms with non-zero sentiment IDs
         int i;
         for (i = 1; i <= this.igTermCount; ++i) {
             if (this.term[i].getSentimentID() > 0) {
@@ -216,12 +236,14 @@ public class Sentence {
         }
 
         if (this.igSentimentIDListCount > 0) {
+            // Create an array to hold the unique sentiment IDs found
             this.igSentimentIDList = new int[this.igSentimentIDListCount + 1];
             this.igSentimentIDListCount = 0;
 
             for (i = 1; i <= this.igTermCount; ++i) {
                 iSentimentIDTemp = this.term[i].getSentimentID();
                 if (iSentimentIDTemp > 0) {
+                    // Check if the sentiment ID has already been added to the list
                     for (int j = 1; j <= this.igSentimentIDListCount; ++j) {
                         if (iSentimentIDTemp == this.igSentimentIDList[j]) {
                             iSentimentIDTemp = 0;
@@ -229,12 +251,13 @@ public class Sentence {
                         }
                     }
 
+                    // If it is a unique sentiment ID, add it to the list
                     if (iSentimentIDTemp > 0) {
                         this.igSentimentIDList[++this.igSentimentIDListCount] = iSentimentIDTemp;
                     }
                 }
             }
-
+            // Sort the list of sentiment IDs
             Sort.quickSortInt(this.igSentimentIDList, 1, this.igSentimentIDListCount);
         }
 
@@ -363,13 +386,12 @@ public class Sentence {
     }
 
     /**
-     * Marks the terms in the sentence that are valid for sentiment classification.
-     * If the option to ignore sentences without keywords is set, it checks whether
-     * the sentence contains any sentiment keywords, and marks the terms that are
-     * within a certain distance of those keywords as valid for classification.
-     * If no keywords are found, it sets the bgNothingToClassify flag to true.
-     * Otherwise, it sets the bgNothingToClassify flag to false and marks the terms
-     * that are within a certain distance of the keywords as valid for classification.
+     * bgIncludeTerm[] represents whether a term is valid.
+     * This method marks the terms in the sentence that are valid for sentiment classification.
+     * If the option to ignore sentences without keywords is set,
+     * it sets a term valid if it belongs to the keyword,
+     * as well as terms within certain distance(igWordsToIncludeAfterKeyword) from the keywords;
+     * Otherwise, it set all the terms valid
      */
     private void markTermsValidToClassify() {
         this.bgIncludeTerm = new boolean[this.igTermCount + 1];
@@ -377,11 +399,14 @@ public class Sentence {
         if (this.options.bgIgnoreSentencesWithoutKeywords) {
             this.bgNothingToClassify = true;
 
+            // If a term is a keyword, set the term valid
             int iTerm;
+            // Iterate through all the terms
             for (iTermsSinceValid = 1; iTermsSinceValid <= this.igTermCount; ++iTermsSinceValid) {
                 this.bgIncludeTerm[iTermsSinceValid] = false;
                 if (this.term[iTermsSinceValid].isWord()) {
                     for (iTerm = 0; iTerm < this.options.sgSentimentKeyWords.length; ++iTerm) {
+                        // If the term belongs to the keyword
                         if (this.term[iTermsSinceValid].matchesString(this.options.sgSentimentKeyWords[iTerm],
                                 true)) {
                             this.bgIncludeTerm[iTermsSinceValid] = true;
@@ -391,9 +416,12 @@ public class Sentence {
                 }
             }
 
+            // If the sentence has keywords, set the words within certain distance
+            // (igWordsToIncludeAfterKeyword) from keywords valid
             if (!this.bgNothingToClassify) {
                 iTermsSinceValid = 100000;
 
+                // After the keywords
                 for (iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
                     if (this.bgIncludeTerm[iTerm]) {
                         iTermsSinceValid = 0;
@@ -407,6 +435,7 @@ public class Sentence {
 
                 iTermsSinceValid = 100000;
 
+                // Before the keywords
                 for (iTerm = this.igTermCount; iTerm >= 1; --iTerm) {
                     if (this.bgIncludeTerm[iTerm]) {
                         iTermsSinceValid = 0;
@@ -441,41 +470,54 @@ public class Sentence {
         int iWordTotal = 0;
         int iLastBoosterWordScore = 0;
         int iTemp = 0;
+        // Need to check whether it has terms to classify first
+        // since method markTermsValidToClassify() access term list
         if (this.igTermCount == 0) {
+            // No terms to classify
             this.bgNothingToClassify = true;
             this.igNegativeSentiment = -1;
             this.igPositiveSentiment = 1;
         } else {
+            // Has terms to classify
             this.markTermsValidToClassify();
             if (this.bgNothingToClassify) {
                 this.igNegativeSentiment = -1;
                 this.igPositiveSentiment = 1;
             } else {
+                // indicate whether there is punctuation to boost the sentiment score
                 boolean bSentencePunctuationBoost = false;
+                // distance between negate word and sentiment word
                 int iWordsSinceNegative = this.options.igMaxWordsBeforeSentimentToNegate + 2;
                 float[] fSentiment = new float[this.igTermCount + 1];
+
+                // override term strength with idiom strength
                 if (this.options.bgUseIdiomLookupTable) {
                     this.overrideTermStrengthsWithIdiomStrengths(false);
                 }
 
+                // override term strength with object evaluation strength
                 if (this.options.bgUseObjectEvaluationTable) {
                     this.overrideTermStrengthsWithObjectEvaluationStrengths(false);
                 }
 
+                // Caculate sentiment depending on type and all kinds of rules
                 for (int iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
                     if (this.bgIncludeTerm[iTerm]) {
                         int iTermsChecked;
                         if (!this.term[iTerm].isWord()) {
                             if (this.term[iTerm].isEmoticon()) {
+                                // If the term is emoticon
                                 iTermsChecked = this.term[iTerm].getEmoticonSentimentStrength();
                                 if (iTermsChecked != 0) {
                                     if (iWordTotal > 0) {
+                                        // If there are previous words, add the sentiment score to the word before
                                         fSentiment[iWordTotal] +=
                                                 this.term[iTerm].getEmoticonSentimentStrength();
                                         if (this.options.bgExplainClassification) {
                                             this.sgClassificationRationale.append(this.term[iTerm].getEmoticon()).append(" [").append(this.term[iTerm].getEmoticonSentimentStrength()).append(" emoticon] ");
                                         }
                                     } else {
+                                        // if there is no words, store the sentiment score in a new space
                                         ++iWordTotal;
                                         fSentiment[iWordTotal] = iTermsChecked;
                                         if (this.options.bgExplainClassification) {
@@ -484,6 +526,8 @@ public class Sentence {
                                     }
                                 }
                             } else if (this.term[iTerm].isPunctuation()) {
+                                // If the term is punctuation,
+                                // Punctuation long enough && punctuation contains "!" && has word before
                                 if (this.term[iTerm].getPunctuationEmphasisLength() >=
                                         this.options.igMinPunctuationWithExclamationToChangeSentenceSentiment &&
                                         this.term[iTerm].punctuationContains("!") && iWordTotal > 0) {
@@ -494,13 +538,16 @@ public class Sentence {
                                 }
                             }
                         } else {
+                            // If the term is a word, get the sentiment score
                             ++iWordTotal;
+                            // first term || not a proper noun || previous term is ":" || previous term like "@*"
                             if (iTerm == 1 || !this.term[iTerm].isProperNoun() ||
                                     this.term[iTerm - 1].getOriginalText().equals(":") ||
                                     this.term[iTerm - 1].getOriginalText().length() > 3 &&
                                             this.term[iTerm - 1].getOriginalText().charAt(0) == '@') {
                                 fSentiment[iWordTotal] = this.term[iTerm].getSentimentValue();
 
+                                // explain the term
                                 if (this.options.bgExplainClassification) {
                                     iTemp = this.term[iTerm].getSentimentValue();
                                     if (iTemp < 0) {
@@ -519,6 +566,7 @@ public class Sentence {
                                 this.sgClassificationRationale.append(this.term[iTerm].getOriginalText()).append(" [proper noun] ");
                             }
 
+                            // Multiple letters in a term boost sentiment
                             if (this.options.bgMultipleLettersBoostSentiment &&
                                     this.term[iTerm].getWordEmphasisLength() >=
                                             this.options.igMinRepeatedLettersForBoost &&
@@ -551,6 +599,7 @@ public class Sentence {
                                 }
                             }
 
+                            // Term with all capitals boost the sentiment
                             int var10002;
                             if (this.options.bgCapitalsBoostTermSentiment && fSentiment[iWordTotal] != 0.0F &&
                                     this.term[iTerm].isAllCapitals()) {
@@ -567,6 +616,7 @@ public class Sentence {
                                 }
                             }
 
+                            // Add the last word's booster word score to the current word
                             if (this.options.bgBoosterWordsChangeEmotion) {
                                 if (iLastBoosterWordScore != 0) {
                                     if (fSentiment[iWordTotal] > 0.0F) {
@@ -585,7 +635,9 @@ public class Sentence {
                                 iLastBoosterWordScore = this.term[iTerm].getBoosterWordScore();
                             }
 
+                            // Negating word influence emotion
                             if (this.options.bgNegatingWordsOccurBeforeSentiment) {
+                                // Negating word flip emotion
                                 if (this.options.bgNegatingWordsFlipEmotion) {
                                     if (iWordsSinceNegative <= this.options.igMaxWordsBeforeSentimentToNegate) {
                                         fSentiment[iWordTotal] =
@@ -595,6 +647,7 @@ public class Sentence {
                                         }
                                     }
                                 } else {
+                                    // Negating negative word neutralize emotion
                                     if (this.options.bgNegatingNegativeNeutralisesEmotion &&
                                             fSentiment[iWordTotal] < 0.0F &&
                                             iWordsSinceNegative <= this.options.igMaxWordsBeforeSentimentToNegate) {
@@ -604,6 +657,7 @@ public class Sentence {
                                         }
                                     }
 
+                                    // Negating positive word flip emotion
                                     if (this.options.bgNegatingPositiveFlipsEmotion &&
                                             fSentiment[iWordTotal] > 0.0F &&
                                             iWordsSinceNegative <= this.options.igMaxWordsBeforeSentimentToNegate) {
@@ -624,6 +678,7 @@ public class Sentence {
                                 ++iWordsSinceNegative;
                             }
 
+                            // Negating word influence prior words
                             if (this.term[iTerm].isNegatingWord() &&
                                     this.options.bgNegatingWordsOccurAfterSentiment) {
                                 iTermsChecked = 0;
@@ -661,6 +716,7 @@ public class Sentence {
                                 }
                             }
 
+                            // Multiple negative words boost sentiment score
                             if (this.options.bgAllowMultipleNegativeWordsToIncreaseNegativeEmotion &&
                                     fSentiment[iWordTotal] < -1.0F && iWordTotal > 1 &&
                                     fSentiment[iWordTotal - 1] < -1.0F) {
@@ -670,6 +726,7 @@ public class Sentence {
                                 }
                             }
 
+                            // Multiple positive words boost sentiment score
                             if (this.options.bgAllowMultiplePositiveWordsToIncreasePositiveEmotion &&
                                     fSentiment[iWordTotal] > 1.0F && iWordTotal > 1 &&
                                     fSentiment[iWordTotal - 1] > 1.0F) {
@@ -690,6 +747,7 @@ public class Sentence {
                 int iPosWords = 0;
                 int iNegWords = 0;
 
+                // Calculate max and total score
                 int iTerm;
                 for (iTerm = 1; iTerm <= iWordTotal; ++iTerm) {
                     if (fSentiment[iTerm] < 0.0F) {
@@ -709,6 +767,8 @@ public class Sentence {
                 igSentiCount = iNegWords + iPosWords;
                 --fMaxNeg;
                 ++fMaxPos;
+
+                // Calculate positive and negative score based on the method
                 int var10000 = this.options.igEmotionSentenceCombineMethod;
                 this.options.getClass();
                 if (var10000 == 1) {
@@ -736,6 +796,7 @@ public class Sentence {
                     }
                 }
 
+                // Question word and question mark reduce negative emotion
                 if (this.options.bgReduceNegativeEmotionInQuestionSentences &&
                         this.igNegativeSentiment < -1) {
                     for (iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
@@ -759,6 +820,7 @@ public class Sentence {
                     }
                 }
 
+                // Why check here? Isn't it better to put it in the word list?
                 if (this.igPositiveSentiment == 1 && this.options.bgMissCountsAsPlus2) {
                     for (iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
                         if (this.term[iTerm].isWord() &&
@@ -772,6 +834,7 @@ public class Sentence {
                     }
                 }
 
+                // ! influence sentiment
                 if (bSentencePunctuationBoost) {
                     if (this.igPositiveSentiment < -this.igNegativeSentiment) {
                         --this.igNegativeSentiment;
@@ -796,6 +859,7 @@ public class Sentence {
                     }
                 }
 
+                // ! in neutral sentence count as plus 2
                 if (this.igPositiveSentiment == 1 && this.igNegativeSentiment == -1 &&
                         this.options.bgExclamationInNeutralSentenceCountsAsPlus2) {
                     for (iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
@@ -809,6 +873,7 @@ public class Sentence {
                     }
                 }
 
+                // you/your/whats in neutral sentence count as plus 2
                 if (this.igPositiveSentiment == 1 && this.igNegativeSentiment == -1 &&
                         this.options.bgYouOrYourIsPlus2UnlessSentenceNegative) {
                     for (iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
@@ -953,15 +1018,21 @@ public class Sentence {
     }
 
     /**
-     * Overrides the sentiment strength of terms with the strength of matching idioms.
+     * This method overrides the sentiment strength of individual terms with the sentiment strength of the idiom
+     * that they appear in.
+     * If a term is part of multiple idioms, its sentiment strength will be overridden with the highest sentiment
+     * strength of all idioms it appears in.
      *
-     * @param recalculateIfAlreadyDone true if the sentiment strength should be recalculated even if it has already been applied, false otherwise.
+     * @param recalculateIfAlreadyDone if true, recalculate the override even if it has already been done
      */
     public void overrideTermStrengthsWithIdiomStrengths(boolean recalculateIfAlreadyDone) {
+        // Only apply the override if it hasn't already been done or if recalculateIfAlreadyDone is true
         if (!this.bgIdiomsApplied || recalculateIfAlreadyDone) {
             for (int iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
+                // Only apply the override to actual words, not punctuation or emoticons
                 if (this.term[iTerm].isWord()) {
                     for (int iIdiom = 1; iIdiom <= this.resources.idiomList.igIdiomCount; ++iIdiom) {
+                        // Check if the current term plus the length of the idiom is within the bounds of the sentence
                         if (iTerm + this.resources.idiomList.igIdiomWordCount[iIdiom] - 1 <= this.igTermCount) {
                             boolean bMatchingIdiom = true;
 
@@ -975,6 +1046,7 @@ public class Sentence {
                                 }
                             }
 
+                            // If the term and subsequent terms match the idiom, override their sentiment strength
                             if (bMatchingIdiom) {
                                 if (this.options.bgExplainClassification) {
                                     this.sgClassificationRationale.append("[term weight(s) changed by idiom ").append(this.resources.idiomList.getIdiom(iIdiom)).append("]");

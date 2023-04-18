@@ -26,6 +26,9 @@ public class Term {
     //private final int igContentTypePunctuation = 2;
     //private final int igContentTypeEmoticon = 3;
     int igEmoticonStrength = 0;
+    /**
+     *  1 represents word, 2 represents punctuation, 3 represents emoji
+     */
     private int igContentType = 0;
     private String sgOriginalWord = "";
     private String sgLCaseWord = "";
@@ -370,9 +373,12 @@ public class Term {
                     String sFirstLetter = this.sgOriginalWord.substring(0, 1);
                     if (!sFirstLetter.toLowerCase().equals(sFirstLetter.toUpperCase()) &&
                             !this.sgOriginalWord.substring(0, 2).equalsIgnoreCase("I'")) {
+                        // first letter is not digit or special characters &&
+                        // first 2 letters are not "I'm"
                         String sWordRemainder = this.sgOriginalWord.substring(1);
                         if (sFirstLetter.equals(sFirstLetter.toUpperCase()) &&
                                 sWordRemainder.equals(sWordRemainder.toLowerCase())) {
+                            // Capitalize the first
                             this.bgProperNoun = true;
                         }
                     }
