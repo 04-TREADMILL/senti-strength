@@ -23,6 +23,7 @@ cache:
 stages:
 - build
 - test
+- upload
 - release
 
 build:
@@ -36,6 +37,17 @@ test:
   script:
     - ./gradlew check
     - ls -l build/libs/*.jar
+  dependencies:
+    - build
+
+upload:
+  stage: upload
+  script:
+    - ls -l build/libs/*.jar
+    - wget https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
+    - tar xzvf aliyun-cli-linux-latest-amd64.tgz
+    - ./aliyun configure set --profile senti-strength --mode AK --region cn-nanjing --access-key-id $OSS_AK --access-key-secret $OSS_SK
+    - ./aliyun oss cp build/libs/*.jar oss://senti-strength/myEASIEST-1.0-SNAPSHOT.jar -u --acl default
   dependencies:
     - build
 
@@ -55,6 +67,10 @@ release:
     tag_name: 'v0.$CI_PIPELINE_IID'                # The version is incremented per pipeline.
     description: 'v0.$CI_PIPELINE_IID'
     ref: '$CI_COMMIT_SHA'                          # The tag is created from the pipeline SHA.
+  assets:
+    links:
+      - name: 'jar'
+        url: 'https://senti-strength.oss-cn-nanjing.aliyuncs.com/myEASIEST-1.0-SNAPSHOT.jar'
 
 after_script:
   - echo "End CI"
