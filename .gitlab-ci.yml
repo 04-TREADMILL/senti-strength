@@ -18,27 +18,55 @@ cache:
   paths:
     - .gradle/wrapper
     - .gradle/caches
+    - build
 
 stages:
 - build
 - test
+- upload
+- release
 
 build:
   stage: build
   script:
     - ./gradlew assemble
-  artifacts:
-    paths:
-      - build/libs/*.jar
-    exclude:
-      - build/libs/*.jar
-  only:
-    - master
+    - ls -l build/libs/*.jar
 
 test:
   stage: test
   script:
     - ./gradlew check
+    - ls -l build/libs/*.jar
+  dependencies:
+    - build
+
+upload:
+  stage: upload
+  script:
+    - ls -l build/libs/*.jar
+    - wget https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
+    - tar xzvf aliyun-cli-linux-latest-amd64.tgz
+    - ./aliyun configure set --profile senti-strength --mode AK --region cn-nanjing --access-key-id $OSS_AK --access-key-secret $OSS_SK
+    - ./aliyun oss cp build/libs/*.jar oss://senti-strength/myEASIEST-1.0-SNAPSHOT.jar -u --acl default
+  dependencies:
+    - build
+
+release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never                                  # Do not run this job when a tag is created manually
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  # Run this job when commits are pushed or merged to the default branch
+  script:
+    - echo "Running the release job."
+    - ls -l build/libs/*.jar
+  dependencies:
+    - build
+  release:                                         # See https://docs.gitlab.com/ee/ci/yaml/#release for available properties
+    tag_name: 'v0.$CI_PIPELINE_IID'                # The version is incremented per pipeline.
+    description: 'v0.$CI_PIPELINE_IID'
+    ref: '$CI_COMMIT_SHA'                          # The tag is created from the pipeline SHA.
 
 after_script:
   - echo "End CI"

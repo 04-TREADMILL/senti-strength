@@ -14,6 +14,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Objects;
 
+import nju.SEIII.EASIEST.SentiStrength.Corpus.BaseCorpus;
+import nju.SEIII.EASIEST.SentiStrength.Corpus.BinaryModeCorpus;
+import nju.SEIII.EASIEST.SentiStrength.Corpus.ScaleModeCorpus;
+import nju.SEIII.EASIEST.SentiStrength.Corpus.TrinaryModeCorpus;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.VO.OutputVO;
 
@@ -43,7 +47,7 @@ import nju.SEIII.EASIEST.Utilities.VO.OutputVO;
  * </ul></p>
  */
 public class SentiStrength {
-    Corpus c;
+    BaseCorpus c;
     String sInputFile = "";
     String sInputFolder = "";
     String sTextToParse = "";
@@ -70,11 +74,11 @@ public class SentiStrength {
     String sLanguage = "";
 
     public SentiStrength() {
-        this.c = new Corpus();
+        this.c = new BaseCorpus();
     }
 
     public SentiStrength(String[] args) {
-        this.c = new Corpus();
+        this.c = new BaseCorpus();
         this.initialiseAndRun(args);
     }
 
@@ -265,12 +269,14 @@ public class SentiStrength {
                 if (args[i].equalsIgnoreCase("trinary")) {
                     this.c.options.bgTrinaryMode = true;
                     bArgumentRecognised[i] = true;
+                    this.c = new TrinaryModeCorpus(c.options, c.resources);
                 }
 
                 if (args[i].equalsIgnoreCase("binary")) {
                     this.c.options.bgBinaryVersionOfTrinaryMode = true;
                     this.c.options.bgTrinaryMode = true;
                     bArgumentRecognised[i] = true;
+                    this.c = new BinaryModeCorpus(c.options, c.resources);
                 }
 
                 if (args[i].equalsIgnoreCase("scale")) {
@@ -280,6 +286,7 @@ public class SentiStrength {
                         System.out.println("Must choose binary/trinary OR scale mode");
                         return;
                     }
+                    this.c = new ScaleModeCorpus(c.options, c.resources);
                 }
 
                 ClassificationOptions var10000;
@@ -561,7 +568,7 @@ public class SentiStrength {
         return output;
     }
 
-    private void runMachineLearning(Corpus c, String sInputFile, boolean bDoAll, int iMinImprovement,
+    private void runMachineLearning(BaseCorpus c, String sInputFile, boolean bDoAll, int iMinImprovement,
                                     boolean bUseTotalDifference, int iIterations,
                                     int iMultiOptimisations, String sOutputFile) {
         if (iMinImprovement < 1) {
@@ -619,7 +626,7 @@ public class SentiStrength {
         }
     }
 
-    private void classifyAndSaveWithID(Corpus c, String sInputFile, String sInputFolder, int iTextCol,
+    private void classifyAndSaveWithID(BaseCorpus c, String sInputFile, String sInputFolder, int iTextCol,
                                        int iIdCol) {
         if (!sInputFile.equals("")) {
             c.classifyAllLinesAndRecordWithID(sInputFile, iTextCol - 1, iIdCol - 1,
@@ -651,7 +658,7 @@ public class SentiStrength {
         }
     }
 
-    private void annotationTextCol(Corpus c, String sInputFile, String sInputFolder,
+    private void annotationTextCol(BaseCorpus c, String sInputFile, String sInputFolder,
                                    String sFileSubString, int iTextColForAnnotation,
                                    boolean bOkToOverwrite) {
         if (!bOkToOverwrite) {
@@ -684,7 +691,7 @@ public class SentiStrength {
         }
     }
 
-    private void parseOneText(Corpus c, String sTextToParse, boolean bURLEncodedOutput) {
+    private void parseOneText(BaseCorpus c, String sTextToParse, boolean bURLEncodedOutput) {
         //int iPos = 1;
         OutputVO output = computeSentimentScores(sTextToParse, " ");
 
@@ -702,7 +709,7 @@ public class SentiStrength {
 
     }
 
-    private void listenToStdIn(Corpus c, int iTextCol) {
+    private void listenToStdIn(BaseCorpus c, int iTextCol) {
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
         String sTextToParse;
@@ -769,7 +776,7 @@ public class SentiStrength {
         }
     }
 
-    private void listenForCmdInput(Corpus c) {
+    private void listenForCmdInput(BaseCorpus c) {
         BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 
         while (true) {
@@ -794,7 +801,7 @@ public class SentiStrength {
         }
     }
 
-    private void listenAtPort(Corpus c, int iListenPort) {
+    private void listenAtPort(BaseCorpus c, int iListenPort) {
         ServerSocket serverSocket;
         String decodedText = "";
 
@@ -1042,7 +1049,7 @@ public class SentiStrength {
                 this.c.options.sgProgramMeasuring + " weights (default 1)]");
     }
 
-    public Corpus getCorpus() {
+    public BaseCorpus getCorpus() {
         return this.c;
     }
 

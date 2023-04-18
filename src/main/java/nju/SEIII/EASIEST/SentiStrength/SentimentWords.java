@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+
+import nju.SEIII.EASIEST.SentiStrength.Corpus.BaseCorpus;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.Sort;
 
@@ -169,7 +171,7 @@ public class SentimentWords {
    * @param c         the corpus containing the sentiment list
    * @return true if the operation is successful, false otherwise
    */
-  public boolean saveSentimentList(String sFilename, Corpus c) {
+  public boolean saveSentimentList(String sFilename, BaseCorpus c) {
     try {
       BufferedWriter wWriter = new BufferedWriter(new FileWriter(sFilename));
       for (int i = 1; i <= igSentimentWordsCount; i++) {
