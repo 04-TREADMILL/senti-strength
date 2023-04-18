@@ -31,10 +31,10 @@ build:
   artifacts:
     paths:
       - build/libs/*.jar
-    exclude:
-      - build/libs/*.jar
-  only:
-    - master
+#    exclude:
+#      - build/libs/*.jar
+#  only:
+#    - master
 
 test:
   stage: test
