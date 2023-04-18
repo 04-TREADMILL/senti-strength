@@ -3,7 +3,7 @@
 // Decompiler options: packimports(3) fieldsfirst 
 // Source File Name:   Corpus.java
 
-package nju.SEIII.EASIEST.SentiStrength;
+package nju.SEIII.EASIEST.SentiStrength.Corpus;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
+import nju.SEIII.EASIEST.SentiStrength.*;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.Sort;
 
@@ -58,33 +59,33 @@ import nju.SEIII.EASIEST.Utilities.Sort;
  * </ul>
  * <p>
  */
-public class Corpus {
+public class BaseCorpus {
 
     public ClassificationOptions options;
     public ClassificationResources resources;
     UnusedTermsClassificationIndex unusedTermsClassificationIndex;
     int igSupcorpusMemberCount;
-    private Paragraph[] paragraph;
-    private int igParagraphCount;
-    private int[] igPosCorrect;
-    private int[] igNegCorrect;
-    private int[] igTrinaryCorrect;
-    private int[] igScaleCorrect;
-    private int[] igPosClass;
-    private int[] igNegClass;
-    private int[] igTrinaryClass;
-    private int[] igScaleClass;
-    private boolean bgCorpusClassified;
-    private int[] igSentimentIDList;
-    private int igSentimentIDListCount;
-    private int[] igSentimentIDParagraphCount;
-    private boolean bSentimentIDListMade;
-    private boolean[] bgSupcorpusMember;
+    protected Paragraph[] paragraph;
+    protected int igParagraphCount;
+    protected int[] igPosCorrect;
+    protected int[] igNegCorrect;
+    protected int[] igTrinaryCorrect;
+    protected int[] igScaleCorrect;
+    protected int[] igPosClass;
+    protected int[] igNegClass;
+    protected int[] igTrinaryClass;
+    protected int[] igScaleClass;
+    protected boolean bgCorpusClassified;
+    protected int[] igSentimentIDList;
+    protected int igSentimentIDListCount;
+    protected int[] igSentimentIDParagraphCount;
+    protected boolean bSentimentIDListMade;
+    protected boolean[] bgSupcorpusMember;
 
     /**
      * Constructs a new Corpus object.
      */
-    public Corpus() {
+    public BaseCorpus() {
         options = new ClassificationOptions();
         resources = new ClassificationResources();
         igParagraphCount = 0;
@@ -99,34 +100,10 @@ public class Corpus {
      */
     public void indexClassifiedCorpus() {
         unusedTermsClassificationIndex = new UnusedTermsClassificationIndex();
-        if (options.bgScaleMode) {
-            unusedTermsClassificationIndex.initialise(true, false, false, false);
-            for (int i = 1; i <= igParagraphCount; i++) {
-                paragraph[i].addParagraphToIndexWithScaleValues(unusedTermsClassificationIndex,
-                        igScaleCorrect[i], igScaleClass[i]);
-            }
-
-        } else if (options.bgTrinaryMode && options.bgBinaryVersionOfTrinaryMode) {
-            unusedTermsClassificationIndex.initialise(false, false, true, false);
-            for (int i = 1; i <= igParagraphCount; i++) {
-                paragraph[i].addParagraphToIndexWithBinaryValues(unusedTermsClassificationIndex,
-                        igTrinaryCorrect[i], igTrinaryClass[i]);
-            }
-
-        } else if (options.bgTrinaryMode) {
-            unusedTermsClassificationIndex.initialise(false, false, false, true);
-            for (int i = 1; i <= igParagraphCount; i++) {
-                paragraph[i].addParagraphToIndexWithTrinaryValues(unusedTermsClassificationIndex,
-                        igTrinaryCorrect[i], igTrinaryClass[i]);
-            }
-
-        } else {
-            unusedTermsClassificationIndex.initialise(false, true, false, false);
-            for (int i = 1; i <= igParagraphCount; i++) {
-                paragraph[i].addParagraphToIndexWithPosNegValues(unusedTermsClassificationIndex,
-                        igPosCorrect[i], igPosClass[i], igNegCorrect[i], igNegClass[i]);
-            }
-
+        unusedTermsClassificationIndex.initialise(false, true, false, false);
+        for (int i = 1; i <= igParagraphCount; i++) {
+            paragraph[i].addParagraphToIndexWithPosNegValues(unusedTermsClassificationIndex,
+                    igPosCorrect[i], igPosClass[i], igNegCorrect[i], igNegClass[i]);
         }
     }
 
@@ -144,15 +121,7 @@ public class Corpus {
         if (unusedTermsClassificationIndex == null) {
             indexClassifiedCorpus();
         }
-        if (options.bgScaleMode) {
-            unusedTermsClassificationIndex.printIndexWithScaleValues(saveFile, iMinFreq);
-        } else if (options.bgTrinaryMode && options.bgBinaryVersionOfTrinaryMode) {
-            unusedTermsClassificationIndex.printIndexWithBinaryValues(saveFile, iMinFreq);
-        } else if (options.bgTrinaryMode) {
-            unusedTermsClassificationIndex.printIndexWithTrinaryValues(saveFile, iMinFreq);
-        } else {
-            unusedTermsClassificationIndex.printIndexWithPosNegValues(saveFile, iMinFreq);
-        }
+        unusedTermsClassificationIndex.printIndexWithPosNegValues(saveFile, iMinFreq);
         System.out.println("Term weights saved to " + saveFile);
     }
 
@@ -257,86 +226,7 @@ public class Corpus {
             }
             while ((sLine = rReader.readLine()) != null) {
                 if (!sLine.equals("")) {
-                    paragraph[++igParagraphCount] = new Paragraph();
-                    int iLastTabPos = sLine.lastIndexOf("\t");
-                    int iFirstTabPos = sLine.indexOf("\t");
-                    if (iFirstTabPos < iLastTabPos ||
-                            iFirstTabPos > 0 && (options.bgTrinaryMode || options.bgScaleMode)) {
-                        paragraph[igParagraphCount].setParagraph(sLine.substring(iLastTabPos + 1), resources,
-                                options);
-                        if (options.bgTrinaryMode) {
-                            try {
-                                igTrinaryCorrect[igParagraphCount] =
-                                        Integer.parseInt(sLine.substring(0, iFirstTabPos).trim());
-                            } catch (Exception e) {
-                                System.out.println(
-                                        "Trinary classification could not be read and will be ignored!: " + sLine);
-                                igTrinaryCorrect[igParagraphCount] = 999;
-                            }
-                            if (igTrinaryCorrect[igParagraphCount] > 1 ||
-                                    igTrinaryCorrect[igParagraphCount] < -1) {
-                                System.out.println(
-                                        "Trinary classification out of bounds and will be ignored!: " + sLine);
-                                igParagraphCount--;
-                            } else if (options.bgBinaryVersionOfTrinaryMode &&
-                                    igTrinaryCorrect[igParagraphCount] == 0) {
-                                System.out.println("Warning, unexpected 0 in binary classification!: " + sLine);
-                            }
-                        } else if (options.bgScaleMode) {
-                            try {
-                                igScaleCorrect[igParagraphCount] =
-                                        Integer.parseInt(sLine.substring(0, iFirstTabPos).trim());
-                            } catch (Exception e) {
-                                System.out.println(
-                                        "Scale classification could not be read and will be ignored!: " + sLine);
-                                igScaleCorrect[igParagraphCount] = 999;
-                            }
-                            if (igScaleCorrect[igParagraphCount] > 4 || igTrinaryCorrect[igParagraphCount] < -4) {
-                                System.out.println(
-                                        "Scale classification out of bounds (-4 to +4) and will be ignored!: " + sLine);
-                                igParagraphCount--;
-                            }
-                        } else {
-                            try {
-                                igPosCorrect[igParagraphCount] =
-                                        Integer.parseInt(sLine.substring(0, iFirstTabPos).trim());
-                                igNegCorrect[igParagraphCount] =
-                                        Integer.parseInt(sLine.substring(iFirstTabPos + 1, iLastTabPos).trim());
-                                if (igNegCorrect[igParagraphCount] < 0) {
-                                    igNegCorrect[igParagraphCount] = -igNegCorrect[igParagraphCount];
-                                }
-                            } catch (Exception e) {
-                                System.out.println(
-                                        "Positive or negative classification could not be read and will be ignored!: " +
-                                                sLine);
-                                igPosCorrect[igParagraphCount] = 0;
-                            }
-                            if (igPosCorrect[igParagraphCount] > 5 || igPosCorrect[igParagraphCount] < 1) {
-                                System.out.println(
-                                        "Warning, positive classification out of bounds and line will be ignored!: " +
-                                                sLine);
-                                igParagraphCount--;
-                            } else if (igNegCorrect[igParagraphCount] > 5 || igNegCorrect[igParagraphCount] < 1) {
-                                System.out.println(
-                                        "Warning, negative classification out of bounds (must be 1,2,3,4, or 5, with or without -) and line will be ignored!: " +
-                                                sLine);
-                                igParagraphCount--;
-                            }
-                        }
-                    } else {
-                        if (iFirstTabPos >= 0) {
-                            if (options.bgTrinaryMode) {
-                                igTrinaryCorrect[igParagraphCount] =
-                                        Integer.parseInt(sLine.substring(0, iFirstTabPos).trim());
-                            }
-                            sLine = sLine.substring(iFirstTabPos + 1);
-                        } else if (options.bgTrinaryMode) {
-                            igTrinaryCorrect[igParagraphCount] = 0;
-                        }
-                        paragraph[igParagraphCount].setParagraph(sLine, resources, options);
-                        igPosCorrect[igParagraphCount] = 0;
-                        igNegCorrect[igParagraphCount] = 0;
-                    }
+                    processorForSetCorpus(sLine);
                 }
             }
             rReader.close();
@@ -347,6 +237,48 @@ public class Corpus {
         useWholeCorpusNotSubcorpus();
         System.out.println("Number of texts in corpus: " + igParagraphCount);
         return true;
+    }
+
+    protected void processorForSetCorpus(String sLine) {
+        paragraph[++igParagraphCount] = new Paragraph();
+        int iLastTabPos = sLine.lastIndexOf("\t");
+        int iFirstTabPos = sLine.indexOf("\t");
+        if (iFirstTabPos < iLastTabPos) {
+            paragraph[igParagraphCount].setParagraph(sLine.substring(iLastTabPos + 1), resources,
+                    options);
+            try {
+                igPosCorrect[igParagraphCount] =
+                        Integer.parseInt(sLine.substring(0, iFirstTabPos).trim());
+                igNegCorrect[igParagraphCount] =
+                        Integer.parseInt(sLine.substring(iFirstTabPos + 1, iLastTabPos).trim());
+                if (igNegCorrect[igParagraphCount] < 0) {
+                    igNegCorrect[igParagraphCount] = -igNegCorrect[igParagraphCount];
+                }
+            } catch (Exception e) {
+                System.out.println(
+                        "Positive or negative classification could not be read and will be ignored!: " +
+                                sLine);
+                igPosCorrect[igParagraphCount] = 0;
+            }
+            if (igPosCorrect[igParagraphCount] > 5 || igPosCorrect[igParagraphCount] < 1) {
+                System.out.println(
+                        "Warning, positive classification out of bounds and line will be ignored!: " +
+                                sLine);
+                igParagraphCount--;
+            } else if (igNegCorrect[igParagraphCount] > 5 || igNegCorrect[igParagraphCount] < 1) {
+                System.out.println(
+                        "Warning, negative classification out of bounds (must be 1,2,3,4, or 5, with or without -) and line will be ignored!: " +
+                                sLine);
+                igParagraphCount--;
+            }
+        } else {
+            if (iFirstTabPos >= 0) {
+                sLine = sLine.substring(iFirstTabPos + 1);
+            }
+            paragraph[igParagraphCount].setParagraph(sLine, resources, options);
+            igPosCorrect[igParagraphCount] = 0;
+            igNegCorrect[igParagraphCount] = 0;
+        }
     }
 
     /**
@@ -368,7 +300,6 @@ public class Corpus {
                 paragraph[i].recalculateParagraphSentimentScores();
             }
         }
-
         calculateCorpusSentimentScores();
     }
 
@@ -415,22 +346,13 @@ public class Corpus {
         if (igPosClass == null || igPosClass.length < igPosCorrect.length) {
             igPosClass = new int[igParagraphCount + 1];
             igNegClass = new int[igParagraphCount + 1];
-            igTrinaryClass = new int[igParagraphCount + 1];
-            igScaleClass = new int[igParagraphCount + 1];
         }
         for (int i = 1; i <= igParagraphCount; i++) {
             if (bgSupcorpusMember[i]) {
                 igPosClass[i] = paragraph[i].getParagraphPositiveSentiment();
                 igNegClass[i] = paragraph[i].getParagraphNegativeSentiment();
-                if (options.bgTrinaryMode) {
-                    igTrinaryClass[i] = paragraph[i].getParagraphTrinarySentiment();
-                }
-                if (options.bgScaleMode) {
-                    igScaleClass[i] = paragraph[i].getParagraphScaleSentiment();
-                }
             }
         }
-
         bgCorpusClassified = true;
     }
 
@@ -473,7 +395,6 @@ public class Corpus {
                 }
             }
         }
-
         bgCorpusClassified = true;
     }
 
@@ -496,7 +417,6 @@ public class Corpus {
                             igNegClass[i] + "\t" + paragraph[i].getTaggedParagraph() + "\n");
                 }
             }
-
             wWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -577,7 +497,6 @@ public class Corpus {
                 iMatches++;
             }
         }
-
         return iMatches;
     }
 
@@ -809,7 +728,6 @@ public class Corpus {
                 igSentimentIDListCount += paragraph[i].getSentimentIDList().length;
             }
         }
-
         if (igSentimentIDListCount > 0) {
             igSentimentIDList = new int[igSentimentIDListCount + 1];
             igSentimentIDParagraphCount = new int[igSentimentIDListCount + 1];
@@ -822,10 +740,8 @@ public class Corpus {
                             igSentimentIDList[++igSentimentIDListCount] = k;
                         }
                     }
-
                 }
             }
-
             Sort.quickSortInt(igSentimentIDList, 1, igSentimentIDListCount);
             for (int i = 1; i <= igParagraphCount; i++) {
                 int[] sentenceIDList = paragraph[i].getSentimentIDList();
@@ -836,10 +752,8 @@ public class Corpus {
                                     igSentimentIDList, 1, igSentimentIDListCount)]++;
                         }
                     }
-
                 }
             }
-
         }
         bSentimentIDListMade = true;
     }
@@ -907,10 +821,7 @@ public class Corpus {
      */
     public void classifyAllLinesAndRecordWithID(String sInputFile, int iTextCol, int iIDCol,
                                                 String sOutputFile) {
-        int iPos = 0;
-        int iNeg = 0;
-        int iTrinary = -3;
-        int iScale = -10;
+
         int iCount1 = 0;
         String sLine = "";
         try {
@@ -920,22 +831,7 @@ public class Corpus {
                 sLine = rReader.readLine();
                 iCount1++;
                 if (!Objects.equals(sLine, "")) {
-                    String[] sData = sLine.split("\t");
-                    if (sData.length > iTextCol && sData.length > iIDCol) {
-                        Paragraph paragraph = new Paragraph();
-                        paragraph.setParagraph(sData[iTextCol], resources, options);
-                        if (options.bgTrinaryMode) {
-                            iTrinary = paragraph.getParagraphTrinarySentiment();
-                            wWriter.write(sData[iIDCol] + "\t" + iTrinary + "\n");
-                        } else if (options.bgScaleMode) {
-                            iScale = paragraph.getParagraphScaleSentiment();
-                            wWriter.write(sData[iIDCol] + "\t" + iScale + "\n");
-                        } else {
-                            iPos = paragraph.getParagraphPositiveSentiment();
-                            iNeg = paragraph.getParagraphNegativeSentiment();
-                            wWriter.write(sData[iIDCol] + "\t" + iPos + "\t" + iNeg + "\n");
-                        }
-                    }
+                    processorForClassifyAllLinesAndRecordWithID(sLine, iTextCol, iIDCol, wWriter);
                 }
             }
             Thread.sleep(10L);
@@ -962,21 +858,33 @@ public class Corpus {
                 "Processed " + iCount1 + " lines from file: " + sInputFile + ". Last line was:\n" + sLine);
     }
 
+    protected void processorForClassifyAllLinesAndRecordWithID(String sLine, int iTextCol, int iIDCol, BufferedWriter wWriter) throws IOException {
+        int iPos = 0;
+        int iNeg = 0;
+        String[] sData = sLine.split("\t");
+        if (sData.length > iTextCol && sData.length > iIDCol) {
+            Paragraph paragraph = new Paragraph();
+            paragraph.setParagraph(sData[iTextCol], resources, options);
+            iPos = paragraph.getParagraphPositiveSentiment();
+            iNeg = paragraph.getParagraphNegativeSentiment();
+            wWriter.write(sData[iIDCol] + "\t" + iPos + "\t" + iNeg + "\n");
+        }
+    }
+
     /**
      * This method reads in an input file, annotates each line with sentiment analysis using the specified text column,
      * and writes the annotated lines to a temporary file. The original input file is then deleted and the temporary file
      * is renamed to the original file name. The annotation can be done in trinary mode (positive, negative, or neutral),
      * scale mode (a sentiment score between -10 and 10), or binary mode (positive or negative). The mode is determined
      * by the options specified in the calling code.
+     * 此方法读入一个输入文件，使用指定的文本列用情感分析注释每一行，并将注释的行写入一个临时文件。
+     * 然后删除原始输入文件并将临时文件重命名为原始文件名。注释可以在三元模式（正面、负面或中性）下完成，
+     * 比例模式（-10 到 10 之间的情绪分数）或二进制模式（正面或负面）。模式由调用代码中指定的选项决定
      *
      * @param sInputFile The path to the input file to be annotated
      * @param iTextCol   The index of the text column in the input file to be analyzed
      */
     public void annotateAllLinesInInputFile(String sInputFile, int iTextCol) {
-        int iPos = 0;
-        int iNeg = 0;
-        int iTrinary = -3;
-        int iScale = -10;
         String sTempFile = sInputFile + "_temp";
         try {
             BufferedReader rReader = new BufferedReader(new FileReader(sInputFile));
@@ -984,29 +892,12 @@ public class Corpus {
             while (rReader.ready()) {
                 String sLine = rReader.readLine();
                 if (!Objects.equals(sLine, "")) {
-                    String[] sData = sLine.split("\t");
-                    if (sData.length > iTextCol) {
-                        Paragraph paragraph = new Paragraph();
-                        paragraph.setParagraph(sData[iTextCol], resources, options);
-                        if (options.bgTrinaryMode) {
-                            iTrinary = paragraph.getParagraphTrinarySentiment();
-                            wWriter.write(sLine + "\t" + iTrinary + "\n");
-                        } else if (options.bgScaleMode) {
-                            iScale = paragraph.getParagraphScaleSentiment();
-                            wWriter.write(sLine + "\t" + iScale + "\n");
-                        } else {
-                            iPos = paragraph.getParagraphPositiveSentiment();
-                            iNeg = paragraph.getParagraphNegativeSentiment();
-                            wWriter.write(sLine + "\t" + iPos + "\t" + iNeg + "\n");
-                        }
-                    } else {
-                        wWriter.write(sLine + "\n");
-                    }
+                    processorForAnnotateAllLinesInInputFile(sLine, iTextCol, wWriter);
                 }
             }
             rReader.close();
             wWriter.close();
-            Path original= Paths.get(sInputFile);
+            Path original = Paths.get(sInputFile);
             Files.delete(original);
             File newFile = new File(sTempFile);
             newFile.renameTo(new File(sInputFile));
@@ -1019,6 +910,22 @@ public class Corpus {
         } catch (Exception e) {
             System.out.println("Error reading from or writing to file: " + sInputFile);
             e.printStackTrace();
+        }
+    }
+
+    protected void processorForAnnotateAllLinesInInputFile(String sLine, int iTextCol, BufferedWriter wWriter) throws IOException {
+        int iPos = 0;
+        int iNeg = 0;
+        String[] sData = sLine.split("\t");
+        if (sData.length > iTextCol) {
+            Paragraph paragraph = new Paragraph();
+            paragraph.setParagraph(sData[iTextCol], resources, options);
+
+            iPos = paragraph.getParagraphPositiveSentiment();
+            iNeg = paragraph.getParagraphNegativeSentiment();
+            wWriter.write(sLine + "\t" + iPos + "\t" + iNeg + "\n");
+        } else {
+            wWriter.write(sLine + "\n");
         }
     }
 
@@ -1506,9 +1413,9 @@ public class Corpus {
      * @param wWriter                 a BufferedWriter object used to write the results to the output file
      * @return true if the row was successfully printed, false otherwise
      */
-    private boolean printClassificationResultsRow(int[] iPosClassAll, int[] iNegClassAll,
-                                                  int[] iTrinaryOrScaleClassAll,
-                                                  BufferedWriter wWriter) {
+    protected boolean printClassificationResultsRow(int[] iPosClassAll, int[] iNegClassAll,
+                                                    int[] iTrinaryOrScaleClassAll,
+                                                    BufferedWriter wWriter) {
         int iPosCorrect = -1;
         int iNegCorrect = -1;
         int iPosWithin1 = -1;
@@ -1531,70 +1438,50 @@ public class Corpus {
                 new int[3], new int[3], new int[3]
         };
         try {
-            if (options.bgTrinaryMode) {
-                iTrinaryCorrect =
-                        ClassificationStatistics.accuracy(igTrinaryCorrect, iTrinaryOrScaleClassAll,
-                                igParagraphCount, false);
-                iTrinaryCorrectWithin1 =
-                        ClassificationStatistics.accuracyWithin1(igTrinaryCorrect, iTrinaryOrScaleClassAll,
-                                igParagraphCount, false);
-                fTrinaryCorrectProportion = (float) iTrinaryCorrect / (float) igParagraphCount;
-                fTrinaryCorrectWithin1Proportion = (float) iTrinaryCorrectWithin1 / (float) igParagraphCount;
-                ClassificationStatistics.trinaryOrBinaryConfusionTable(iTrinaryOrScaleClassAll,
-                        igTrinaryCorrect, igParagraphCount, estCorr);
-            } else if (options.bgScaleMode) {
-                iTrinaryCorrect = ClassificationStatistics.accuracy(igScaleCorrect, iTrinaryOrScaleClassAll,
-                        igParagraphCount, false);
-                iTrinaryCorrectWithin1 =
-                        ClassificationStatistics.accuracyWithin1(igScaleCorrect, iTrinaryOrScaleClassAll,
-                                igParagraphCount, false);
-                fTrinaryCorrectProportion = (float) iTrinaryCorrect / (float) igParagraphCount;
-                fTrinaryCorrectWithin1Proportion = (float) iTrinaryCorrectWithin1 / (float) igParagraphCount;
-                fPosOrScaleCorr =
-                        ClassificationStatistics.correlation(igScaleCorrect, iTrinaryOrScaleClassAll,
-                                igParagraphCount);
-            } else {
-                iPosCorrect =
-                        ClassificationStatistics.accuracy(igPosCorrect, iPosClassAll, igParagraphCount, false);
-                iNegCorrect =
-                        ClassificationStatistics.accuracy(igNegCorrect, iNegClassAll, igParagraphCount, true);
-                iPosWithin1 =
-                        ClassificationStatistics.accuracyWithin1(igPosCorrect, iPosClassAll, igParagraphCount,
-                                false);
-                iNegWithin1 =
-                        ClassificationStatistics.accuracyWithin1(igNegCorrect, iNegClassAll, igParagraphCount,
-                                true);
-                fPosOrScaleCorr =
-                        ClassificationStatistics.correlationAbs(igPosCorrect, iPosClassAll, igParagraphCount);
-                fNegCorr =
-                        ClassificationStatistics.correlationAbs(igNegCorrect, iNegClassAll, igParagraphCount);
-                fPosMPE = ClassificationStatistics.absoluteMeanPercentageError(igPosCorrect, iPosClassAll,
-                        igParagraphCount, false);
-                fNegMPE = ClassificationStatistics.absoluteMeanPercentageError(igNegCorrect, iNegClassAll,
-                        igParagraphCount, true);
-                fPosMPEnoDiv = ClassificationStatistics.absoluteMeanPercentageErrorNoDivision(igPosCorrect,
-                        iPosClassAll, igParagraphCount, false);
-                fNegMPEnoDiv = ClassificationStatistics.absoluteMeanPercentageErrorNoDivision(igNegCorrect,
-                        iNegClassAll, igParagraphCount, true);
-                fPosCorrectProportion = (float) iPosCorrect / (float) igParagraphCount;
-                fNegCorrectProportion = (float) iNegCorrect / (float) igParagraphCount;
-                fPosWithin1Proportion = (float) iPosWithin1 / (float) igParagraphCount;
-                fNegWithin1Proportion = (float) iNegWithin1 / (float) igParagraphCount;
-            }
-            wWriter.write("\t" + iPosCorrect + "\t" + fPosCorrectProportion + "\t" + iNegCorrect + "\t" +
-                    fNegCorrectProportion + "\t" + iPosWithin1 + "\t" + fPosWithin1Proportion + "\t" +
-                    iNegWithin1 + "\t" + fNegWithin1Proportion + "\t" + fPosOrScaleCorr + "\t" + fNegCorr +
-                    "\t" + fPosMPE + "\t" + fNegMPE + "\t" + fPosMPEnoDiv + "\t" + fNegMPEnoDiv + "\t" +
-                    iTrinaryCorrect + "\t" + fTrinaryCorrectProportion + "\t" + iTrinaryCorrectWithin1 + "\t" +
-                    fTrinaryCorrectWithin1Proportion + "\t" + estCorr[0][0] + "\t" + estCorr[0][1] + "\t" +
-                    estCorr[0][2] + "\t" + estCorr[1][0] + "\t" + estCorr[1][1] + "\t" + estCorr[1][2] +
-                    "\t" + estCorr[2][0] + "\t" + estCorr[2][1] + "\t" + estCorr[2][2] + "\t" +
-                    igParagraphCount + "\n");
+            iPosCorrect =
+                    ClassificationStatistics.accuracy(igPosCorrect, iPosClassAll, igParagraphCount, false);
+            iNegCorrect =
+                    ClassificationStatistics.accuracy(igNegCorrect, iNegClassAll, igParagraphCount, true);
+            iPosWithin1 =
+                    ClassificationStatistics.accuracyWithin1(igPosCorrect, iPosClassAll, igParagraphCount,
+                            false);
+            iNegWithin1 =
+                    ClassificationStatistics.accuracyWithin1(igNegCorrect, iNegClassAll, igParagraphCount,
+                            true);
+            fPosOrScaleCorr =
+                    ClassificationStatistics.correlationAbs(igPosCorrect, iPosClassAll, igParagraphCount);
+            fNegCorr =
+                    ClassificationStatistics.correlationAbs(igNegCorrect, iNegClassAll, igParagraphCount);
+            fPosMPE = ClassificationStatistics.absoluteMeanPercentageError(igPosCorrect, iPosClassAll,
+                    igParagraphCount, false);
+            fNegMPE = ClassificationStatistics.absoluteMeanPercentageError(igNegCorrect, iNegClassAll,
+                    igParagraphCount, true);
+            fPosMPEnoDiv = ClassificationStatistics.absoluteMeanPercentageErrorNoDivision(igPosCorrect,
+                    iPosClassAll, igParagraphCount, false);
+            fNegMPEnoDiv = ClassificationStatistics.absoluteMeanPercentageErrorNoDivision(igNegCorrect,
+                    iNegClassAll, igParagraphCount, true);
+            fPosCorrectProportion = (float) iPosCorrect / (float) igParagraphCount;
+            fNegCorrectProportion = (float) iNegCorrect / (float) igParagraphCount;
+            fPosWithin1Proportion = (float) iPosWithin1 / (float) igParagraphCount;
+            fNegWithin1Proportion = (float) iNegWithin1 / (float) igParagraphCount;
+            writeClassificationResult(wWriter, iPosCorrect, iNegCorrect, iPosWithin1, iNegWithin1, iTrinaryCorrect, iTrinaryCorrectWithin1, fPosCorrectProportion, fNegCorrectProportion, fPosWithin1Proportion, fNegWithin1Proportion, fTrinaryCorrectProportion, fTrinaryCorrectWithin1Proportion, fPosOrScaleCorr, fNegCorr, fPosMPE, fNegMPE, fPosMPEnoDiv, fNegMPEnoDiv, estCorr);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
         return true;
+    }
+
+    protected void writeClassificationResult(BufferedWriter wWriter, int iPosCorrect, int iNegCorrect, int iPosWithin1, int iNegWithin1, int iTrinaryCorrect, int iTrinaryCorrectWithin1, double fPosCorrectProportion, double fNegCorrectProportion, double fPosWithin1Proportion, double fNegWithin1Proportion, double fTrinaryCorrectProportion, double fTrinaryCorrectWithin1Proportion, double fPosOrScaleCorr, double fNegCorr, double fPosMPE, double fNegMPE, double fPosMPEnoDiv, double fNegMPEnoDiv, int[][] estCorr) throws IOException {
+        wWriter.write("\t" + iPosCorrect + "\t" + fPosCorrectProportion + "\t" + iNegCorrect + "\t" +
+                fNegCorrectProportion + "\t" + iPosWithin1 + "\t" + fPosWithin1Proportion + "\t" +
+                iNegWithin1 + "\t" + fNegWithin1Proportion + "\t" + fPosOrScaleCorr + "\t" + fNegCorr +
+                "\t" + fPosMPE + "\t" + fNegMPE + "\t" + fPosMPEnoDiv + "\t" + fNegMPEnoDiv + "\t" +
+                iTrinaryCorrect + "\t" + fTrinaryCorrectProportion + "\t" + iTrinaryCorrectWithin1 + "\t" +
+                fTrinaryCorrectWithin1Proportion + "\t" + estCorr[0][0] + "\t" + estCorr[0][1] + "\t" +
+                estCorr[0][2] + "\t" + estCorr[1][0] + "\t" + estCorr[1][1] + "\t" + estCorr[1][2] +
+                "\t" + estCorr[2][0] + "\t" + estCorr[2][1] + "\t" + estCorr[2][2] + "\t" +
+                igParagraphCount + "\n");
     }
 
     /**
@@ -1974,6 +1861,7 @@ public class Corpus {
             e.printStackTrace();
         }
     }
+
     private int calculateCorrect(int[] igPosCorrect, int[] igPosClass) {
         if (igParagraphCount == 0) {
             return 0;
