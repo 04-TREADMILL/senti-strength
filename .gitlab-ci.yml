@@ -67,10 +67,6 @@ release:
     tag_name: 'v0.$CI_PIPELINE_IID'                # The version is incremented per pipeline.
     description: 'v0.$CI_PIPELINE_IID'
     ref: '$CI_COMMIT_SHA'                          # The tag is created from the pipeline SHA.
-  assets:
-    links:
-      - name: 'jar'
-        url: 'https://senti-strength.oss-cn-nanjing.aliyuncs.com/myEASIEST-1.0-SNAPSHOT.jar'
 
 after_script:
   - echo "End CI"
