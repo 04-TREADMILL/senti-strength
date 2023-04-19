@@ -231,10 +231,10 @@ public class ClassificationOptions {
             this.bgBoosterWordsChangeEmotion = Boolean.parseBoolean(sData[1]);
           } else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
             this.bgNegatingWordsFlipEmotion = Boolean.parseBoolean(sData[1]);
-          //} else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
-          //  this.bgNegatingPositiveFlipsEmotion = Boolean.parseBoolean(sData[1]);
-          //} else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
-          //  this.bgNegatingNegativeNeutralisesEmotion = Boolean.parseBoolean(sData[1]);
+            //} else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
+            //  this.bgNegatingPositiveFlipsEmotion = Boolean.parseBoolean(sData[1]);
+            //} else if (Objects.equals(sData[0], "NegatingWordsFlipEmotion")) {
+            //  this.bgNegatingNegativeNeutralisesEmotion = Boolean.parseBoolean(sData[1]);
           } else if (Objects.equals(sData[0], "CorrectSpellingsWithRepeatedLetter")) {
             this.bgCorrectSpellingsWithRepeatedLetter = Boolean.parseBoolean(sData[1]);
           } else if (Objects.equals(sData[0], "UseEmoticons")) {

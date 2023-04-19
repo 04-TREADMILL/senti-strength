@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-
 import nju.SEIII.EASIEST.SentiStrength.ClassificationOptions;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.Sort;
@@ -34,7 +33,7 @@ import nju.SEIII.EASIEST.Utilities.Sort;
  * <li>UC-20 File name extension for output
  * </ul><p>
  */
-public class BoosterWordsList extends WordStrengthList{
+public class BoosterWordsList extends WordStrengthList {
   /**
    * An array of Strings representing booster words.
    */

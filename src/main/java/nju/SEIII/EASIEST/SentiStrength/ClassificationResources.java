@@ -6,8 +6,11 @@
 package nju.SEIII.EASIEST.SentiStrength;
 
 import java.io.File;
-
-import nju.SEIII.EASIEST.SentiStrength.WordPresenceList.*;
+import nju.SEIII.EASIEST.SentiStrength.WordPresenceList.CorrectSpellingsList;
+import nju.SEIII.EASIEST.SentiStrength.WordPresenceList.IronyList;
+import nju.SEIII.EASIEST.SentiStrength.WordPresenceList.NegatingWordList;
+import nju.SEIII.EASIEST.SentiStrength.WordPresenceList.QuestionWords;
+import nju.SEIII.EASIEST.SentiStrength.WordPresenceList.WordPresenceList;
 import nju.SEIII.EASIEST.SentiStrength.WordStrengthList.BoosterWordsList;
 import nju.SEIII.EASIEST.SentiStrength.WordStrengthList.EmoticonsList;
 import nju.SEIII.EASIEST.SentiStrength.WordStrengthList.WordStrengthList;
@@ -227,8 +230,7 @@ public class ClassificationResources {
         negatingWords.initialise(sgSentiStrengthFolder + sgNegatingWordListFile, options) &&
         questionWords.initialise(sgSentiStrengthFolder + sgQuestionWordListFile, options) &&
         ironyList.initialise(sgSentiStrengthFolder + sgIronyWordListFile, options) &&
-        boosterWords.initialise(sgSentiStrengthFolder + sgBoosterListFile, options
-        ) &&
+        boosterWords.initialise(sgSentiStrengthFolder + sgBoosterListFile, options) &&
         idiomList.initialise(sgSentiStrengthFolder + sgIdiomLookupTableFile, options,
             iExtraLinesToReserve)) {
       if (iExtraLinesToReserve > 0)

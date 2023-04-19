@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-
 import nju.SEIII.EASIEST.SentiStrength.ClassificationOptions;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.Sort;
@@ -25,7 +24,7 @@ import nju.SEIII.EASIEST.Utilities.Sort;
  * </ul></p>
  */
 
-public class EmoticonsList extends WordStrengthList{
+public class EmoticonsList extends WordStrengthList {
 
   /**
    * Array of emoticons
