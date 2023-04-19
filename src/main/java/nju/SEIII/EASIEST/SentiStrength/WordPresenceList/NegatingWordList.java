@@ -3,7 +3,7 @@
 // Decompiler options: packimports(3) fieldsfirst 
 // Source File Name:   NegatingWordList.java
 
-package nju.SEIII.EASIEST.SentiStrength;
+package nju.SEIII.EASIEST.SentiStrength.WordPresenceList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,6 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+
+import nju.SEIII.EASIEST.SentiStrength.ClassificationOptions;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.Sort;
 
@@ -30,7 +32,7 @@ import nju.SEIII.EASIEST.Utilities.Sort;
  * UC-17 Location of linguistic data folder
  * UC-18 Location of sentiment term weights
  */
-public class NegatingWordList {
+public class NegatingWordList extends WordPresenceList {
 
   /**
    * The array of negating words.
@@ -109,7 +111,7 @@ public class NegatingWordList {
    * @param sWord the word to check
    * @return true if the word is a negating word, false otherwise
    */
-  public boolean negatingWord(String sWord) {
+  public boolean contains(String sWord) {
     return Sort.i_FindStringPositionInSortedArray(sWord, sgNegatingWord, 1, igNegatingWordCount) >=
         0;
   }

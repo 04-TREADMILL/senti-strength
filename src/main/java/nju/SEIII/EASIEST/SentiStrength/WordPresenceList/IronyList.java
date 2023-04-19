@@ -1,4 +1,4 @@
-package nju.SEIII.EASIEST.SentiStrength;
+package nju.SEIII.EASIEST.SentiStrength.WordPresenceList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+
+import nju.SEIII.EASIEST.SentiStrength.ClassificationOptions;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.Sort;
 
@@ -19,7 +21,7 @@ import nju.SEIII.EASIEST.Utilities.Sort;
  * <li> UC-20 File name extension for output
  * </ul></p>
  */
-public class IronyList {
+public class IronyList extends WordPresenceList {
 
   /**
    * Array of irony terms.
@@ -50,7 +52,7 @@ public class IronyList {
    * @param term The term to check.
    * @return true if the term is found in the list of ironic terms, false otherwise.
    */
-  public boolean termIsIronic(String term) {
+  public boolean contains(String term) {
     int iIronyTermCount =
         Sort.i_FindStringPositionInSortedArray(term, sgIronyTerm, 1, igIronyTermCount);
     return iIronyTermCount >= 0;

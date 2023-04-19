@@ -3,7 +3,7 @@
 // Decompiler options: packimports(3) fieldsfirst 
 // Source File Name:   BoosterWordsList.java
 
-package nju.SEIII.EASIEST.SentiStrength;
+package nju.SEIII.EASIEST.SentiStrength.WordStrengthList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+
+import nju.SEIII.EASIEST.SentiStrength.ClassificationOptions;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.Sort;
 
@@ -32,7 +34,7 @@ import nju.SEIII.EASIEST.Utilities.Sort;
  * <li>UC-20 File name extension for output
  * </ul><p>
  */
-public class BoosterWordsList {
+public class BoosterWordsList extends WordStrengthList{
   /**
    * An array of Strings representing booster words.
    */
@@ -59,13 +61,11 @@ public class BoosterWordsList {
    * The first part of each line (before its first tab character) represents one element in the String array (sgBoosterWords)
    * The second part (between its first and second tab characters) represents one element in the int array (igBoosterWordStrength).
    *
-   * @param sFilename                        The name of the file to read data from
-   * @param options                          A ClassificationOptions object
-   * @param iExtraBlankArrayEntriesToInclude The number of extra blank entries to include in the arrays
+   * @param sFilename The name of the file to read data from
+   * @param options   A ClassificationOptions object
    * @return true if initialization is successful; false otherwise
    */
-  public boolean initialise(String sFilename, ClassificationOptions options,
-                            int iExtraBlankArrayEntriesToInclude) {
+  public boolean initialise(String sFilename, ClassificationOptions options) {
     int iLinesInFile;
     int iWordStrength;
     if (Objects.equals(sFilename, "")) {
@@ -83,8 +83,8 @@ public class BoosterWordsList {
       return false;
     }
     // Initialize sgBoosterWords and igBoosterWordStrength arrays with given size
-    sgBoosterWords = new String[iLinesInFile + 1 + iExtraBlankArrayEntriesToInclude];
-    igBoosterWordStrength = new int[iLinesInFile + 1 + iExtraBlankArrayEntriesToInclude];
+    sgBoosterWords = new String[iLinesInFile + 1];
+    igBoosterWordStrength = new int[iLinesInFile + 1];
     igBoosterWordsCount = 0;
     try {
       BufferedReader rReader;
@@ -146,38 +146,38 @@ public class BoosterWordsList {
     return true;
   }
 
-  /**
-   * Adds an extra term into the two arrays (sgBoosterWords and igBoosterWordStrength).
-   *
-   * @param sText                           The text of the extra term to add
-   * @param iWordStrength                   The strength value of the extra term to add
-   * @param bSortBoosterListAfterAddingTerm Whether or not to sort both arrays after adding the extra term
-   * @return true if adding the extra term is successful; false otherwise
-   */
-  public boolean addExtraTerm(String sText, int iWordStrength,
-                              boolean bSortBoosterListAfterAddingTerm) {
-    try {
-      igBoosterWordsCount++;
-      sgBoosterWords[igBoosterWordsCount] = sText;
-      igBoosterWordStrength[igBoosterWordsCount] = iWordStrength;
-      if (bSortBoosterListAfterAddingTerm) {
-        Sort.quickSortStringsWithInt(sgBoosterWords, igBoosterWordStrength, 1,
-            igBoosterWordsCount);
-      }
-    } catch (Exception e) {
-      System.out.println("Could not add extra booster word: " + sText);
-      e.printStackTrace();
-      return false;
-    }
-    return true;
-  }
-
-  /**
-   * Sorts both arrays (sgBoosterWords and igBoosterWordStrength) using a quick sort algorithm.
-   */
-  public void sortBoosterWordList() {
-    Sort.quickSortStringsWithInt(sgBoosterWords, igBoosterWordStrength, 1, igBoosterWordsCount);
-  }
+//  /**
+//   * Adds an extra term into the two arrays (sgBoosterWords and igBoosterWordStrength).
+//   *
+//   * @param sText                           The text of the extra term to add
+//   * @param iWordStrength                   The strength value of the extra term to add
+//   * @param bSortBoosterListAfterAddingTerm Whether or not to sort both arrays after adding the extra term
+//   * @return true if adding the extra term is successful; false otherwise
+//   */
+//  public boolean addExtraTerm(String sText, int iWordStrength,
+//                              boolean bSortBoosterListAfterAddingTerm) {
+//    try {
+//      igBoosterWordsCount++;
+//      sgBoosterWords[igBoosterWordsCount] = sText;
+//      igBoosterWordStrength[igBoosterWordsCount] = iWordStrength;
+//      if (bSortBoosterListAfterAddingTerm) {
+//        Sort.quickSortStringsWithInt(sgBoosterWords, igBoosterWordStrength, 1,
+//            igBoosterWordsCount);
+//      }
+//    } catch (Exception e) {
+//      System.out.println("Could not add extra booster word: " + sText);
+//      e.printStackTrace();
+//      return false;
+//    }
+//    return true;
+//  }
+//
+//  /**
+//   * Sorts both arrays (sgBoosterWords and igBoosterWordStrength) using a quick sort algorithm.
+//   */
+//  public void sortBoosterWordList() {
+//    Sort.quickSortStringsWithInt(sgBoosterWords, igBoosterWordStrength, 1, igBoosterWordsCount);
+//  }
 
   /**
    * Returns the strength value of a given word.
@@ -185,7 +185,7 @@ public class BoosterWordsList {
    * @param sWord The word to get its strength value
    * @return The strength value of the given word; 0 if that word is not found in sgBoosterWords array
    */
-  public int getBoosterStrength(String sWord) {
+  public int getStrength(String sWord) {
     int iWordID = Sort.i_FindStringPositionInSortedArray(sWord.toLowerCase(), sgBoosterWords, 1,
         igBoosterWordsCount);
     if (iWordID >= 0) {

@@ -798,7 +798,7 @@ public class Sentence {
                         this.igNegativeSentiment < -1) {
                     for (iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
                         if (this.term[iTerm].isWord()) {
-                            if (this.resources.questionWords.questionWord(
+                            if (this.resources.questionWords.contains(
                                     this.term[iTerm].getTranslatedWord().toLowerCase())) {
                                 ++this.igNegativeSentiment;
                                 if (this.options.bgExplainClassification) {
@@ -950,7 +950,7 @@ public class Sentence {
 
         if (this.igPositiveSentiment >= this.options.igMinSentencePosForTermsIrony) {
             for (iTerm = 1; iTerm <= this.igTermCount; ++iTerm) {
-                if (this.resources.ironyList.termIsIronic(this.term[iTerm].getText())) {
+                if (this.resources.ironyList.contains(this.term[iTerm].getText())) {
                     if (this.igNegativeSentiment > -this.igPositiveSentiment) {
                         this.igNegativeSentiment = 1 - this.igPositiveSentiment;
                     }

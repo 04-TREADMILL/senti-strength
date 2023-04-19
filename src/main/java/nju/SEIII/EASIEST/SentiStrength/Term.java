@@ -284,7 +284,7 @@ public class Term {
      * The booster word score is determined by the strength of the booster word in the resources.
      */
     public void setBoosterWordScore() {
-        this.igBoosterWordScore = this.resources.boosterWords.getBoosterStrength(this.sgTranslatedWord);
+        this.igBoosterWordScore = this.resources.boosterWords.getStrength(this.sgTranslatedWord);
     }
 
     /**
@@ -444,7 +444,7 @@ public class Term {
                 this.sgLCaseWord = this.sgTranslatedWord.toLowerCase();
             }
 
-            this.bgNegatingWord = this.resources.negatingWords.negatingWord(this.sgLCaseWord);
+            this.bgNegatingWord = this.resources.negatingWords.contains(this.sgLCaseWord);
             this.bgNegatingWordCalculated = true;
         }
 
@@ -632,7 +632,7 @@ public class Term {
      * it will remain unchanged.
      */
     private void correctSpellingInTranslatedWord() {
-        if (!this.resources.correctSpellings.correctSpelling(this.sgTranslatedWord.toLowerCase())) {
+        if (!this.resources.correctSpellings.contains(this.sgTranslatedWord.toLowerCase())) {
             int iLastChar = this.sgTranslatedWord.length() - 1;
 
             for (int iPos = 1; iPos <= iLastChar; ++iPos) {
@@ -640,7 +640,7 @@ public class Term {
                         .compareTo(this.sgTranslatedWord.substring(iPos - 1, iPos)) == 0) {
                     String sReplaceWord =
                             this.sgTranslatedWord.substring(0, iPos) + this.sgTranslatedWord.substring(iPos + 1);
-                    if (this.resources.correctSpellings.correctSpelling(sReplaceWord.toLowerCase())) {
+                    if (this.resources.correctSpellings.contains(sReplaceWord.toLowerCase())) {
                         this.sgWordEmphasis.append(this.sgTranslatedWord.charAt(iPos));
                         this.sgTranslatedWord = sReplaceWord;
                         return;
@@ -673,7 +673,7 @@ public class Term {
      * @return true if the given string is a valid emoticon code, false otherwise
      */
     private boolean codeEmoticon(String sPossibleEmoticon) {
-        int iEmoticonStrength = this.resources.emoticons.getEmoticon(sPossibleEmoticon);
+        int iEmoticonStrength = this.resources.emoticons.getStrength(sPossibleEmoticon);
         if (iEmoticonStrength != 999) {
             this.igContentType = 3;
             this.sgEmoticon = sPossibleEmoticon;

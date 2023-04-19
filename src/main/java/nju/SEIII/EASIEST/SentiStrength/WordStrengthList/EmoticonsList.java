@@ -1,4 +1,4 @@
-package nju.SEIII.EASIEST.SentiStrength;
+package nju.SEIII.EASIEST.SentiStrength.WordStrengthList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+
+import nju.SEIII.EASIEST.SentiStrength.ClassificationOptions;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.Sort;
 
@@ -23,7 +25,7 @@ import nju.SEIII.EASIEST.Utilities.Sort;
  * </ul></p>
  */
 
-public class EmoticonsList {
+public class EmoticonsList extends WordStrengthList{
 
   /**
    * Array of emoticons
@@ -56,7 +58,7 @@ public class EmoticonsList {
    * @param emoticon The emoticon to get the strength of.
    * @return The strength of the given emoticon if it exists in the list. Otherwise, returns 999.
    */
-  public int getEmoticon(String emoticon) {
+  public int getStrength(String emoticon) {
     int iEmoticon =
         Sort.i_FindStringPositionInSortedArray(emoticon, sgEmoticon, 1, igEmoticonCount);
     if (iEmoticon >= 0) {

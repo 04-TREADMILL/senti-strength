@@ -3,7 +3,7 @@
 // Decompiler options: packimports(3) fieldsfirst 
 // Source File Name:   CorrectSpellingsList.java
 
-package nju.SEIII.EASIEST.SentiStrength;
+package nju.SEIII.EASIEST.SentiStrength.WordPresenceList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,6 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+
+import nju.SEIII.EASIEST.SentiStrength.ClassificationOptions;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 import nju.SEIII.EASIEST.Utilities.Sort;
 
@@ -25,7 +27,7 @@ import nju.SEIII.EASIEST.Utilities.Sort;
  * <li>UC-18 Location of sentiment term weights
  * </ul><p>
  */
-public class CorrectSpellingsList {
+public class CorrectSpellingsList extends WordPresenceList {
   /**
    * An array for storing correct words.
    * prefix sg probably stand for “String global”
@@ -121,7 +123,7 @@ public class CorrectSpellingsList {
    * @param sWord The word to check
    * @return true if the word is spelled correctly, false otherwise
    */
-  public boolean correctSpelling(String sWord) {
+  public boolean contains(String sWord) {
     // Use binary search to check if the word is in the sorted array of correct words
     return Sort.i_FindStringPositionInSortedArray(sWord, sgCorrectWord, 1, igCorrectWordCount) >= 0;
   }

@@ -6,6 +6,11 @@
 package nju.SEIII.EASIEST.SentiStrength;
 
 import java.io.File;
+
+import nju.SEIII.EASIEST.SentiStrength.WordPresenceList.*;
+import nju.SEIII.EASIEST.SentiStrength.WordStrengthList.BoosterWordsList;
+import nju.SEIII.EASIEST.SentiStrength.WordStrengthList.EmoticonsList;
+import nju.SEIII.EASIEST.SentiStrength.WordStrengthList.WordStrengthList;
 import nju.SEIII.EASIEST.Utilities.FileOps;
 
 // Referenced classes of package nju.SEIII.EASIEST.sentistrength:
@@ -39,12 +44,12 @@ public class ClassificationResources {
   /**
    * A list of emoticons used for text classification.
    */
-  public EmoticonsList emoticons;
+  public WordStrengthList emoticons;
 
   /**
    * A list of correct spellings used for text classification.
    */
-  public CorrectSpellingsList correctSpellings;
+  public WordPresenceList correctSpellings;
 
   /**
    * A list of sentiment words used for text classification.
@@ -54,17 +59,17 @@ public class ClassificationResources {
   /**
    * A list of negating words used for text classification.
    */
-  public NegatingWordList negatingWords;
+  public WordPresenceList negatingWords;
 
   /**
    * A list of question words used for text classification.
    */
-  public QuestionWords questionWords;
+  public WordPresenceList questionWords;
 
   /**
    * A list of booster words used for text classification.
    */
-  public BoosterWordsList boosterWords;
+  public WordStrengthList boosterWords;
 
   /**
    * A list of idioms used for text classification.
@@ -78,7 +83,7 @@ public class ClassificationResources {
   /**
    * A list of irony words used for text classification.
    */
-  public IronyList ironyList;
+  public WordPresenceList ironyList;
 
   /**
    * A lemmatiser used for text classification.
@@ -222,8 +227,8 @@ public class ClassificationResources {
         negatingWords.initialise(sgSentiStrengthFolder + sgNegatingWordListFile, options) &&
         questionWords.initialise(sgSentiStrengthFolder + sgQuestionWordListFile, options) &&
         ironyList.initialise(sgSentiStrengthFolder + sgIronyWordListFile, options) &&
-        boosterWords.initialise(sgSentiStrengthFolder + sgBoosterListFile, options,
-            iExtraLinesToReserve) &&
+        boosterWords.initialise(sgSentiStrengthFolder + sgBoosterListFile, options
+        ) &&
         idiomList.initialise(sgSentiStrengthFolder + sgIdiomLookupTableFile, options,
             iExtraLinesToReserve)) {
       if (iExtraLinesToReserve > 0)
