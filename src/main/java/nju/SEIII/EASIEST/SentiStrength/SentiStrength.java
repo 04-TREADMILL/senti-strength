@@ -906,7 +906,7 @@ public class SentiStrength {
     System.out.println("1) folder location for the linguistic files");
     System.out.println("   e.g., on Windows: C:/mike/Lexical_Data/");
     System.out.println("   e.g., on Mac/Linux/Unix: /usr/Lexical_Data/");
-    if (this.c.options.bgTensiStrength) {
+    if (this.c.options.getBgTensiStrength()) {
       System.out.println("TensiiStrength_Data can be downloaded from...[not completed yet]");
     } else {
       System.out.println(
@@ -919,7 +919,7 @@ public class SentiStrength {
     System.out.println("   e.g., To classify a file of texts: input /bob/data.txt");
     System.out.println();
     System.out.println("Here is an example complete command:");
-    if (this.c.options.bgTensiStrength) {
+    if (this.c.options.getBgTensiStrength()) {
       System.out.println(
           "java -jar TensiStrength.jar sentidata C:/a/Stress_Data/ text am+stressed");
     } else {
@@ -928,7 +928,7 @@ public class SentiStrength {
     }
 
     System.out.println();
-    if (!this.c.options.bgTensiStrength) {
+    if (!this.c.options.getBgTensiStrength()) {
       System.out.println("To list all commands: java -jar SentiStrength.jar help");
     }
 

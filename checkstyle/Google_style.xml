@@ -375,5 +375,82 @@
             <!-- The check is suppressed in the next line of code after the comment -->
             <property name="influenceFormat" value="1"/>
         </module>
+
+
+        <!-- added rules-->
+
+        <!-- 代码检查 -->
+        <!-- 检查空的代码段 -->
+        <module name="EmptyStatement"/>
+        <!-- 检查在重写了equals方法后是否重写了hashCode方法 -->
+        <module name="EqualsHashCode"/>
+        <!-- 检查局部变量或参数是否隐藏了类中的变量 -->
+        <module name="HiddenField">
+            <property name="tokens" value="VARIABLE_DEF"/>
+        </module>
+        <!-- 检查是否使用工厂方法实例化 -->
+        <module name="IllegalInstantiation"/>
+        <!-- 检查子表达式中是否有赋值操作 -->
+        <module name="InnerAssignment"/>
+        <!-- 检查是否有"魔术"数字 -->
+        <module name="MagicNumber">
+            <property name="ignoreNumbers" value="0, 1"/>
+            <property name="ignoreAnnotation" value="true"/>
+        </module>
+        <!-- 检查switch语句是否有default -->
+        <module name="MissingSwitchDefault"/>
+        <!-- 检查是否有过度复杂的布尔表达式 -->
+        <module name="SimplifyBooleanExpression"/>
+        <!-- 检查是否有过于复杂的布尔返回代码段 -->
+        <module name="SimplifyBooleanReturn"/>
+
+        <!-- 类设计检查 -->
+        <!-- 检查类是否为扩展设计l -->
+        <!-- 检查只有private构造函数的类是否声明为final -->
+        <module name="FinalClass"/>
+        <!-- 检查工具类是否有putblic的构造器 -->
+        <module name="HideUtilityClassConstructor"/>
+        <!-- 检查接口是否仅定义类型 -->
+        <module name="InterfaceIsType"/>
+        <!-- 检查类成员的可见度 检查类成员的可见性。只有static final 成员是public的
+        除非在本检查的protectedAllowed和packagedAllowed属性中进行了设置-->
+        <module name="VisibilityModifier">
+            <property name="packageAllowed" value="true"/>
+            <property name="protectedAllowed" value="true"/>
+        </module>
+
+        <!-- 语法 -->
+        <!-- String的比较不能用!= 和 == -->
+        <module name="StringLiteralEquality"/>
+        <!-- 限制for循环最多嵌套2层 -->
+        <module name="NestedForDepth">
+            <property name="max" value="2"/>
+        </module>
+        <!-- if最多嵌套3层 -->
+        <module name="NestedIfDepth">
+            <property name="max" value="3"/>
+        </module>
+        <!-- 检查未被注释的main方法,排除以Appllication结尾命名的类 -->
+        <module name="UncommentedMain">
+            <property name="excludedClasses" value=".*Application$"/>
+        </module>
+        <!-- 禁止使用System.out.println -->
+        <module name="Regexp">
+            <property name="format" value="System\.out\.println"/>
+            <property name="illegalPattern" value="true"/>
+        </module>
+        <!-- return个数 3个-->
+        <module name="ReturnCount">
+            <property name="max" value="3"/>
+        </module>
+        <!--try catch 异常处理数量 3-->
+        <module name="NestedTryDepth ">
+            <property name="max" value="3"/>
+        </module>
+        <!-- clone方法必须调用了super.clone() -->
+        <module name="SuperClone" />
+        <!-- finalize 必须调用了super.finalize() -->
+        <module name="SuperFinalize" />
+
     </module>
 </module>

@@ -36,7 +36,12 @@ public class ClassificationOptions {
   final int igCombineMax = 0;
   final int igCombineAverage = 1;
   final int igCombineTotal = 2;
-  public boolean bgTensiStrength = false;
+
+  public boolean getBgTensiStrength() {
+    return bgTensiStrength;
+  }
+
+  private boolean bgTensiStrength = false;
   public String sgProgramName = "SentiStrength";
   public String sgProgramMeasuring = "sentiment";
   public String sgProgramPos = "positive sentiment";

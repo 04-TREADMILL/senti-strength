@@ -359,6 +359,32 @@ public class ClassificationStatistics {
   }
 
   /**
+   * This method calculates the absolute mean percentage error.
+   *
+   * @param iCorrect              an array of correct values
+   * @param iPredicted            an array of predicted values
+   * @param iCount                the number of values
+   * @param bChangeSignOfOneArray a boolean value indicating whether to change the sign of one array
+   * @return the absolute mean percentage error
+   */
+  public static double absoluteMeanPercentageError(int[] iCorrect, int[] iPredicted, int iCount,
+                                                   boolean bChangeSignOfOneArray) {
+    double fAMeanPE = 0.0D;
+    if (bChangeSignOfOneArray) {
+      for (int iRow = 1; iRow <= iCount; iRow++) {
+        fAMeanPE +=
+            Math.abs((double) (iPredicted[iRow] + iCorrect[iRow]) / (double) iCorrect[iRow]);
+      }
+    } else {
+      for (int iRow = 1; iRow <= iCount; iRow++) {
+        fAMeanPE +=
+            Math.abs((double) (iPredicted[iRow] - iCorrect[iRow]) / (double) iCorrect[iRow]);
+      }
+    }
+    return fAMeanPE / iCount;
+  }
+
+  /**
    * This method calculates the baseline accuracy of the majority class proportion.
    *
    * @param iCorrect an array of integers representing the correct class labels
@@ -463,29 +489,4 @@ public class ClassificationStatistics {
     }
   }
 
-  /**
-   * This method calculates the absolute mean percentage error.
-   *
-   * @param iCorrect              an array of correct values
-   * @param iPredicted            an array of predicted values
-   * @param iCount                the number of values
-   * @param bChangeSignOfOneArray a boolean value indicating whether to change the sign of one array
-   * @return the absolute mean percentage error
-   */
-  public static double absoluteMeanPercentageError(int[] iCorrect, int[] iPredicted, int iCount,
-                                                   boolean bChangeSignOfOneArray) {
-    double fAMeanPE = 0.0D;
-    if (bChangeSignOfOneArray) {
-      for (int iRow = 1; iRow <= iCount; iRow++) {
-        fAMeanPE +=
-            Math.abs((double) (iPredicted[iRow] + iCorrect[iRow]) / (double) iCorrect[iRow]);
-      }
-    } else {
-      for (int iRow = 1; iRow <= iCount; iRow++) {
-        fAMeanPE +=
-            Math.abs((double) (iPredicted[iRow] - iCorrect[iRow]) / (double) iCorrect[iRow]);
-      }
-    }
-    return fAMeanPE / iCount;
-  }
 }

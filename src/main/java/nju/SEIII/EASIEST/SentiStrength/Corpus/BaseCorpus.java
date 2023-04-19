@@ -979,7 +979,7 @@ public class BaseCorpus {
       }
       if (options.bgTrinaryMode || options.bgScaleMode) {
         wWriter.write("Overall\tText");
-      } else if (options.bgTensiStrength) {
+      } else if (options.getBgTensiStrength()) {
         wWriter.write("Relax\tStress\tText");
       } else {
         wWriter.write("Positive\tNegative\tText");
